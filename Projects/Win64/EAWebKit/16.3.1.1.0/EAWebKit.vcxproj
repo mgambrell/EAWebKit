@@ -18,7 +18,7 @@
     <ProjectGuid>{3486DF90-8F24-6A9B-FF72-3B20A0C510C4}</ProjectGuid>
     <Keyword>x64Proj</Keyword>
     <ProjectName>EAWebKit</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <UCRTContentRoot>C:\Program Files (x86)\Windows Kits\10\</UCRTContentRoot>
     <UniversalCRTSdkDir>C:\Program Files (x86)\Windows Kits\10\</UniversalCRTSdkDir>
     <WindowsSdkDir_10>C:\Program Files (x86)\Windows Kits\10\</WindowsSdkDir_10>
@@ -32,14 +32,14 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-debug|x64' " Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseNativeEnvironment>true</UseNativeEnvironment>
     <UseDebugLibraries>True</UseDebugLibraries>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-opt|x64' " Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseNativeEnvironment>true</UseNativeEnvironment>
     <UseDebugLibraries>False</UseDebugLibraries>
   </PropertyGroup>
@@ -85,7 +85,7 @@
       <PreprocessorDefinitions>_DEBUG</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64\WinMM.lib";"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64\Gdi32.lib";"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64\User32.lib";"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64\advapi32.lib";"winmm.lib";"gdi32.lib";"ole32.lib";"user32.lib";"advapi32.lib";"shell32.lib";"shlwapi.lib";"version.lib";"ws2_32.lib";"Iphlpapi.lib";</AdditionalDependencies>
+      <AdditionalDependencies>"winmm.lib";"gdi32.lib";"ole32.lib";"user32.lib";"advapi32.lib";"shell32.lib";"shlwapi.lib";"version.lib";"ws2_32.lib";"Iphlpapi.lib"</AdditionalDependencies>
       <AdditionalLibraryDirectories>"$(VSInstallDir)\VC\ATLMFC\LIB\amd64";"$(VSInstallDir)\VC\LIB\amd64";"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\ucrt\x64";"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64";"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6\Lib\um\x64"</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4089 </AdditionalOptions>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
@@ -174,7 +174,7 @@
       <PreprocessorDefinitions>_DEBUG</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64\WinMM.lib";"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64\Gdi32.lib";"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64\User32.lib";"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64\advapi32.lib";"winmm.lib";"gdi32.lib";"ole32.lib";"user32.lib";"advapi32.lib";"shell32.lib";"shlwapi.lib";"version.lib";"ws2_32.lib";"Iphlpapi.lib";</AdditionalDependencies>
+      <AdditionalDependencies>"winmm.lib";"gdi32.lib";"ole32.lib";"user32.lib";"advapi32.lib";"shell32.lib";"shlwapi.lib";"version.lib";"ws2_32.lib";"Iphlpapi.lib"</AdditionalDependencies>
       <AdditionalLibraryDirectories>"$(VSInstallDir)\VC\ATLMFC\LIB\amd64";"$(VSInstallDir)\VC\LIB\amd64";"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\ucrt\x64";"C:\Program Files (x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64";"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6\Lib\um\x64"</AdditionalLibraryDirectories>
       <AdditionalOptions>-ignore:4089 </AdditionalOptions>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

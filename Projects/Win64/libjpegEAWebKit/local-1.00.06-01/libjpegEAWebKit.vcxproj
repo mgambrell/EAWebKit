@@ -18,7 +18,7 @@
     <ProjectGuid>{9CD99718-9EA1-ADA4-280D-BC5CAB5814D5}</ProjectGuid>
     <Keyword>x64Proj</Keyword>
     <ProjectName>libjpegEAWebKit</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <UCRTContentRoot>C:\Program Files (x86)\Windows Kits\10\</UCRTContentRoot>
     <UniversalCRTSdkDir>C:\Program Files (x86)\Windows Kits\10\</UniversalCRTSdkDir>
     <WindowsSdkDir_10>C:\Program Files (x86)\Windows Kits\10\</WindowsSdkDir_10>
@@ -32,14 +32,14 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-debug|x64' " Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseNativeEnvironment>true</UseNativeEnvironment>
     <UseDebugLibraries>True</UseDebugLibraries>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-opt|x64' " Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <UseNativeEnvironment>true</UseNativeEnvironment>
     <UseDebugLibraries>False</UseDebugLibraries>
   </PropertyGroup>

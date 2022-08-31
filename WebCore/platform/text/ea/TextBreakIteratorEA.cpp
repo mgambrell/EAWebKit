@@ -33,6 +33,8 @@
 #include <internal/include/EAWebKitAssert.h>
 #include <internal/include/EAWebKitString.h>
 
+#include <string>
+
 
 // Most of these APIs from webcore are not documented at all. The comments below come after reading the ICU based 
 // implementation of these functions.

@@ -874,7 +874,7 @@ EAWebKitStackBaseCallback GetStackBaseCallback()
 
 void SetStackLimitCallback(EAWebKitStackLimitCallback callback)
 {
-	EAW_ASSERT_MSG(!gpStackBaseCallback, "Stack limit callback already exists. Do not call SetStackLimitCallback more than once!");
+	EAW_ASSERT_MSG(!gpStackLimitCallback, "Stack limit callback already exists. Do not call SetStackLimitCallback more than once!");
 	gpStackLimitCallback = callback;
 }
 

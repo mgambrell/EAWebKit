@@ -148,6 +148,7 @@ static RAMCacheInfo					ramCacheUserPref;
 EAWebKitTimerCallback		        gpTimerCallback = NULL;
 EAWebKitMonotonicTimerCallback      gpMonotonicTimerCallback = NULL;
 EAWebKitStackBaseCallback           gpStackBaseCallback = NULL;
+EAWebKitStackLimitCallback           gpStackLimitCallback = NULL;
 void*								gpCollectorStackBase = NULL;
 EAWebKitCryptographicallyRandomValueCallback gpCryptographicallyRandomValueCallback = NULL;
 EAWebKitGetCookiesCallback			gpGetCookiesCallback = NULL;
@@ -698,6 +699,8 @@ bool Init(AppCallbacks* appCallbacks, AppSystems* appSystems)
             SetMonotonicTimer(appCallbacks->monotonicTimer);
 		if(appCallbacks->stackBase)
 			SetStackBaseCallback(appCallbacks->stackBase);
+		if(appCallbacks->stackLimit)
+			SetStackLimitCallback(appCallbacks->stackLimit);
 		if(appCallbacks->cryptRandomValue)
 			SetCryptographicallyRandomValueCallback(appCallbacks->cryptRandomValue);
 		if(appCallbacks->getCookies)
@@ -867,6 +870,17 @@ void SetStackBaseCallback(EAWebKitStackBaseCallback callback)
 EAWebKitStackBaseCallback GetStackBaseCallback()
 {
 	return gpStackBaseCallback;
+}
+
+void SetStackLimitCallback(EAWebKitStackLimitCallback callback)
+{
+	EAW_ASSERT_MSG(!gpStackBaseCallback, "Stack limit callback already exists. Do not call SetStackLimitCallback more than once!");
+	gpStackLimitCallback = callback;
+}
+
+EAWebKitStackLimitCallback GetStackLimitCallback()
+{
+	return gpStackLimitCallback;
 }
 
 void SetCryptographicallyRandomValueCallback(EAWebKitCryptographicallyRandomValueCallback callback)
@@ -1422,6 +1436,11 @@ void SetParameters(const Parameters& parameters)
 
 	WebCore::initializeVMTimeout();
     JSC::Options::maxPerThreadStackUsage() = EA::WebKit::GetParameters().mJavaScriptStackSize;
+		
+		//MBG FIX - this defaults to 128k but it's not sufficient on PC debug builds
+		//it's hard to prove this, since it seems to only be smoked out when handling errors
+		//(I believe the reserved zone is for creating exceptions?)
+		JSC::Options::reservedZoneSize() = 256*1024;
 };
 
 ThemeParameters::ThemeParameters()

@@ -242,7 +242,7 @@ void drawInterface(EA::WebKit::View* v)
    glDrawElements(GL_TRIANGLES, screenQuad.indexCount, GL_UNSIGNED_SHORT, 0);
 }
 
-int main(int argc, char** argv)
+DWORD WINAPI mainThread(void* p)
 {
    void SDL_SetMainReady(void);
 
@@ -344,4 +344,11 @@ int main(int argc, char** argv)
    SDL_Quit();
 
    return 0;
+}
+
+int main(int argc, char** argv)
+{
+  //allows us to control the stack size, if needed
+  HANDLE thr = CreateThread(nullptr,2*1024*1024,&mainThread,nullptr,0,nullptr);
+  WaitForSingleObject(thr,INFINITE);
 }

@@ -340,6 +340,7 @@ struct CookieEx //Would like to call it Cookie or CookieInfo but they are alread
 typedef double	    (*EAWebKitTimerCallback)();
 typedef double	    (*EAWebKitMonotonicTimerCallback)();
 typedef void*   	(*EAWebKitStackBaseCallback)();
+typedef void*   	(*EAWebKitStackLimitCallback)();
 typedef bool		(*EAWebKitCryptographicallyRandomValueCallback)(unsigned char *buffer, size_t length);  // Returns true if no error, else false
 typedef void		(*EAWebKitGetCookiesCallback)(const char16_t* pUrl,EASTLFixedString16Wrapper& result,uint32_t flags);
 typedef bool		(*EAWebKitSetCookieCallback)(const CookieEx& cookie);
@@ -349,6 +350,7 @@ struct AppCallbacks
 EAWebKitTimerCallback							timer;
 EAWebKitMonotonicTimerCallback					monotonicTimer;
 EAWebKitStackBaseCallback						stackBase;
+EAWebKitStackLimitCallback						stackLimit;
 EAWebKitCryptographicallyRandomValueCallback	cryptRandomValue;
 EAWebKitGetCookiesCallback						getCookies;
 EAWebKitSetCookieCallback						setCookie;

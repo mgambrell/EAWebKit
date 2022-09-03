@@ -66,6 +66,16 @@ void* stackBaseCallback()
    return reinterpret_cast<void*>(pTib->StackBase);
 }
 
+
+void* stackLimitCallback() 
+{
+  //taken from: https://github.com/adobe/webkit/blob/master/Source/WTF/wtf/StackBounds.cpp#L228
+  PNT_TIB64 pTib = reinterpret_cast<PNT_TIB64>(NtCurrentTeb());
+  return reinterpret_cast<void*>(pTib->StackLimit);
+}
+
+
+
 void getCookiesCallback(const char16_t* pUrl, EA::WebKit::EASTLFixedString16Wrapper& result, uint32_t flags)
 {
    std::cout << __FUNCTION__ << std::endl;
@@ -81,6 +91,7 @@ struct EA::WebKit::AppCallbacks callbacks = {
    timerCallback,
    monotonicTimerCallback,
    stackBaseCallback,
+   stackLimitCallback,
    cryptographicallyRandomValueCallback,
    getCookiesCallback,
    setCookieCallback
@@ -136,7 +147,7 @@ bool initWebkit()
    params.mRemoteWebInspectorPort = 1234;
    params.mReportJSExceptionCallstacks = true;
    params.mVerifySSLCert = true;
-   params.mJavaScriptStackSize = 1024 * 1024; //1MB of stack space
+   params.mJavaScriptStackSize = 2 * 1024 * 1024; //MBG MODIFIED
 
    wk->SetParameters(params);
 

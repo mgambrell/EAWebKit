@@ -71,6 +71,7 @@ static void* estimateStackBound(void* origin)
 #if PLATFORM(EA)
 namespace EA { namespace WebKit {
 	extern void *(*gpStackBaseCallback)(void);
+  extern void *(*gpStackLimitCallback)(void);
 	extern void* gpCollectorStackBase;
 }}
 #endif
@@ -106,7 +107,7 @@ void StackBounds::initialize()
 	//		callSelf();
 	// }
 	//
-	m_bound = estimateStackBound(m_origin);
+  m_bound = EA::WebKit::gpStackLimitCallback();
 
 }
 #elif OS(DARWIN)

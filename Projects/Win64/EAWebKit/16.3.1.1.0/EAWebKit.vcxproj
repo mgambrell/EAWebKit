@@ -97,7 +97,7 @@
       <ManifestFile>pc64-vc-dev-debug\build\EAWebKit\EAWebKitd.dll.intermediate.manifest</ManifestFile>
       <MapFileName>pc64-vc-dev-debug\bin\EAWebKitd.map</MapFileName>
       <ModuleDefinitionFile>..\..\..\..\EAWebkit_Windows.def</ModuleDefinitionFile>
-      <OutputFile>pc64-vc-dev-debug\bin\EAWebKitd.dll</OutputFile>
+      <OutputFile>$(OutDir)EAWebKitd.dll</OutputFile>
       <ProgramDatabaseFile>pc64-vc-dev-debug\bin\EAWebKitd.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <SuppressStartupBanner>TRUE</SuppressStartupBanner>
@@ -123,7 +123,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-debug|x64' ">
-    <OutDir>pc64-vc-dev-debug\bin\</OutDir>
+    <OutDir>..\..\..\..\glWebKit-master\bin64\</OutDir>
     <IntDir>pc64-vc-dev-debug\build\EAWebKit\vstmp\</IntDir>
     <TargetName>EAWebKitd</TargetName>
     <TargetExt>.dll</TargetExt>

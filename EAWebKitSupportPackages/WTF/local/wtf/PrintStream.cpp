@@ -50,6 +50,8 @@ void PrintStream::flush()
 
 void printInternal(PrintStream& out, const char* string)
 {
+  //MBG TEST HACK
+  printf(string);
     out.printf("%s", string);
 }
 

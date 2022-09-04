@@ -1,5 +1,3 @@
-#pragma comment(lib, "ws2_32.lib")
-
 #include "windows.h"
 
 #define SDL_MAIN_HANDLED

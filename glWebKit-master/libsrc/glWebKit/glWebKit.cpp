@@ -8,7 +8,6 @@
 #include <EAWebKit\EAWebKit>
 
 #include <windows.h>
-#include <bcrypt.h>
 
 #include <list>
 #include <iostream>
@@ -96,10 +95,6 @@ bool initWebkit()
    {
       create_Webkit_instance = reinterpret_cast<PF_CreateEAWebkitInstance>(GetProcAddress(wdll, "CreateEAWebkitInstance"));
    }
-
-   // init winsock manually, this is required
-   WSADATA wsadata = {};
-   WSAStartup(MAKEWORD(2, 0), &wsadata);
 
    if(!create_Webkit_instance)
    {

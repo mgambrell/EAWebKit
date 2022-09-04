@@ -81,12 +81,14 @@ struct EA::WebKit::AppCallbacks callbacks = {
 struct EA::WebKit::AppSystems systems = { nullptr };
 
 static MyFileSystem s_MyFileSystem;
+static MyAllocatorSystem s_MyAllocatorSystem;
 
 bool initWebkit()
 {
    systems.mThreadSystem = new StdThreadSystem;
    systems.mEAWebkitClient = new GLWebkitClient();
    systems.mFileSystem = &s_MyFileSystem;
+   systems.mAllocator = &s_MyAllocatorSystem;
 
    typedef EA::WebKit::EAWebKitLib* (*PF_CreateEAWebkitInstance)(void);
    PF_CreateEAWebkitInstance create_Webkit_instance = nullptr;

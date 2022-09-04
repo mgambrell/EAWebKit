@@ -55,7 +55,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>DEBUG;TRACE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;TRACE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\include;..\..\libsrc\glWebKit;..\..\..\EAWebKitSupportPackages\EABaseEAWebKit\local-2.06.05-01\include\Common;..\..\..\Webkit\ea\Api\EAWebKit\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -97,6 +97,7 @@
     <ClInclude Include="..\..\libsrc\glWebKit\glWebkitRenderer.h" />
     <ClInclude Include="..\..\libsrc\glWebKit\glWebkitThreading.h" />
     <ClInclude Include="..\..\libsrc\glWebKit\glWebkitUtils.h" />
+    <ClInclude Include="..\..\libsrc\glWebKit\Systems.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\libsrc\glWebKit\glWebKit.cpp" />
@@ -104,6 +105,7 @@
     <ClCompile Include="..\..\libsrc\glWebKit\glWebkitRenderer.cpp" />
     <ClCompile Include="..\..\libsrc\glWebKit\glWebkitThreading.cpp" />
     <ClCompile Include="..\..\libsrc\glWebKit\glWebkitUtils.cpp" />
+    <ClCompile Include="..\..\libsrc\glWebKit\Systems.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

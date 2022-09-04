@@ -40,31 +40,31 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #if ENABLE(SQL_DATABASE)
 #include "sqlite3.h"
 #endif
-
-// Note by Arpit Baldeva: Following define makes sure that no memory allocation happens in EAWebKit before EA::WebKit::Init()
-// is called. If you comment out following, the use of default allocator would result in a crash.
-// Not enabled by default as an integrator of the library may not give an allocator during the initial integration.
-//#define NO_DEFAULT_ALLOCATOR 1
-
-#if defined(EA_PLATFORM_WINDOWS) 
-#include <windows.h>
-namespace 
-{
-inline DWORD protection(bool writable, bool executable)
-{
-	return (DWORD) (executable ?
-		(writable ? PAGE_EXECUTE_READWRITE : PAGE_EXECUTE_READ) :
-		(writable ? PAGE_READWRITE : PAGE_READONLY));
-}
-}
-#endif
-
-#if defined(EA_PLATFORM_OSX)
-#include <unistd.h>
-#include <sys/mman.h>
-#include <mach/mach_init.h>
-#include <mach/vm_map.h>
-#endif
+//
+//// Note by Arpit Baldeva: Following define makes sure that no memory allocation happens in EAWebKit before EA::WebKit::Init()
+//// is called. If you comment out following, the use of default allocator would result in a crash.
+//// Not enabled by default as an integrator of the library may not give an allocator during the initial integration.
+////#define NO_DEFAULT_ALLOCATOR 1
+//
+//#if defined(EA_PLATFORM_WINDOWS) 
+//#include <windows.h>
+//namespace 
+//{
+//inline DWORD protection(bool writable, bool executable)
+//{
+//	return (DWORD) (executable ?
+//		(writable ? PAGE_EXECUTE_READWRITE : PAGE_EXECUTE_READ) :
+//		(writable ? PAGE_READWRITE : PAGE_READONLY));
+//}
+//}
+//#endif
+//
+//#if defined(EA_PLATFORM_OSX)
+//#include <unistd.h>
+//#include <sys/mman.h>
+//#include <mach/mach_init.h>
+//#include <mach/vm_map.h>
+//#endif
 namespace EA
 {
 namespace WebKit
@@ -81,256 +81,256 @@ namespace WebKit
 // Note Microsoft _aligned_malloc needs to be coupled with _aligned_free. 
 // We just always alloc alligned to keep things consistent.
 
-class DefaultAllocator : public Allocator
-{
-	void* Malloc(size_t size, int /*flags*/, const char* /*pName*/)
-	{
-#if defined(NO_DEFAULT_ALLOCATOR)
-		ASSERT_NOT_REACHED();
-#endif
-		#if defined(_MSC_VER)
-			#if (EA_PLATFORM_PTR_SIZE == 8)
-				return	_aligned_malloc(size, 16); //16 byte alignment on 64 bit 
-			#else
-				return	_aligned_malloc(size, 8); //8 byte alignment on 32 bit
-			#endif
-		#elif defined(__GNUC__)
-			return malloc(size);
-		#endif
-
-	}
-
-	void* MallocAligned(size_t size, size_t alignment, size_t offset, int /*flags*/, const char* /*pName*/)
-	{
-		(void) offset;
-		#if defined(_MSC_VER)
-			return _aligned_malloc(size, alignment);
-		#elif defined(__GNUC__) 
-            #if defined(EA_PLATFORM_OSX)
-            	void* mem;
-            	posix_memalign(&mem,alignment,size); 
-            	return mem;
-            #else
-                return memalign(alignment, size);
-            #endif
-		#endif
-	}
-
-	void Free(void* p, size_t /*size*/)
-	{
-		#if defined(_MSC_VER)
-			_aligned_free(p);
-		#elif defined(__GNUC__)
-			free(p);
-		#endif
-	}
-
-	void FreeAligned(void* p, size_t size)
-	{
-		Free(p, size);
-	}
-
-	void* Realloc(void* p, size_t size, int /*flags*/)
-	{
-		#if defined(_MSC_VER)
-			return _aligned_realloc(p, size, 1);
-		#elif defined(__GNUC__)
-			return realloc(p, size);
-		#endif
-
-	}
-
-	// OS memory management API.
-	bool SupportsOSMemoryManagement()
-	{
-#if defined(EA_PLATFORM_WINDOWS) || defined(EA_PLATFORM_OSX)
-		return true;
-#else
-		return false;
-#endif
-	}
-
-	size_t SystemPageSize()
-	{
-#if defined(EA_PLATFORM_WINDOWS)
-		size_t size = 0;
-		SYSTEM_INFO system_info;
-		GetSystemInfo(&system_info);
-		size = system_info.dwPageSize;
-		return size;
-#elif defined(EA_PLATFORM_OSX)
-        return (size_t)getpagesize();
-#else
-		return 4096;
-#endif
-	}
-
-	void* ReserveUncommitted(size_t bytes, bool writable, bool executable)
-	{
-#if defined(EA_PLATFORM_WINDOWS)
-		void* result = VirtualAlloc(0, bytes, MEM_RESERVE, protection(writable, executable));
- 		EAW_ASSERT_MSG(result, "VirtualAlloc failed");
-		return result;
-#elif defined(EA_PLATFORM_OSX)
-        int protection = PROT_READ;
-        if (writable)
-            protection |= PROT_WRITE;
-        if (executable)
-            protection |= PROT_EXEC;
-        
-        int flags = MAP_PRIVATE | MAP_ANON;
-                
-        void* base = mmap(0, bytes, protection, flags, -1, 0);
-        if (base == MAP_FAILED)
-            base = 0;
-        return base;
-
-#else
-		EAW_ASSERT_MSG(false, "ReserveUncommitted not supported");
-		return 0;
-#endif
-	}
-	
-	
-	void* ReserveAndCommit(size_t bytes, bool writable, bool executable)
-	{
-#if defined(EA_PLATFORM_WINDOWS)
-		void* result = VirtualAlloc(0, bytes, MEM_RESERVE | MEM_COMMIT, protection(writable, executable));
-		EAW_ASSERT_MSG(result, "VirtualAlloc failed");
-		return result;
-#elif defined(EA_PLATFORM_OSX)
-        int protection = PROT_READ;
-        if (writable)
-            protection |= PROT_WRITE;
-        if (executable)
-            protection |= PROT_EXEC;
-        
-        int flags = MAP_PRIVATE | MAP_ANON;
-        
-        void* base = mmap(0, bytes, protection, flags, -1, 0);
-        if (base == MAP_FAILED)
-            base = 0;
-        return base;
-#else
-		EAW_ASSERT_MSG(false, "ReserveAndCommit not supported");
-		return 0;
-#endif
-	}
-	
-	void ReleaseDecommitted(void* address, size_t bytes)
-	{
-#if defined(EA_PLATFORM_WINDOWS)
-		// See comment in Decommit(). Similarly, when bytes is 0, we
-		// don't want to release anything. So, don't call VirtualFree() below.
-		if (!bytes)
-			return;
-		// According to http://msdn.microsoft.com/en-us/library/aa366892(VS.85).aspx,
-		// dwSize must be 0 if dwFreeType is MEM_RELEASE.
-		bool result = VirtualFree(address, 0, MEM_RELEASE);
-		(void)result;
-		EAW_ASSERT_MSG(result, "VirtualFree failed");
-#elif defined(EA_PLATFORM_OSX)
-		int result = munmap(address, bytes);
-		(void)result;
-		EAW_ASSERT_MSG(result == 0, "munmap failed");
-#else
-		EAW_ASSERT_MSG(false, "releaseDecommitted not supported");
-#endif
-	}
-
-	virtual void* ReserveAndCommitAligned(size_t bytes, size_t alignment, void*& reserveBase, size_t& reserveSize, bool writable, bool executable)
-	{
-		size_t alignmentMask = alignment - 1;
-		(void)alignmentMask;
-
-#if defined(EA_PLATFORM_WINDOWS)
-		//VirtualAlloc does not take alignment so we reserve extra memory to be able to commit required amount of memory on alignment requested.
-		reserveSize = bytes + alignment; 
-		reserveBase = VirtualAlloc(0, reserveSize, MEM_RESERVE, protection(writable, executable));
-
-		// Select an aligned region within the reservation and commit.
-		void* alignedBase = reinterpret_cast<uintptr_t>(reserveBase) & alignmentMask
-			? reinterpret_cast<void*>((reinterpret_cast<uintptr_t>(reserveBase) & ~alignmentMask) + alignment)
-			: reserveBase;
-		
-		bool isAligned = !(reinterpret_cast<intptr_t>(alignedBase) & (alignment - 1));
-		EAW_ASSERT_MSG(isAligned,"Not aligned");
-		return VirtualAlloc(alignedBase, bytes, MEM_COMMIT, protection(writable, executable));
-#elif defined(EA_PLATFORM_OSX)
-		int flags = VM_FLAGS_ANYWHERE;
-		int protection = PROT_READ;
-		if (writable)
-			protection |= PROT_WRITE;
-		if (executable)
-			protection |= PROT_EXEC;
-
-		vm_address_t address = 0;
-		vm_map(current_task(), &address, bytes, alignmentMask, flags, MEMORY_OBJECT_NULL, 0, FALSE, protection, PROT_READ | PROT_WRITE | PROT_EXEC, VM_INHERIT_DEFAULT);
-		reserveBase = reinterpret_cast<void*>(address);
-		reserveSize = bytes;
-		return reserveBase;
-#else
-		EAW_ASSERT_MSG(false, "ReserveAndCommitAligned not supported");
-		return 0;
-#endif
-
-	}
-
-	virtual void ReleaseDecommittedAligned(void* reserveBase, size_t reserveSize, size_t alignment)
-	{
-#if defined(EA_PLATFORM_WINDOWS)
-		// See comment in Decommit(). Similarly, when bytes is 0, we
-		// don't want to release anything. So, don't call VirtualFree() below.
-		if (!reserveSize)
-			return;
-		// According to http://msdn.microsoft.com/en-us/library/aa366892(VS.85).aspx,
-		// dwSize must be 0 if dwFreeType is MEM_RELEASE.
-		bool result = VirtualFree(reserveBase, 0, MEM_RELEASE);
-		(void)result;
-		EAW_ASSERT_MSG(result, "VirtualFree failed");
-#elif defined(EA_PLATFORM_OSX)
-		vm_deallocate(current_task(), reinterpret_cast<vm_address_t>(reserveBase), reserveSize);
-#else
-		EAW_ASSERT_MSG(false, "ReleaseDecommittedAligned not supported");
-#endif
-	}
-
-	void Commit(void* address, size_t bytes, bool writable, bool executable)
-	{
-#if defined(EA_PLATFORM_WINDOWS)
-		void* result = VirtualAlloc(address, bytes, MEM_COMMIT, protection(writable, executable));
-		(void) result;
-		EAW_ASSERT_MSG(result, "VirtualAlloc failed");
-#elif defined(EA_PLATFORM_OSX)
-        // Nothing to do here. All the memory through mmap is already committed.
-#else
-		EAW_ASSERT_MSG(false, "commit not supported");
-#endif
-	}
-	
-	void Decommit(void* address, size_t bytes)
-	{
-#if defined(EA_PLATFORM_WINDOWS)
-		// According to http://msdn.microsoft.com/en-us/library/aa366892(VS.85).aspx,
-		// bytes (i.e. dwSize) being 0 when dwFreeType is MEM_DECOMMIT means that we'll
-		// decommit the entire region allocated by VirtualAlloc() instead of decommitting
-		// nothing as we would expect. Hence, we should check if bytes is 0 and handle it
-		// appropriately before calling VirtualFree().
-		// See: https://bugs.webkit.org/show_bug.cgi?id=121972.
-		if (!bytes)
-			return;
-		bool result = VirtualFree(address, bytes, MEM_DECOMMIT);
-		(void) result;
-		EAW_ASSERT_MSG(result, "VirtualFree failed");
-#elif defined(EA_PLATFORM_OSX)
-        // Nothing to do here. All the memory is decommitted through munmap.
-#else
-		EAW_ASSERT_MSG(false, "decommit not supported");
-#endif
-	}
-	
-	
-};
+//class DefaultAllocator : public Allocator
+//{
+//	void* Malloc(size_t size, int /*flags*/, const char* /*pName*/)
+//	{
+//#if defined(NO_DEFAULT_ALLOCATOR)
+//		ASSERT_NOT_REACHED();
+//#endif
+//		#if defined(_MSC_VER)
+//			#if (EA_PLATFORM_PTR_SIZE == 8)
+//				return	_aligned_malloc(size, 16); //16 byte alignment on 64 bit 
+//			#else
+//				return	_aligned_malloc(size, 8); //8 byte alignment on 32 bit
+//			#endif
+//		#elif defined(__GNUC__)
+//			return malloc(size);
+//		#endif
+//
+//	}
+//
+//	void* MallocAligned(size_t size, size_t alignment, size_t offset, int /*flags*/, const char* /*pName*/)
+//	{
+//		(void) offset;
+//		#if defined(_MSC_VER)
+//			return _aligned_malloc(size, alignment);
+//		#elif defined(__GNUC__) 
+//            #if defined(EA_PLATFORM_OSX)
+//            	void* mem;
+//            	posix_memalign(&mem,alignment,size); 
+//            	return mem;
+//            #else
+//                return memalign(alignment, size);
+//            #endif
+//		#endif
+//	}
+//
+//	void Free(void* p, size_t /*size*/)
+//	{
+//		#if defined(_MSC_VER)
+//			_aligned_free(p);
+//		#elif defined(__GNUC__)
+//			free(p);
+//		#endif
+//	}
+//
+//	void FreeAligned(void* p, size_t size)
+//	{
+//		Free(p, size);
+//	}
+//
+//	void* Realloc(void* p, size_t size, int /*flags*/)
+//	{
+//		#if defined(_MSC_VER)
+//			return _aligned_realloc(p, size, 1);
+//		#elif defined(__GNUC__)
+//			return realloc(p, size);
+//		#endif
+//
+//	}
+//
+//	// OS memory management API.
+//	bool SupportsOSMemoryManagement()
+//	{
+//#if defined(EA_PLATFORM_WINDOWS) || defined(EA_PLATFORM_OSX)
+//		return true;
+//#else
+//		return false;
+//#endif
+//	}
+//
+//	size_t SystemPageSize()
+//	{
+//#if defined(EA_PLATFORM_WINDOWS)
+//		size_t size = 0;
+//		SYSTEM_INFO system_info;
+//		GetSystemInfo(&system_info);
+//		size = system_info.dwPageSize;
+//		return size;
+//#elif defined(EA_PLATFORM_OSX)
+//        return (size_t)getpagesize();
+//#else
+//		return 4096;
+//#endif
+//	}
+//
+//	void* ReserveUncommitted(size_t bytes, bool writable, bool executable)
+//	{
+//#if defined(EA_PLATFORM_WINDOWS)
+//		void* result = VirtualAlloc(0, bytes, MEM_RESERVE, protection(writable, executable));
+// 		EAW_ASSERT_MSG(result, "VirtualAlloc failed");
+//		return result;
+//#elif defined(EA_PLATFORM_OSX)
+//        int protection = PROT_READ;
+//        if (writable)
+//            protection |= PROT_WRITE;
+//        if (executable)
+//            protection |= PROT_EXEC;
+//        
+//        int flags = MAP_PRIVATE | MAP_ANON;
+//                
+//        void* base = mmap(0, bytes, protection, flags, -1, 0);
+//        if (base == MAP_FAILED)
+//            base = 0;
+//        return base;
+//
+//#else
+//		EAW_ASSERT_MSG(false, "ReserveUncommitted not supported");
+//		return 0;
+//#endif
+//	}
+//	
+//	
+//	void* ReserveAndCommit(size_t bytes, bool writable, bool executable)
+//	{
+//#if defined(EA_PLATFORM_WINDOWS)
+//		void* result = VirtualAlloc(0, bytes, MEM_RESERVE | MEM_COMMIT, protection(writable, executable));
+//		EAW_ASSERT_MSG(result, "VirtualAlloc failed");
+//		return result;
+//#elif defined(EA_PLATFORM_OSX)
+//        int protection = PROT_READ;
+//        if (writable)
+//            protection |= PROT_WRITE;
+//        if (executable)
+//            protection |= PROT_EXEC;
+//        
+//        int flags = MAP_PRIVATE | MAP_ANON;
+//        
+//        void* base = mmap(0, bytes, protection, flags, -1, 0);
+//        if (base == MAP_FAILED)
+//            base = 0;
+//        return base;
+//#else
+//		EAW_ASSERT_MSG(false, "ReserveAndCommit not supported");
+//		return 0;
+//#endif
+//	}
+//	
+//	void ReleaseDecommitted(void* address, size_t bytes)
+//	{
+//#if defined(EA_PLATFORM_WINDOWS)
+//		// See comment in Decommit(). Similarly, when bytes is 0, we
+//		// don't want to release anything. So, don't call VirtualFree() below.
+//		if (!bytes)
+//			return;
+//		// According to http://msdn.microsoft.com/en-us/library/aa366892(VS.85).aspx,
+//		// dwSize must be 0 if dwFreeType is MEM_RELEASE.
+//		bool result = VirtualFree(address, 0, MEM_RELEASE);
+//		(void)result;
+//		EAW_ASSERT_MSG(result, "VirtualFree failed");
+//#elif defined(EA_PLATFORM_OSX)
+//		int result = munmap(address, bytes);
+//		(void)result;
+//		EAW_ASSERT_MSG(result == 0, "munmap failed");
+//#else
+//		EAW_ASSERT_MSG(false, "releaseDecommitted not supported");
+//#endif
+//	}
+//
+//	virtual void* ReserveAndCommitAligned(size_t bytes, size_t alignment, void*& reserveBase, size_t& reserveSize, bool writable, bool executable)
+//	{
+//		size_t alignmentMask = alignment - 1;
+//		(void)alignmentMask;
+//
+//#if defined(EA_PLATFORM_WINDOWS)
+//		//VirtualAlloc does not take alignment so we reserve extra memory to be able to commit required amount of memory on alignment requested.
+//		reserveSize = bytes + alignment; 
+//		reserveBase = VirtualAlloc(0, reserveSize, MEM_RESERVE, protection(writable, executable));
+//
+//		// Select an aligned region within the reservation and commit.
+//		void* alignedBase = reinterpret_cast<uintptr_t>(reserveBase) & alignmentMask
+//			? reinterpret_cast<void*>((reinterpret_cast<uintptr_t>(reserveBase) & ~alignmentMask) + alignment)
+//			: reserveBase;
+//		
+//		bool isAligned = !(reinterpret_cast<intptr_t>(alignedBase) & (alignment - 1));
+//		EAW_ASSERT_MSG(isAligned,"Not aligned");
+//		return VirtualAlloc(alignedBase, bytes, MEM_COMMIT, protection(writable, executable));
+//#elif defined(EA_PLATFORM_OSX)
+//		int flags = VM_FLAGS_ANYWHERE;
+//		int protection = PROT_READ;
+//		if (writable)
+//			protection |= PROT_WRITE;
+//		if (executable)
+//			protection |= PROT_EXEC;
+//
+//		vm_address_t address = 0;
+//		vm_map(current_task(), &address, bytes, alignmentMask, flags, MEMORY_OBJECT_NULL, 0, FALSE, protection, PROT_READ | PROT_WRITE | PROT_EXEC, VM_INHERIT_DEFAULT);
+//		reserveBase = reinterpret_cast<void*>(address);
+//		reserveSize = bytes;
+//		return reserveBase;
+//#else
+//		EAW_ASSERT_MSG(false, "ReserveAndCommitAligned not supported");
+//		return 0;
+//#endif
+//
+//	}
+//
+//	virtual void ReleaseDecommittedAligned(void* reserveBase, size_t reserveSize, size_t alignment)
+//	{
+//#if defined(EA_PLATFORM_WINDOWS)
+//		// See comment in Decommit(). Similarly, when bytes is 0, we
+//		// don't want to release anything. So, don't call VirtualFree() below.
+//		if (!reserveSize)
+//			return;
+//		// According to http://msdn.microsoft.com/en-us/library/aa366892(VS.85).aspx,
+//		// dwSize must be 0 if dwFreeType is MEM_RELEASE.
+//		bool result = VirtualFree(reserveBase, 0, MEM_RELEASE);
+//		(void)result;
+//		EAW_ASSERT_MSG(result, "VirtualFree failed");
+//#elif defined(EA_PLATFORM_OSX)
+//		vm_deallocate(current_task(), reinterpret_cast<vm_address_t>(reserveBase), reserveSize);
+//#else
+//		EAW_ASSERT_MSG(false, "ReleaseDecommittedAligned not supported");
+//#endif
+//	}
+//
+//	void Commit(void* address, size_t bytes, bool writable, bool executable)
+//	{
+//#if defined(EA_PLATFORM_WINDOWS)
+//		void* result = VirtualAlloc(address, bytes, MEM_COMMIT, protection(writable, executable));
+//		(void) result;
+//		EAW_ASSERT_MSG(result, "VirtualAlloc failed");
+//#elif defined(EA_PLATFORM_OSX)
+//        // Nothing to do here. All the memory through mmap is already committed.
+//#else
+//		EAW_ASSERT_MSG(false, "commit not supported");
+//#endif
+//	}
+//	
+//	void Decommit(void* address, size_t bytes)
+//	{
+//#if defined(EA_PLATFORM_WINDOWS)
+//		// According to http://msdn.microsoft.com/en-us/library/aa366892(VS.85).aspx,
+//		// bytes (i.e. dwSize) being 0 when dwFreeType is MEM_DECOMMIT means that we'll
+//		// decommit the entire region allocated by VirtualAlloc() instead of decommitting
+//		// nothing as we would expect. Hence, we should check if bytes is 0 and handle it
+//		// appropriately before calling VirtualFree().
+//		// See: https://bugs.webkit.org/show_bug.cgi?id=121972.
+//		if (!bytes)
+//			return;
+//		bool result = VirtualFree(address, bytes, MEM_DECOMMIT);
+//		(void) result;
+//		EAW_ASSERT_MSG(result, "VirtualFree failed");
+//#elif defined(EA_PLATFORM_OSX)
+//        // Nothing to do here. All the memory is decommitted through munmap.
+//#else
+//		EAW_ASSERT_MSG(false, "decommit not supported");
+//#endif
+//	}
+//	
+//	
+//};
 
 
 Allocator* spEAWebKitAllocator = 0;
@@ -343,15 +343,16 @@ void SetAllocator(EA::WebKit::Allocator* pAllocator)
 
 Allocator* GetAllocator()
 {
-	if(!spEAWebKitAllocator)
-	{
-		void* allocMem = malloc(sizeof(DefaultAllocator));
-		spEAWebKitAllocator = new(allocMem) DefaultAllocator();
-		// Order is important here. We assert assert after the allocator is established otherwise
-		// we end up in an endless loop since our logger uses eastl::string which tries to allocate
-		// memory as well.
-		EAW_ASSERT_MSG(false, "Using default allocator"); 
-	}
+	//if(!spEAWebKitAllocator)
+	//{
+	//	void* allocMem = malloc(sizeof(DefaultAllocator));
+	//	spEAWebKitAllocator = new(allocMem) DefaultAllocator();
+	//	// Order is important here. We assert assert after the allocator is established otherwise
+	//	// we end up in an endless loop since our logger uses eastl::string which tries to allocate
+	//	// memory as well.
+	//	EAW_ASSERT_MSG(false, "Using default allocator"); 
+	//}
+	EAW_ASSERT_MSG(spEAWebKitAllocator, "Allocator does not exist");
 	return spEAWebKitAllocator;
 }
 

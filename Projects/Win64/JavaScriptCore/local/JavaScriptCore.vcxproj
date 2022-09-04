@@ -586,7 +586,6 @@
     <Masm Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\DerivedSources\pc64\dev-debug\LowLevelInterpreterWin.asm">
       <ObjectFileName Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-debug|x64' ">pc64-vc-dev-debug\build\JavaScriptCore\DerivedSources\pc64\dev-debug\LowLevelInterpreterWin.asm.obj</ObjectFileName>
       <ExcludedFromBuild Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-opt|x64' ">TRUE</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='pc64-vc-dev-debug|x64'">true</ExcludedFromBuild>
     </Masm>
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\DerivedSources\pc64\dev-debug\NumberConstructor.lut.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\DerivedSources\pc64\dev-debug\NumberPrototype.lut.h" />
@@ -1524,7 +1523,6 @@
     <Masm Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\jit\JITStubsMSVC64.asm">
       <ObjectFileName Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-debug|x64' ">pc64-vc-dev-debug\build\JavaScriptCore\jit\JITStubsMSVC64.asm.obj</ObjectFileName>
       <ObjectFileName Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-opt|x64' ">pc64-vc-dev-opt\build\JavaScriptCore\jit\JITStubsMSVC64.asm.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='pc64-vc-dev-debug|x64'">true</ExcludedFromBuild>
     </Masm>
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\jit\JITStubsX86.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\jit\JITStubsX86_64.h" />

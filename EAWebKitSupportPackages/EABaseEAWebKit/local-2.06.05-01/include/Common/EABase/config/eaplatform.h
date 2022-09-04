@@ -547,10 +547,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	#endif
 #endif
 
-//MBG - modifications
-#undef EA_PLATFORM_DESKTOP
-#undef EA_PLATFORM_CONSOLE
-#define EA_PLATFORM_CONSOLE 1
 
 #endif // INCLUDED_eaplatform_H
 

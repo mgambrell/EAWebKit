@@ -186,7 +186,6 @@
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\source\EAFileNotification.cpp" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\source\EAFileStream.cpp" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\source\EAFileUtil.cpp" />
-    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\source\EAIniFile.cpp" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\source\EAStreamAdapter.cpp" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\source\EAStreamBuffer.cpp" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\source\EAStreamChild.cpp" />

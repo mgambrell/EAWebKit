@@ -119,9 +119,6 @@
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\source\EAFileUtil.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\source\EAIniFile.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\source\EAStreamAdapter.cpp">
       <Filter>source</Filter>
     </ClCompile>

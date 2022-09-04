@@ -78,10 +78,156 @@ struct EA::WebKit::AppCallbacks callbacks = {
 // init the systems: using DefaultAllocator, DefaultFileSystem, no text/font support, DefaultThreadSystem
 struct EA::WebKit::AppSystems systems = { nullptr };
 
+[[noreturn]]
+void mywk_abort(const char* why)
+{
+  printf(why);
+  abort();
+}
+
+class MyFileSystem : public EA::WebKit::FileSystem
+{
+public:
+  virtual ~MyFileSystem(){ }
+
+  class MyFileObject
+  {
+  public:
+    FILE* f = nullptr;
+  };
+
+  FileObject CreateFileObject() override { return (uintptr_t)(new MyFileObject()); }
+  void DestroyFileObject(FileObject fileObject) override { delete (MyFileObject*)fileObject; }
+
+  bool OpenFile(FileObject fileObject, const EA::WebKit::utf8_t* path, int openFlags, int createDisposition =  kCDONone) override
+  {
+    MyFileObject* mf = (MyFileObject*)fileObject;
+    mf->f = fopen(path,openFlags & kWrite ? "wb" : "rb");
+    return !!mf->f;
+  }
+
+  FileObject OpenTempFile(const EA::WebKit::utf8_t* prefix, EA::WebKit::utf8_t* pDestPath) override
+  {
+    mywk_abort("OpenTempFile");
+  }
+  
+  void CloseFile(FileObject fileObject)
+  {
+    MyFileObject* mf = (MyFileObject*)fileObject;
+    if(mf->f)
+    {
+      fclose(mf->f);
+      mf->f = nullptr;
+    }
+  }
+
+  //MBG NOTE - FileSystemDefault's implementation made no sense. it seems this should just work in the sensible way and return what was read.
+  // Returns (int64_t)(ReadStatus::kReadError) in case of an error that is not recoverable
+  // if Returns > 0, the total number of bytes read.
+  // if Returns ReadStatus::kReadComplete, the file read is complete and no more data to read.
+  int64_t ReadFile(FileObject fileObject, void* buffer, int64_t size) override
+  {
+    MyFileObject* mf = (MyFileObject*)fileObject;
+    auto result = fread(buffer,1,size,mf->f);
+    return result;
+  }
+
+  virtual bool WriteFile(FileObject fileObject, const void* buffer, int64_t size) override
+  {
+    MyFileObject* mf = (MyFileObject*)fileObject;
+    fwrite(buffer,1,size,mf->f);
+    return true;
+  }
+
+  int64_t GetFileSize(FileObject fileObject) override
+  {
+    MyFileObject* mf = (MyFileObject*)fileObject;
+    auto at = ftell(mf->f);
+    fseek(mf->f,0,SEEK_END);
+    long len = ftell(mf->f);
+    fseek(mf->f,at,SEEK_SET);
+    return len;
+  }
+
+  bool SetFileSize(FileObject fileObject, int64_t size) override
+  {
+    mywk_abort("OpenTempFile");
+    return false;
+  }
+  
+  int64_t GetFilePosition(FileObject fileObject) override
+  {
+    MyFileObject* mf = (MyFileObject*)fileObject;
+    return ftell(mf->f);
+  }
+
+  bool SetFilePosition(FileObject fileObject, int64_t position) override
+  {
+    MyFileObject* mf = (MyFileObject*)fileObject;
+    fseek(mf->f,position,SEEK_SET);
+    return true;
+  }
+
+  bool FlushFile(FileObject fileObject) override
+  {
+    //nop
+    return false;
+  }
+
+  // File system functionality
+  bool FileExists(const EA::WebKit::utf8_t* path) override
+  {
+    FILE* inf = fopen(path,"rb");
+    if(inf)
+    {
+      fclose(inf);
+      return true;
+    }
+    return false;
+  }
+  
+  bool DirectoryExists(const EA::WebKit::utf8_t* path) override
+  {
+    mywk_abort("DirectoryExists");
+  }
+  bool RemoveFile(const EA::WebKit::utf8_t* path) override
+  {
+    mywk_abort("RemoveFile");
+  }
+  bool DeleteDirectory(const EA::WebKit::utf8_t* path) override
+  {
+    mywk_abort("DeleteDirectory");
+  }
+  bool GetFileSize(const EA::WebKit::utf8_t* path, int64_t& size) override
+  {
+    mywk_abort("GetFileSize");
+  }
+  bool GetFileModificationTime(const EA::WebKit::utf8_t* path, time_t& result) override
+  {
+    mywk_abort("GetFileModificationTime");
+  }
+  bool MakeDirectory(const EA::WebKit::utf8_t* path) override
+  {
+    mywk_abort("MakeDirectory");
+  }
+  bool GetDataDirectory(EA::WebKit::utf8_t* path, size_t pathBufferCapacity) override
+  {
+    mywk_abort("GetDataDirectory");
+  }
+
+  virtual bool GetTempDirectory(EA::WebKit::utf8_t* path, size_t pathBufferCapacity) override
+  { 
+    path[0] = 0; 
+    return false;
+  }
+
+} s_MyFileSystem;
+
 bool initWebkit()
 {
    systems.mThreadSystem = new StdThreadSystem;
    systems.mEAWebkitClient = new GLWebkitClient();
+   systems.mFileSystem = &s_MyFileSystem;
 
    typedef EA::WebKit::EAWebKitLib* (*PF_CreateEAWebkitInstance)(void);
    PF_CreateEAWebkitInstance create_Webkit_instance = nullptr;
@@ -91,16 +237,14 @@ bool initWebkit()
 #else
    HMODULE wdll = LoadLibraryA("EAWebkit.dll");
 #endif // _DEBUG
-   if(wdll != nullptr)
-   {
-      create_Webkit_instance = reinterpret_cast<PF_CreateEAWebkitInstance>(GetProcAddress(wdll, "CreateEAWebkitInstance"));
-   }
 
+   if(!wdll)
+     abort();
+   
+   create_Webkit_instance = reinterpret_cast<PF_CreateEAWebkitInstance>(GetProcAddress(wdll, "CreateEAWebkitInstance"));
+   
    if(!create_Webkit_instance)
-   {
-      std::cout << "EAWebkit.dll missing" << std::endl;
-      return false;
-   }
+     abort();
 
    wk = create_Webkit_instance();
 

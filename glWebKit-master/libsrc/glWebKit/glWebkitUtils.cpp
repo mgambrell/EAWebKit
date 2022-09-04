@@ -22,72 +22,6 @@
 #include <iostream>
 #include <algorithm>
 
-int getSystemFonts(std::vector<std::string>& fonts) 
-{
-    static const LPWSTR fontRegistryPath = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts";
-    HKEY hKey;
-    LONG result;
-
-    // Open Windows font registry key
-    result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, fontRegistryPath, 0, KEY_READ, &hKey);
-    if (result != ERROR_SUCCESS) {
-        return 1;
-    }
-
-    DWORD maxValueNameSize = 0, maxValueDataSize = 0;
-    result = RegQueryInfoKey(hKey, 0, 0, 0, 0, 0, 0, 0, &maxValueNameSize, &maxValueDataSize, 0, 0);
-    if (result != ERROR_SUCCESS) {
-        return 1;
-    }
-
-    DWORD valueIndex = 0;
-    LPSTR valueName = new CHAR[maxValueNameSize];
-    LPBYTE valueData = new BYTE[maxValueDataSize];
-    DWORD valueNameSize, valueDataSize, valueType;
-
-
-    // Build full font file path
-    char winDir_[MAX_PATH] = "";
-    GetWindowsDirectoryA(winDir_, MAX_PATH);
-    std::string winDir = std::string(winDir_);
-    fonts.clear();
-
-    do {
-        valueDataSize = maxValueDataSize;
-        valueNameSize = maxValueNameSize;
-
-        result = RegEnumValueA(hKey, valueIndex, valueName, &valueNameSize, 0, &valueType, valueData, &valueDataSize);
-
-        valueIndex++;
-
-        if (result != ERROR_SUCCESS || valueType != REG_SZ) {
-            continue;
-        }
-
-        std::string wsValueName(valueName, valueNameSize);
-        std::string wsValueData((LPSTR)valueData, valueDataSize-1); //remove trailing \0 in data
-
-        std::string ext = wsValueData.substr(wsValueData.length() - 3);
-        std::transform(ext.begin(), ext.end(),ext.begin(), ::tolower);
-
-        if(ext != std::string("ttf") && ext != std::string("ttc") )
-           continue;
-
-        if(wsValueData.substr(0, 2) == std::string("C:"))
-           continue;
-
-        std::string fontPath = winDir + "\\Fonts\\" + wsValueData;
-        fonts.push_back(fontPath);
-
-    } while (result != ERROR_NO_MORE_ITEMS);
-
-    delete[] valueName;
-    delete[] valueData;
-
-    RegCloseKey(hKey);
-    return 0;
-}
-
 int add_ttf_font(EA::WebKit::EAWebKitLib* wk, const char* ttfFile) 
 {
     EA::WebKit::ITextSystem* ts = wk->GetTextSystem();
@@ -111,21 +45,6 @@ int add_ttf_font(EA::WebKit::EAWebKitLib* wk, const char* ttfFile)
     int numFaces = ts->AddFace(buffer, fileSize);
 
     return numFaces;
-}
-
-int init_system_fonts(EA::WebKit::EAWebKitLib* wk) 
-{
-    std::vector<std::string> fonts;
-    if (getSystemFonts(fonts)) 
-    {
-        return 1;
-    }
-    int fonts_installed = 0;
-    for (int i = 0; i < fonts.size(); ++i) 
-    {
-        add_ttf_font(wk, fonts[i].c_str());
-    }
-    return 0;
 }
 
 unsigned int vPbo[2] = { 0, 0 };

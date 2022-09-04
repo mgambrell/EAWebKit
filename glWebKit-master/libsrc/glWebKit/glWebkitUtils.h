@@ -11,7 +11,5 @@ extern unsigned int frame;
 
 #include <string>
 
-int getSystemFonts(std::vector<std::string>& fonts);
 int add_ttf_font(EA::WebKit::EAWebKitLib* wk, const char* ttfFile);
-int init_system_fonts(EA::WebKit::EAWebKitLib* wk);
 

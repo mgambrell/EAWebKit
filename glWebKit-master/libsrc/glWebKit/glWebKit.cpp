@@ -125,7 +125,7 @@ bool initWebkit()
    params.mHttpManagerLogLevel = 4;
    params.mRemoteWebInspectorPort = 1234;
    params.mReportJSExceptionCallstacks = true;
-   params.mVerifySSLCert = true;
+   params.mVerifySSLCert = false;
    params.mJavaScriptStackSize = 2 * 1024 * 1024; //MBG MODIFIED
 
    wk->SetParameters(params);
@@ -134,10 +134,6 @@ bool initWebkit()
    //times new roman is the default fallback if a font isn't found, so we need 
    //to at least load this (should probably be built in)
    int ret = add_ttf_font(wk, "times.ttf");
-   if (ret == 0)
-   {
-      std::cout << "Error adding times.ttf font. " << std::endl;
-   }
 
    return true;
 }

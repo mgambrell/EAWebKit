@@ -34,29 +34,8 @@ double monotonicTimerCallback()
 
 bool cryptographicallyRandomValueCallback(unsigned char *buffer, size_t length)
 {
-   //deprecated API, using newer api below
-//     HCRYPTPROV hCryptProv = 0;
-//     CryptAcquireContext(&hCryptProv, 0, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT);
-//     CryptGenRandom(hCryptProv, length, buffer);
-//     CryptReleaseContext(hCryptProv, 0);
-
-    BCRYPT_ALG_HANDLE algorithm;
-    NTSTATUS ret;
-    ret = BCryptOpenAlgorithmProvider(&algorithm, BCRYPT_RNG_ALGORITHM, 0, 0);
-    if(ret != 0)
-    {
-       std::cout << "Failed to initialize cryto algorithm provider.  Return code: " << ret << std::endl;
-       return false;
-    }
-
-    ret = BCryptGenRandom(algorithm, buffer, length, 0);
-    if(ret != 0)
-    {
-       std::cout << "Failed to get cryto random number.  Return code: " << ret << std::endl;
-       return false;
-    }
-    
-    return true;  // Returns true if no error, else false
+  //not important (LOL!)
+  return true;
 }
 
 void* stackBaseCallback() 

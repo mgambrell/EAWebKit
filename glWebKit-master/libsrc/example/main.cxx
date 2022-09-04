@@ -1,5 +1,4 @@
 #pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "Bcrypt.lib")
 
 #include "windows.h"
 

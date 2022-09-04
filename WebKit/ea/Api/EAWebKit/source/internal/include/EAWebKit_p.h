@@ -68,6 +68,9 @@ EAWebKitMonotonicTimerCallback  GetMonotonicTimer();
 void						    SetStackBaseCallback(EAWebKitStackBaseCallback);
 EAWebKitStackBaseCallback	    GetStackBaseCallback();
 
+void						    SetStackLimitCallback(EAWebKitStackLimitCallback);
+EAWebKitStackLimitCallback	    GetStackLimitCallback();
+
 void                        	SetCryptographicallyRandomValueCallback(EAWebKitCryptographicallyRandomValueCallback);
 
 void							SetGetCookiesCallback(EAWebKitGetCookiesCallback getCookies);

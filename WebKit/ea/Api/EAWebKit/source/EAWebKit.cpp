@@ -99,6 +99,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "CSSValuePool.h"
 #include "WebStorageNamespaceProvider.h"
 
+//MBG ADDED
+#include "../../EAWebKitSupportPackages/cairo/GLPipe/GLPipe.h"
+
 //-
 #if ENABLE(EATEXT_IN_DLL)
 #include <internal/include/EAWebKitTextWrapper.h>
@@ -1441,6 +1444,9 @@ void SetParameters(const Parameters& parameters)
 		//it's hard to prove this, since it seems to only be smoked out when handling errors
 		//(I believe the reserved zone is for creating exceptions?)
 		JSC::Options::reservedZoneSize() = 256*1024;
+
+		//MBG ADDED
+		GLPipe_SetProcs((GLPipe_Procs*)parameters.glp_procs);
 };
 
 ThemeParameters::ThemeParameters()

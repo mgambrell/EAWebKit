@@ -230,6 +230,9 @@ struct Parameters
 	uint32_t    mJavaScriptStackSize;
 	uint32_t	mJavaScriptHeapWatermark; // PC Only(Ignored on Consoles as default value is sufficient). The watermark at which JSCore engine starts to recollect blocks. Higher watermark means more speed of execution. 1 MB by default. 
 
+	//MBG ADDED
+	void* glp_procs = nullptr;
+
 	// Font smoothing size
 	uint32_t    mSmoothFontSize;                // Default to 18 css pixels.  If 0, all font sizes are smooth (anti-aliased), including bold and italic. Results can vary depending on font family and sizes (better in general for larger fonts).
 	uint32_t    mFontFilterColorIntensity;      // Default is 48.  0-255 range.  If mEnableFontAlphaFilter is true, it will filter any pen color that has a color channel <= to this intentsity value.  It is to avoid filtering bright colors (e.g white) which can sometimes look faded if alpha filtered.

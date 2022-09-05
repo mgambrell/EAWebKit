@@ -54,10 +54,16 @@ extern "C" char* getenv(const char*);
 #define USE_ACCELERATED_COMPOSITING 1
 #define USE_TEXTURE_MAPPER 1
 
+//MBG - modified
 // Turn off 3D graphics/OpenGL for now.
-#define ENABLE_GRAPHICS_CONTEXT_3D 0
-#define	USE_OPENGL_ES_2 0
-#define	USE_EGL 0
+//#define ENABLE_GRAPHICS_CONTEXT_3D 0
+//#define	USE_OPENGL_ES_2 0
+//#define	USE_EGL 0
+//#define ENABLE_GRAPHICS_CONTEXT_3D 1 //this seems to make webgl stuff happen, i guess? i dont need it.. but i guess eventually one day it would be cool. seems i need the whole heft of ANGLE though, then
+#define	USE_OPENGL_ES_2 1
+#define	USE_EGL 1
+//MBG - had to add this one, strange
+#define USE_OPENGL_ES 1
 
 #define USE_PTHREADS 0
 

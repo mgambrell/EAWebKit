@@ -102,6 +102,10 @@
 
 #include "PlatformContextCairo.h"
 
+//MBG GL TEST
+#include "cairo/cairo-gl.h"
+#include <GLES2/gl2.h>
+
 namespace EA
 {
 namespace WebKit
@@ -506,8 +510,38 @@ void WebFrame::ClearDisplay(const WebCore::Color &color)
     d->mClearDisplayColor = color;
 }
 
+GLuint fbid, texid;
+
 void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface *surface, const eastl::vector<WebCore::IntRect> &dirtyRegions) 
 {
+	//mbg quick test:
+	static bool notfirst = false;
+	static cairo_device_t* m_dev;
+	static cairo_surface_t* m_cairoGlSurface;
+	if(!notfirst)
+	{
+		notfirst = true;
+
+		auto egl = eglCreateContext(0,nullptr,nullptr,nullptr);
+		m_dev = cairo_egl_device_create(0,egl);
+		
+		glGenTextures(1,&texid);
+		glBindTexture(GL_TEXTURE_2D,texid);
+		glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,1280,720,0,GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		glGenFramebuffers(1,&fbid);
+		if(fbid != 6)
+		{
+			int zzz=9;
+		}
+		glBindFramebuffer(GL_FRAMEBUFFER,fbid);
+		glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D, texid, 0);
+
+		m_cairoGlSurface = cairo_gl_surface_create_for_texture(m_dev,CAIRO_CONTENT_COLOR_ALPHA,texid,1280,720);
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER,fbid);
+
+
 	EAW_ASSERT_MSG(!d->page->view()->IsUsingTiledBackingStore(), "non tiled rendering path called but using tiled backing store");
 	if(d->page->view()->IsUsingTiledBackingStore())
 		return;
@@ -522,22 +556,33 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 
     WebCore::FrameView *view = d->frame->view();
 	NOTIFY_PROCESS_STATUS(kVProcessTypeDirtyRectsRender, EA::WebKit::kVProcessStatusStarted, d->page->view());
-	for (unsigned i = 0; i < dirtyRegions.size(); ++i) 
+	unsigned nDirtyRegionsToDraw = dirtyRegions.size();
+	for (unsigned i = 0; i < nDirtyRegionsToDraw; ++i) 
 	{
-        ISurface::SurfaceDescriptor surfaceDescriptor = {0};
-        
-        IntRect eaRect(dirtyRegions[i]);
-        surface->Lock(&surfaceDescriptor, &eaRect);
-        
-		RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_image_surface_create_for_data((unsigned char*)surfaceDescriptor.mData, CAIRO_FORMAT_ARGB32, eaRect.mSize.mWidth, eaRect.mSize.mHeight, surfaceDescriptor.mStride));    
-        RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
-        
+		const auto& dirty = dirtyRegions[i];
+
+		//MBG - EXPERIMENTING HERE WITH GL RENDERING
+		bool isGlRendering = false;
+
+		//I. software
+		//ISurface::SurfaceDescriptor surfaceDescriptor = { 0 };
+		//IntRect eaRect(dirtyRegions[i]);
+		//surface->Lock(&surfaceDescriptor, &eaRect);
+		//auto pRawSurf = cairo_image_surface_create_for_data((unsigned char*)surfaceDescriptor.mData, CAIRO_FORMAT_ARGB32, eaRect.mSize.mWidth, eaRect.mSize.mHeight, surfaceDescriptor.mStride);
+		//RefPtr<cairo_surface_t> cairoSurface = adoptRef(pRawSurf);
+		//RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
+
+				//II. with GL
+		auto pRawCairoContext = cairo_create(m_cairoGlSurface);
+		RefPtr<cairo_t> cairoContext = adoptRef(pRawCairoContext);
+		isGlRendering = true;
+		
 		WebCore::GraphicsContext graphicsContext(cairoContext.get());
 
         if (!graphicsContext.paintingDisabled() || graphicsContext.updatingControlTints()) 
         {
-            const WebCore::IntRect &dirty = dirtyRegions[i];
-			graphicsContext.translate(-dirty.x(), -dirty.y());// Translate the context so the drawing starts at the origin of the locked portion.
+					if(!isGlRendering)
+						graphicsContext.translate(-dirty.x(), -dirty.y());// Translate the context so the drawing starts at the origin of the locked portion. (not needed for GL rendering)
             view->paint(&graphicsContext, dirty);// Paint contents and scroll bars. Some ports call paintContents and then painScrollbars separately.
         }
 
@@ -550,7 +595,7 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 			
 			graphicsContext.setStrokeStyle(WebCore::SolidStroke);
 			graphicsContext.setStrokeColor(WebCore::Color(1.0f,0.0f,0.0f,1.0f), WebCore::ColorSpaceDeviceRGB);
-			graphicsContext.strokeRect(WebCore::FloatRect(eaRect.mLocation.mX,eaRect.mLocation.mY,eaRect.mSize.mWidth,eaRect.mSize.mHeight),2.0f); 
+			graphicsContext.strokeRect(WebCore::FloatRect(dirty.x(),dirty.y(),dirty.width(),dirty.height()),2.0f); 
 
 			graphicsContext.restore();
 			NOTIFY_PROCESS_STATUS(kVProcessTypeDrawDebug, EA::WebKit::kVProcessStatusEnded, d->page->view());

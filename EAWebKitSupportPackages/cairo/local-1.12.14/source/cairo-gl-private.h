@@ -89,11 +89,17 @@
 
 /* maximal number of shaders we keep in the cache.
  * Random number that is hopefully big enough to not cause many cache evictions. */
+//MBG TODO - INCREASE
 #define CAIRO_GL_MAX_SHADERS_PER_CONTEXT 64
 
 /* VBO size that we allocate, smaller size means we gotta flush more often,
  * but larger means hogging more memory and can cause trouble for drivers
  * (especially on embedded devices). */
+//MBG TODO - ANALYZE (results in 1362 verts per batch. probably fine but there's no harm in it being bigger)
+//MBG UPDATE - we create WAY TOO MANY contexts for my taste..... but....
+//MBG UPDATE - ... the way cairo is built, this is client-side vertex data; we will end up allocating it from the OS (if not through a cache later) so as long as it's page-sized and LARGE it'll be alright
+//(increasing the size costs almost nothing when allocating from the OS unless it's zeroing it, which I can make sure it won't)
+//that said.... I'm not changing it now.
 #define CAIRO_GL_VBO_SIZE (16*1024)
 
 typedef struct _cairo_gl_surface cairo_gl_surface_t;

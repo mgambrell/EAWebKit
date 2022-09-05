@@ -10,6 +10,18 @@
     <Filter Include="source">
       <UniqueIdentifier>{F438CD36-9A9B-08FA-222C-0DC9EBFE35EB}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GLPipe">
+      <UniqueIdentifier>{9c230506-424f-4c4c-a918-f3cd6692bf52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLPipe\EGL">
+      <UniqueIdentifier>{74e8c23b-a2ac-40ca-be2e-1bf43a5feaac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLPipe\GLES2">
+      <UniqueIdentifier>{c9f7fc33-b454-45de-8dd4-8b51eef0cdbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLPipe\KHR">
+      <UniqueIdentifier>{4c70ce63-6c21-43f7-8af3-68f3a5990479}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo\cairo.h">
@@ -269,6 +281,39 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-win32-private.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-private.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-dispatch-private.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-ext-def-private.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-gradient-private.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPipe.h">
+      <Filter>GLPipe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\EGL\eglplatform.h">
+      <Filter>GLPipe\EGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\EGL\egl.h">
+      <Filter>GLPipe\EGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLES2\gl2ext.h">
+      <Filter>GLPipe\GLES2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLES2\gl2platform.h">
+      <Filter>GLPipe\GLES2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLES2\gl2.h">
+      <Filter>GLPipe\GLES2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\KHR\khrplatform.h">
+      <Filter>GLPipe\KHR</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -584,5 +629,58 @@
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-wideint.c">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-shaders.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-source.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-spans-compositor.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-surface.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-traps-compositor.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-composite.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-device.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-dispatch.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-glyphs.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-gradient.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-info.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-msaa-compositor.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-operand.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-egl-context.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-rtree.c">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPipe.cpp">
+      <Filter>GLPipe</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPIPE_proclist.inc">
+      <Filter>GLPipe</Filter>
+    </None>
   </ItemGroup>
 </Project>

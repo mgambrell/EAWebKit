@@ -53,7 +53,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-debug|x64' ">
     <ClCompile>
-      <AdditionalIncludeDirectories>"..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo";"..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include";"..\..\..\..\EAWebKitSupportPackages\libpngEAWebKit\local-1.01.00-01\include\libpng";"..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include";"..\..\..\..\EAWebKitSupportPackages\zlibEAWebKit\local-1.2.5-7-01\install";"..\..\..\..\EAWebKitSupportPackages\zlibEAWebKit\local-1.2.5-7-01\include";"$(VSInstallDir)\VC\ATLMFC\INCLUDE";"$(VSInstallDir)\VC\INCLUDE";"..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt";"..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um";"..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared";"..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt";"..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\NETFXSDK\4.6\Include\um"</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe;..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo;..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include;..\..\..\..\EAWebKitSupportPackages\libpngEAWebKit\local-1.01.00-01\include\libpng;..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include;..\..\..\..\EAWebKitSupportPackages\zlibEAWebKit\local-1.2.5-7-01\install;..\..\..\..\EAWebKitSupportPackages\zlibEAWebKit\local-1.2.5-7-01\include;$(VSInstallDir)\VC\ATLMFC\INCLUDE;$(VSInstallDir)\VC\INCLUDE;..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt;..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\NETFXSDK\4.6\Include\um</AdditionalIncludeDirectories>
       <AdditionalOptions>-bigobj /FS -w44946 -w44555 -w44296 -w44287 -w44265 -w44254 </AdditionalOptions>
       <AdditionalUsingDirectories>"..\..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs\14.0\References\CommonConfiguration\neutral"</AdditionalUsingDirectories>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -70,7 +70,7 @@
       <NantUnescapedPreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_HAS_EXCEPTIONS=0;_SECURE_SCL=1;_WIN32_IE=0x0601;_WIN32_WINNT=0x0601;_WINDOWS;CAIRO_DISABLE_TMPFILE;CAIRO_NO_MUTEX=1;cairo_public=;EA_DEBUG;EA_SLN_BUILD=1;EA_VS_UPDATE_MAJOR_VER=14;EA_VS_UPDATE_MINOR_VER=0;EA_VS_UPDATE_PATCH_VER=24720;WIN32;WINVER=0x0601</NantUnescapedPreprocessorDefinitions>
       <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_HAS_EXCEPTIONS=0;_SECURE_SCL=1;_WIN32_IE=0x0601;_WIN32_WINNT=0x0601;_WINDOWS;CAIRO_DISABLE_TMPFILE;CAIRO_NO_MUTEX=1;cairo_public=;EA_DEBUG;EA_SLN_BUILD=1;EA_VS_UPDATE_MAJOR_VER=14;EA_VS_UPDATE_MINOR_VER=0;EA_VS_UPDATE_PATCH_VER=24720;WIN32;WINVER=0x0601</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_HAS_EXCEPTIONS=0;_SECURE_SCL=1;_WIN32_IE=0x0601;_WIN32_WINNT=0x0601;_WINDOWS;CAIRO_DISABLE_TMPFILE;CAIRO_NO_MUTEX=1;cairo_public=;EA_DEBUG;EA_SLN_BUILD=1;EA_VS_UPDATE_MAJOR_VER=14;EA_VS_UPDATE_MINOR_VER=0;EA_VS_UPDATE_PATCH_VER=24720;WIN32;WINVER=0x0601;CAIRO_HAS_GLESV2_SURFACE;CAIRO_HAS_EGL_FUNCTIONS</PreprocessorDefinitions>
       <ProcessorNumber>8</ProcessorNumber>
       <ProgramDataBaseFileName>pc64-vc-dev-debug\lib\cairo.pdb</ProgramDataBaseFileName>
       <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
@@ -184,11 +184,36 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\EGL\egl.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\EGL\eglplatform.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLES2\gl2.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLES2\gl2ext.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLES2\gl2platform.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPipe.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\KHR\khrplatform.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo-version.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo\cairo.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo\cairo-deprecated.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo\cairo-features.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo\cairo-malloc.h" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPipe.cpp">
+      <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='pc64-vc-dev-debug|x64'">false</PreprocessToFile>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-egl-context.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-composite.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-device.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-dispatch.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-glyphs.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-gradient.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-info.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-msaa-compositor.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-operand.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-shaders.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-source.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-spans-compositor.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-surface.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-traps-compositor.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-rtree.c" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo.c" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-analysis-surface.c" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-analysis-surface-private.h" />
@@ -250,6 +275,10 @@
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-freelist-private.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-freelist-type-private.h" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gstate.c" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-dispatch-private.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-ext-def-private.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-gradient-private.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-private.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gstate-private.h" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-hash.c" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-hash-private.h" />
@@ -374,6 +403,9 @@
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-wideint-type-private.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-win32.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-win32-private.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPIPE_proclist.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <!--<Import Project="..\..\..\..\..\..\Framework\7.04.01\data\FrameworkMsbuild.props" />-->

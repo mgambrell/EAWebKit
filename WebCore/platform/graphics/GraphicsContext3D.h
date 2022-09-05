@@ -26,7 +26,7 @@
 #ifndef GraphicsContext3D_h
 #define GraphicsContext3D_h
 
-#include "ANGLEWebKitBridge.h"
+//#include "ANGLEWebKitBridge.h"
 #include "GraphicsTypes3D.h"
 #include "Image.h"
 #include "IntRect.h"
@@ -43,7 +43,7 @@
 #endif
 
 // FIXME: Find a better way to avoid the name confliction for NO_ERROR.
-#if PLATFORM(WIN)
+#if defined(SYS_RATA)
 #undef NO_ERROR
 #elif PLATFORM(GTK)
 // This define is from the X11 headers, but it's used below, so we must undefine it.
@@ -676,7 +676,7 @@ public:
         ALREADY_SIGNALED = 0x911A,
         TIMEOUT_EXPIRED = 0x911B,
         CONDITION_SATISFIED = 0x911C,
-#if PLATFORM(WIN)
+#if defined(SYS_RATA)
         WAIT_FAILED_WIN = 0x911D,
 #else
         WAIT_FAILED = 0x911D,

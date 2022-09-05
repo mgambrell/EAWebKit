@@ -55,7 +55,7 @@
 #endif
 
 #if USE(EGL)
-#include <EGL/egl.h>
+//#include <EGL/egl.h>
 #endif
 
 namespace WebCore {
@@ -102,7 +102,7 @@ PlatformDisplay& PlatformDisplay::sharedDisplay()
 
 PlatformDisplay::PlatformDisplay()
 #if USE(EGL)
-    : m_eglDisplay(EGL_NO_DISPLAY)
+    //: m_eglDisplay(EGL_NO_DISPLAY)
 #endif
 {
 }
@@ -127,43 +127,43 @@ EGLDisplay PlatformDisplay::eglDisplay() const
 void PlatformDisplay::initializeEGLDisplay()
 {
     m_eglDisplayInitialized = true;
+//
+//    if (m_eglDisplay == EGL_NO_DISPLAY) {
+//// EGL is optionally soft linked on Windows.
+//#if PLATFORM(WIN)
+//        auto eglGetDisplay = eglGetDisplayPtr();
+//        if (!eglGetDisplay)
+//            return;
+//#endif
+//        m_eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+//        if (m_eglDisplay == EGL_NO_DISPLAY)
+//            return;
+//    }
 
-    if (m_eglDisplay == EGL_NO_DISPLAY) {
-// EGL is optionally soft linked on Windows.
-#if PLATFORM(WIN)
-        auto eglGetDisplay = eglGetDisplayPtr();
-        if (!eglGetDisplay)
-            return;
-#endif
-        m_eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-        if (m_eglDisplay == EGL_NO_DISPLAY)
-            return;
-    }
+    //if (eglInitialize(m_eglDisplay, 0, 0) == EGL_FALSE) {
+    //    LOG_ERROR("EGLDisplay Initialization failed.");
+    //    terminateEGLDisplay();
+    //    return;
+    //}
 
-    if (eglInitialize(m_eglDisplay, 0, 0) == EGL_FALSE) {
-        LOG_ERROR("EGLDisplay Initialization failed.");
-        terminateEGLDisplay();
-        return;
-    }
-
-#if USE(OPENGL_ES_2)
-    static const EGLenum eglAPIVersion = EGL_OPENGL_ES_API;
-#else
-    static const EGLenum eglAPIVersion = EGL_OPENGL_API;
-#endif
-    if (eglBindAPI(eglAPIVersion) == EGL_FALSE) {
-        LOG_ERROR("Failed to set EGL API(%d).", eglGetError());
-        terminateEGLDisplay();
-        return;
-    }
+//#if USE(OPENGL_ES_2)
+//    static const EGLenum eglAPIVersion = EGL_OPENGL_ES_API;
+//#else
+//    static const EGLenum eglAPIVersion = EGL_OPENGL_API;
+//#endif
+    //if (eglBindAPI(eglAPIVersion) == EGL_FALSE) {
+    //    LOG_ERROR("Failed to set EGL API(%d).", eglGetError());
+    //    terminateEGLDisplay();
+    //    return;
+    //}
 }
 
 void PlatformDisplay::terminateEGLDisplay()
 {
-    if (m_eglDisplay == EGL_NO_DISPLAY)
-        return;
-    eglTerminate(m_eglDisplay);
-    m_eglDisplay = EGL_NO_DISPLAY;
+    //if (m_eglDisplay == EGL_NO_DISPLAY)
+    //    return;
+    //eglTerminate(m_eglDisplay);
+    //m_eglDisplay = EGL_NO_DISPLAY;
 }
 #endif // USE(EGL)
 

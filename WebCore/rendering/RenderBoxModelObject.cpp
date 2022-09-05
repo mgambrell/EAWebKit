@@ -1779,6 +1779,10 @@ void RenderBoxModelObject::drawBoxSideFromPath(GraphicsContext* graphicsContext,
         // here, we simply make the whitespace dashes ever so slightly bigger.
         // FIXME: This could be even better if we tried to manipulate the dash offset
         // and possibly the gapLength to get the corners dash-symmetrical.
+        //MBG NOTE: found problems here while using glwebkit's dashed boxes test (gaps too big)
+        //the idea seems to be that dashes are three times wider than the gaps, and dots are the same size as the gap
+        //modern firefox is doing something different (and more pleasing)
+        //modern chrome is doing something different still (and also pleasing). so let's say this is just broken here and hope it doesnt matter.
         float dashLength = thickness * ((borderStyle == DASHED) ? 3.0f : 1.0f);
         float gapLength = dashLength;
         float numberOfDashes = borderPath.length() / dashLength;

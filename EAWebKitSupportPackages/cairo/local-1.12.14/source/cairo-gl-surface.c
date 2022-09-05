@@ -405,7 +405,7 @@ _cairo_gl_surface_create_scratch_for_texture (cairo_gl_context_t   *ctx,
     cairo_gl_surface_t *surface;
 
     assert (width <= ctx->max_framebuffer_size && height <= ctx->max_framebuffer_size);
-    surface = calloc (1, sizeof (cairo_gl_surface_t));
+    surface = cairo_calloc (1, sizeof (cairo_gl_surface_t));
     if (unlikely (surface == NULL))
 	return _cairo_surface_create_in_error (_cairo_error (CAIRO_STATUS_NO_MEMORY));
 
@@ -930,7 +930,7 @@ _cairo_gl_surface_draw_image (cairo_gl_surface_t *dst,
 			 dst_x, dst_y, width, height,
 			 format, type, data_start);
 
-	free (data_start_gles2);
+	cairo_free (data_start_gles2);
 
 	/* If we just treated some rgb-only data as rgba, then we have to
 	 * go back and fix up the alpha channel where we filled in this
@@ -1159,7 +1159,7 @@ _cairo_gl_surface_map_to_image (void      *abstract_surface,
 	uint8_t *bot = image->data + (image->height-1)*image->stride;
 
 	if (image->stride > (int)sizeof(stack)) {
-	    row = malloc (image->stride);
+	    row = _cairo_malloc (image->stride);
 	    if (unlikely (row == NULL)) {
 		cairo_surface_destroy (&image->base);
 		return _cairo_image_surface_create_in_error (_cairo_error (CAIRO_STATUS_NO_MEMORY));
@@ -1175,7 +1175,7 @@ _cairo_gl_surface_map_to_image (void      *abstract_surface,
 	}
 
 	if (row != stack)
-	    free(row);
+	    cairo_free(row);
     }
 
     image->base.is_clear = FALSE;

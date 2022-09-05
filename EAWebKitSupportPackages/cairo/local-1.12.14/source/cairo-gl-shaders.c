@@ -133,7 +133,7 @@ _cairo_gl_shader_cache_destroy (void *data)
     _cairo_gl_shader_fini (entry->ctx, &entry->shader);
     if (entry->ctx->current_shader == &entry->shader)
         entry->ctx->current_shader = NULL;
-    free (entry);
+    cairo_free (entry);
 }
 
 static void
@@ -757,7 +757,7 @@ compile_shader (cairo_gl_context_t *ctx,
     printf ("OpenGL shader compilation failed.  Shader:\n%s\n", source);
     printf ("OpenGL compilation log:\n%s\n", log);
 
-    free (log);
+    cairo_free (log);
     ASSERT_NOT_REACHED;
 }
 
@@ -801,7 +801,7 @@ link_shader_program (cairo_gl_context_t *ctx,
     log[num_chars] = '\0';
 
     printf ("OpenGL shader link failed:\n%s\n", log);
-    free (log);
+    cairo_free (log);
     ASSERT_NOT_REACHED;
 }
 
@@ -833,7 +833,7 @@ _cairo_gl_shader_compile_and_link (cairo_gl_context_t *ctx,
 
 	compile_shader (ctx, &ctx->vertex_shaders[vertex_shader],
 			GL_VERTEX_SHADER, source);
-        free (source);
+  cairo_free (source);
     }
 
     compile_shader (ctx, &shader->fragment_shader,
@@ -1030,9 +1030,9 @@ _cairo_gl_get_shader_by_type (cairo_gl_context_t *ctx,
     if (unlikely (status))
 	return status;
 
-    entry = malloc (sizeof (cairo_shader_cache_entry_t));
+    entry = _cairo_malloc (sizeof (cairo_shader_cache_entry_t));
     if (unlikely (entry == NULL)) {
-        free (fs_source);
+      cairo_free (fs_source);
         return _cairo_error (CAIRO_STATUS_NO_MEMORY);
     }
 
@@ -1046,10 +1046,10 @@ _cairo_gl_get_shader_by_type (cairo_gl_context_t *ctx,
 						cairo_gl_operand_get_var_type (mask),
 						use_coverage,
 						fs_source);
-    free (fs_source);
+    cairo_free (fs_source);
 
     if (unlikely (status)) {
-	free (entry);
+      cairo_free (entry);
 	return status;
     }
 
@@ -1058,7 +1058,7 @@ _cairo_gl_get_shader_by_type (cairo_gl_context_t *ctx,
     status = _cairo_cache_insert (&ctx->shaders, &entry->base);
     if (unlikely (status)) {
 	_cairo_gl_shader_fini (ctx, &entry->shader);
-	free (entry);
+  cairo_free (entry);
 	return status;
     }
 

@@ -153,7 +153,7 @@ _cairo_gl_gradient_render (const cairo_gl_context_t    *ctx,
 						    pixman_stops,
 						    n_stops);
     if (pixman_stops != pixman_stops_stack)
-	free (pixman_stops);
+	cairo_free (pixman_stops);
 
     if (unlikely (gradient == NULL))
 	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
@@ -248,7 +248,7 @@ _cairo_gl_gradient_create (cairo_gl_context_t           *ctx,
 	return CAIRO_STATUS_SUCCESS;
     }
 
-    gradient = malloc (sizeof (cairo_gl_gradient_t) + sizeof (cairo_gradient_stop_t) * (n_stops - 1));
+    gradient = _cairo_malloc (sizeof (cairo_gl_gradient_t) + sizeof (cairo_gradient_stop_t) * (n_stops - 1));
     if (gradient == NULL)
 	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
 
@@ -290,7 +290,7 @@ _cairo_gl_gradient_create (cairo_gl_context_t           *ctx,
     glTexImage2D (ctx->tex_target, 0, internal_format, tex_width, 1, 0,
 		  GL_BGRA, GL_UNSIGNED_BYTE, data);
 
-    free (data);
+    cairo_free (data);
 
     /* we ignore errors here and just return an uncached gradient */
     if (unlikely (_cairo_cache_insert (&ctx->gradients, &gradient->cache_entry)))
@@ -300,9 +300,9 @@ _cairo_gl_gradient_create (cairo_gl_context_t           *ctx,
     return CAIRO_STATUS_SUCCESS;
 
 cleanup_data:
-    free (data);
+    cairo_free (data);
 cleanup_gradient:
-    free (gradient);
+    cairo_free (gradient);
     return status;
 }
 
@@ -334,5 +334,5 @@ _cairo_gl_gradient_destroy (cairo_gl_gradient_t *gradient)
         ignore = _cairo_gl_context_release (ctx, CAIRO_STATUS_SUCCESS);
     }
 
-    free (gradient);
+    cairo_free (gradient);
 }

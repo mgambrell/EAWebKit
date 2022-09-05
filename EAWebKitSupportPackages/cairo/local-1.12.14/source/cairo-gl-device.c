@@ -131,7 +131,7 @@ _gl_destroy (void *device)
 
 	cairo_list_del (&font->base.link);
 	cairo_list_del (&font->link);
-	free (font);
+	cairo_free (font);
     }
 
     _cairo_array_fini (&ctx->tristrip_indices);
@@ -139,11 +139,11 @@ _gl_destroy (void *device)
     cairo_region_destroy (ctx->clip_region);
     _cairo_clip_destroy (ctx->clip);
 
-    free (ctx->vb);
+    cairo_free (ctx->vb);
 
     ctx->destroy (ctx);
 
-    free (ctx);
+    cairo_free (ctx);
 }
 
 static const cairo_device_backend_t _cairo_gl_device_backend = {
@@ -297,7 +297,7 @@ _cairo_gl_context_init (cairo_gl_context_t *ctx)
     if (unlikely (status))
         return status;
 
-    ctx->vb = malloc (CAIRO_GL_VBO_SIZE);
+    ctx->vb = _cairo_malloc (CAIRO_GL_VBO_SIZE);
     if (unlikely (ctx->vb == NULL)) {
 	    _cairo_cache_fini (&ctx->gradients);
 	    return _cairo_error (CAIRO_STATUS_NO_MEMORY);

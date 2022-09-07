@@ -31,7 +31,12 @@
 #include <wtf/Assertions.h>
 #include <wtf/InlineASM.h>
 
-#if !ENABLE(JIT)
+//MBG simplified this file to keep things sane. I want the cloop always
+//I think thie file determines which configuration gets used... (maybe?)
+//and definitely which configuration has the LLIntDesiredOffsets computed for it
+//(which should be the one that's used anyway, so..)
+
+//#if !ENABLE(JIT)
 #define OFFLINE_ASM_C_LOOP 1
 #define OFFLINE_ASM_X86 0
 #define OFFLINE_ASM_X86_WIN 0
@@ -46,138 +51,9 @@
 #define OFFLINE_ASM_MIPS 0
 #define OFFLINE_ASM_SH4 0
 
-#else // ENABLE(JIT)
-
-#define OFFLINE_ASM_C_LOOP 0
-
-//+EAWebKitChange
-//4/5/2015
-#if CPU(X86) && (!PLATFORM(WIN) && !defined(EA_PLATFORM_MICROSOFT))
-//-EAWebKitChange
-#define OFFLINE_ASM_X86 1
-#else
-#define OFFLINE_ASM_X86 0
-#endif
-
-//+EAWebKitChange
-//4/5/2015
-#if CPU(X86) && (PLATFORM(WIN) || defined(EA_PLATFORM_MICROSOFT))
-//-EAWebKitChange
-#define OFFLINE_ASM_X86_WIN 1
-#else
-#define OFFLINE_ASM_X86_WIN 0
-#endif
-
-#ifdef __ARM_ARCH_7K__
-#define OFFLINE_ASM_ARMv7k 1
-#else
-#define OFFLINE_ASM_ARMv7k 0
-#endif
-
-#ifdef __ARM_ARCH_7S__
-#define OFFLINE_ASM_ARMv7s 1
-#else
-#define OFFLINE_ASM_ARMv7s 0
-#endif
-
-#if CPU(ARM_THUMB2)
-#define OFFLINE_ASM_ARMv7 1
-#else
-#define OFFLINE_ASM_ARMv7 0
-#endif
-
-#if CPU(ARM_TRADITIONAL)
-#if WTF_ARM_ARCH_AT_LEAST(7)
-#define OFFLINE_ASM_ARMv7_TRADITIONAL 1
-#define OFFLINE_ASM_ARM 0
-#else
-#define OFFLINE_ASM_ARM 1
-#define OFFLINE_ASM_ARMv7_TRADITIONAL 0
-#endif
-#else
-#define OFFLINE_ASM_ARMv7_TRADITIONAL 0
-#define OFFLINE_ASM_ARM 0
-#endif
-
-//+EAWebKitChange
-//4/5/2015
-#if CPU(X86_64) && (!PLATFORM(WIN) && !defined(EA_PLATFORM_MICROSOFT))
-//-EAWebKitChange
-#define OFFLINE_ASM_X86_64 1
-#else
-#define OFFLINE_ASM_X86_64 0
-#endif
-
-//+EAWebKitChange
-//4/5/2015
-#if CPU(X86_64) && (PLATFORM(WIN) || defined(EA_PLATFORM_MICROSOFT))
-//-EAWebKitChange
-#define OFFLINE_ASM_X86_64_WIN 1
-#else
-#define OFFLINE_ASM_X86_64_WIN 0
-#endif
-
-#if CPU(MIPS)
-#define OFFLINE_ASM_MIPS 1
-#else
-#define OFFLINE_ASM_MIPS 0
-#endif
-
-#if CPU(SH4)
-#define OFFLINE_ASM_SH4 1
-#else
-#define OFFLINE_ASM_SH4 0
-#endif
-
-#if CPU(ARM64)
-#define OFFLINE_ASM_ARM64 1
-#else
-#define OFFLINE_ASM_ARM64 0
-#endif
-
-#if CPU(MIPS)
-#ifdef WTF_MIPS_PIC
-#define S(x) #x
-#define SX(x) S(x)
-#define OFFLINE_ASM_CPLOAD(reg) \
-    ".set noreorder\n" \
-    ".cpload " SX(reg) "\n" \
-    ".set reorder\n"
-#else
 #define OFFLINE_ASM_CPLOAD(reg)
-#endif
-#endif
-
-#endif // ENABLE(JIT)
-
-#if USE(JSVALUE64)
 #define OFFLINE_ASM_JSVALUE64 1
-#else
-#define OFFLINE_ASM_JSVALUE64 0
-#endif
-
-#if !ASSERT_DISABLED
-#define OFFLINE_ASM_ASSERT_ENABLED 1
-#else
-#define OFFLINE_ASM_ASSERT_ENABLED 0
-#endif
-
-#if CPU(BIG_ENDIAN)
-#define OFFLINE_ASM_BIG_ENDIAN 1
-#else
 #define OFFLINE_ASM_BIG_ENDIAN 0
-#endif
-
-#if LLINT_EXECUTION_TRACING
-#define OFFLINE_ASM_EXECUTION_TRACING 1
-#else
-#define OFFLINE_ASM_EXECUTION_TRACING 0
-#endif
-
-#if ENABLE(GGC)
 #define OFFLINE_ASM_GGC 1
-#else
-#define OFFLINE_ASM_GGC 0
-#endif
 
 #endif // LLIntOfflineAsmConfig_h

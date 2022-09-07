@@ -5089,6 +5089,7 @@
     <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitEASTLHelpers.cpp" />
     <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitFPUPrecision.cpp" />
     <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitNewDelete.cpp" />
+    <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitOffsetsExtractor.cpp" />
     <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitPolarRegion.cpp" />
     <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitSQLiteVFS.cpp" />
     <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitString.cpp" />

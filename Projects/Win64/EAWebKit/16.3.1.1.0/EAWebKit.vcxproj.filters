@@ -13476,6 +13476,9 @@
     <ClCompile Include="..\..\..\..\WebCore\DerivedSources\XMLNames.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\DerivedSources\XMLNSNames.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\DerivedSources\XPathGrammar.cpp" />
+    <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitOffsetsExtractor.cpp">
+      <Filter>WebKit\ea\Api\EAWebKit\source\internal\source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\win32\EAWebKit.rc">

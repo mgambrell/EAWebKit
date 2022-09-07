@@ -102,6 +102,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //MBG ADDED
 #include "../../EAWebKitSupportPackages/cairo/GLPipe/GLPipe.h"
 
+//MBG ADDED
+void EAWebKitOffsetsExtractor();
+
 //-
 #if ENABLE(EATEXT_IN_DLL)
 #include <internal/include/EAWebKitTextWrapper.h>
@@ -194,6 +197,19 @@ static void ShutdownRemoteWebInspector()
 // Consider WebKit assert system as the user installed EAWebKit assert system may not be present or go away too soon.
 bool EAWebKitLib::Init(AppCallbacks* appCallbacks /* = NULL */, AppSystems* appSystems /* = NULL */)
 {
+	//MBG -
+	//note: LLIntDesiredOffsets.h is constant for each platform (it's related to the given webkit source tree version)
+	//so, what we have here is a reference to code that has a reference to the "LLIntOffsets"
+	//I left it in this function name and in that filename as a reminder of its derivation
+	//This code actually doesn't do anything.
+	//However, it causes a big table to get linked into the binary
+	//In principle we could make a custom binary containing ONLY this (it's traditionally done in an executable that #includes llint vm)
+	//But for convenience's sake, I'll put it in EVERY binary (unless I check the map file and discover it's way too big, but I don't think it will be)
+	//So, you want a personalized LLIntAssembly.h?
+	//So if you run the magic command offlineasm/asm.rb on this binary (use batch files which I stashed somewhere..)
+	//LLIntOfflineAsmConfig.h is interesting. I don't understand its significance yet
+	EAWebKitOffsetsExtractor();
+
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);
 	return EA::WebKit::Init(appCallbacks,appSystems);
 }

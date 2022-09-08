@@ -539,7 +539,7 @@ void ChromeClientEA::reachedMaxAppCacheSize(int64_t size)
     // FIXME: Free some space.
     notImplemented();
 	// abaldeva: This should not be really fired since the quota is set to ApplicationCacheStorage::noQuota() by default.
-	EAW_ASSERT_FORMATTED(false, "Max App Cache Size %lld reached. Need a way to handle this.",size);
+	EAW_ASSERT_FORMATTED(false, "Max App Cache Size %" PRId64 " reached. Need a way to handle this.",size); //MBG - FIXED
 }
 
 
@@ -547,6 +547,7 @@ void ChromeClientEA::reachedApplicationCacheOriginQuota(WebCore::SecurityOrigin*
 {
     notImplemented();
 	// abaldeva: This should not be really fired since the quota is set to ApplicationCacheStorage::noQuota() by default.
+    //MBG NOTE - this is a portability problem due to 4byte wchar_t
 	EAW_ASSERT_FORMATTED(false, "Max App Cache Size for %S origin reached. Need a way to handle this.",origin->host().charactersWithNullTermination().data());
 }
 

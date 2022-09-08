@@ -72,6 +72,12 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	typedef int platform_ssize_t;
 #endif
 
+//MBG ADDED
+#ifdef NN_NINTENDO_SDK
+typedef int socklen_t;
+typedef int platform_ssize_t;
+#endif
+
 struct sockaddr;
 struct pollfd;
 

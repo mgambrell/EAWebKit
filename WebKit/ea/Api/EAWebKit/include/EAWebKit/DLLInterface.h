@@ -168,6 +168,44 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define PLATFORM_DLL_EXPORT_FUNC(funcname, libname)
 #define PLATFORM_DLL_EXPORT_VAR(variable, libname)   
 
+#elif defined(EA_PLATFORM_NX)
+
+
+#define PLATFORM_DLL_MODULE(name,attr,major,minor) 
+
+#if defined(__cplusplus)
+#define PLATFORM_DLL_START(funcname) extern "C" int platform_dll_start_func(void){return funcname(0,0);}	
+#else
+#define PLATFORM_DLL_START(funcname) int platform_dll_start_func(void){return funcname(0,0);}	
+#endif
+#define PLATFORM_DLL_START_SUCCESS                      TRUE
+#define PLATFORM_DLL_START_FAILURE                      FALSE
+
+#if defined(__cplusplus)
+#define PLATFORM_DLL_STOP(funcname)	extern "C" int platform_dll_stop_func(void){return funcname(0,0);}	
+#else
+#define PLATFORM_DLL_STOP(funcname)	int platform_dll_stop_func(void){return funcname(0,0);}	
+#endif
+#define PLATFORM_DLL_STOP_SUCCESS                       TRUE
+#define PLATFORM_DLL_STOP_FAILURE                       FALSE
+
+#define PLATFORM_DLL_LIB(libname,attr)
+#define PLATFORM_DLL_LIB_ATTR_REGISTER					0x0001
+#define PLATFORM_DLL_LIB_ATTR_OVERRIDE					0x0002
+#define PLATFORM_DLL_LIB_ATTR_DEPENDENT_LOAD			0x0008
+
+#define PLATFORM_DLL_EXPORT_INTERFACE 
+#define PLATFORM_DLL_IMPORT_INTERFACE 
+
+#if defined(__cplusplus)
+#define PLATFORM_DLL_EXPORT_FUNC_DECLARE(funcname,rettype,interfacetype) 
+#else
+#define PLATFORM_DLL_EXPORT_FUNC_DECLARE(funcname,rettype,interfacetype) 
+#endif
+
+#define PLATFORM_DLL_EXPORT_FUNC(funcname, libname)
+#define PLATFORM_DLL_EXPORT_VAR(variable, libname)
+
 #elif defined(__APPLE__) || EA_PLATFORM_PS4 == 1 
 
 #define PLATFORM_DLL_MODULE(name,attr,major,minor) 

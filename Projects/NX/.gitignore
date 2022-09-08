@@ -1,0 +1,6 @@
+vstmp
+*.a
+.vs
+*.nro
+*.nrr
+*.nrs

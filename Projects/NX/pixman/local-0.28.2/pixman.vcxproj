@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|NX64">
+      <Configuration>Debug</Configuration>
+      <Platform>NX64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|NX64">
+      <Configuration>Release</Configuration>
+      <Platform>NX64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\loongson-mmintrin.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-accessor.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-arm-common.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-arm-neon-asm.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-combine32.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-compiler.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-edge-imp.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-inlines.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-malloc.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-mips-dspr2-asm.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-mips-dspr2.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-private.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman-version.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include\pixman.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-access-accessors.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-access.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-arm.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-bits-image.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-combine-float.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-combine32.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-conical-gradient.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-edge-accessors.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-edge.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-fast-path.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-general.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-glyph.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-gradient-walker.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-image.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-implementation.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-linear-gradient.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-matrix.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-mips.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-mmx.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-noop.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-ppc.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-radial-gradient.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-region16.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-region32.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-solid-fill.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-timer.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-trap.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-utils.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman-x86.c" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\source\pixman.c" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5C6C1C2C-864A-42A4-ABC9-6F2691188758}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|NX64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <NintendoSdkRoot>$(NINTENDO_SDK_ROOT)</NintendoSdkRoot>
+    <NintendoSdkSpec>NX</NintendoSdkSpec>
+    <NintendoSdkBuildType>Debug</NintendoSdkBuildType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|NX64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <NintendoSdkRoot>$(NINTENDO_SDK_ROOT)</NintendoSdkRoot>
+    <NintendoSdkSpec>NX</NintendoSdkSpec>
+    <NintendoSdkBuildType>Release</NintendoSdkBuildType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|NX64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>nx64-$(Configuration)\lib\</OutDir>
+    <IntDir>nx64-$(Configuration)\build\$(ProjectName)\vstmp\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|NX64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>nx64-$(Configuration)\lib\</OutDir>
+    <IntDir>nx64-$(Configuration)\build\$(ProjectName)\vstmp\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|NX64'">
+    <ClCompile />
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include;%(PreprocessorDefinitions)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;_DEBUG;PIXMAN_NO_TLS=1;PACKAGE=pixman;EA_DEBUG</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|NX64'">
+    <ClCompile />
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include;%(PreprocessorDefinitions)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;NDEBUG;PIXMAN_NO_TLS=1;PACKAGE=pixman</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <PropertyGroup Label="Configuration">
+    <NintendoSdkSpec>NX</NintendoSdkSpec>
+    <!-- copy Debug/Release to nintendo SDK build type, since it's compatible. -->
+    <NintendoSdkBuildType>$(Configuration)</NintendoSdkBuildType>
+  </PropertyGroup>
+  <Import Project="$(NINTENDO_SDK_ROOT)\Build\Vc\NintendoSdkVcProjectSettings.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

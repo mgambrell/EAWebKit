@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|NX64">
+      <Configuration>Debug</Configuration>
+      <Platform>NX64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|NX64">
+      <Configuration>Release</Configuration>
+      <Platform>NX64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\source\allocator_eastl.cpp" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\source\assert.cpp" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\source\fixed_pool.cpp" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\source\hashtable.cpp" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\source\red_black_tree.cpp" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\source\string.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\algorithm.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\allocator.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\bitset.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\bitvector.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\bonus\sort_extra.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\core_allocator_adapter.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\fixed_allocator.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\fixed_hash_map.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\fixed_hash_set.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\fixed_list.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\fixed_map.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\fixed_set.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\fixed_string.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\fixed_substring.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\fixed_vector.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\functional.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\hash_map.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\hash_set.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\heap.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\internal\config.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\internal\eastl_rw.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\internal\fixed_pool.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\internal\generic_iterator.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\internal\hashtable.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\internal\red_black_tree.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\internal\type_compound.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\internal\type_fundamental.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\internal\type_pod.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\internal\type_properties.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\internal\type_transformations.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\iterator.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\list.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\map.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\memory.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\set.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\sort.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\string.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\type_traits.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\utility.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include\EASTL\vector.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2E0EC8CB-FCBC-4D22-90A7-25FB071AA28C}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|NX64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <NintendoSdkRoot>$(NINTENDO_SDK_ROOT)</NintendoSdkRoot>
+    <NintendoSdkSpec>NX</NintendoSdkSpec>
+    <NintendoSdkBuildType>Debug</NintendoSdkBuildType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|NX64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <NintendoSdkRoot>$(NINTENDO_SDK_ROOT)</NintendoSdkRoot>
+    <NintendoSdkSpec>NX</NintendoSdkSpec>
+    <NintendoSdkBuildType>Release</NintendoSdkBuildType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|NX64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>nx64-$(Configuration)\lib\</OutDir>
+    <IntDir>nx64-$(Configuration)\build\$(ProjectName)\vstmp\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|NX64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>nx64-$(Configuration)\lib\</OutDir>
+    <IntDir>nx64-$(Configuration)\build\$(ProjectName)\vstmp\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|NX64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include;..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\source;..\..\..\..\EAWebKitSupportPackages\EABaseEAWebKit\local-2.06.05-01\include\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;_DEBUG;EA_DEBUG</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|NX64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include;..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\source;..\..\..\..\EAWebKitSupportPackages\EABaseEAWebKit\local-2.06.05-01\include\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;NDEBUG</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <PropertyGroup Label="Configuration">
+    <NintendoSdkSpec>NX</NintendoSdkSpec>
+    <!-- copy Debug/Release to nintendo SDK build type, since it's compatible. -->
+    <NintendoSdkBuildType>$(Configuration)</NintendoSdkBuildType>
+  </PropertyGroup>
+  <Import Project="$(NINTENDO_SDK_ROOT)\Build\Vc\NintendoSdkVcProjectSettings.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

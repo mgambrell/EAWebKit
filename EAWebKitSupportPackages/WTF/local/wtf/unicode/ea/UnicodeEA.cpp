@@ -40,7 +40,12 @@ namespace WebKit
 }
 
 COMPILE_ASSERT(sizeof(UChar)	== sizeof(uint16_t), UCharShouldBeTwoBytes);
+#if NN_NINTENDO_SDK
+#pragma message "OH NO!!!!!! WE MAY HAVE TO FIX SOME THINGS DUE TO BIG WCHAR_T"
+#else
 COMPILE_ASSERT(sizeof(wchar_t)	== 2, wchar_tShouldBeTwoBytes); //We are relying on it in many places.
+#endif
+
 
 
 // Note by Arpit Baldeva:

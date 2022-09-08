@@ -50,6 +50,8 @@ inline int getCurrentProcessID()
 #if OS(WINDOWS) || defined(EA_PLATFORM_MICROSOFT)
 //-EAWebKitChange
     return GetCurrentProcessId();
+#elif defined(EA_PLATFORM_NO_GETPID) //MBG - changed
+  return 0;
 #else
     return getpid();
 #endif

@@ -57,6 +57,9 @@
 #define WTF_COMPILER_SUPPORTS_FALLTHROUGH_WARNINGS __has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough")
 #endif
 
+//MBG - causes problems in some cases and isn't needed for webkit
+#undef WTF_COMPILER_SUPPORTS_CXX_USER_LITERALS
+
 /* COMPILER(GCC_OR_CLANG) - GNU Compiler Collection or Clang */
 #if defined(__GNUC__)
 #define WTF_COMPILER_GCC_OR_CLANG 1

@@ -37,7 +37,7 @@ using namespace WTF::Unicode;
 JSStringRef JSStringCreateWithCharacters(const JSChar* chars, size_t numChars)
 {
     initializeThreading();
-    return &OpaqueJSString::create(chars, numChars).leakRef();
+    return &OpaqueJSString::create((const UChar*)chars, numChars).leakRef(); //MBG - added cast to pacify compiler with 4-byte wchar_t
 }
 
 JSStringRef JSStringCreateWithUTF8CString(const char* string)
@@ -62,7 +62,7 @@ JSStringRef JSStringCreateWithUTF8CString(const char* string)
 JSStringRef JSStringCreateWithCharactersNoCopy(const JSChar* chars, size_t numChars)
 {
     initializeThreading();
-    return OpaqueJSString::create(StringImpl::createWithoutCopying(chars, numChars)).leakRef();
+    return OpaqueJSString::create(StringImpl::createWithoutCopying((const UChar*)chars, numChars)).leakRef(); //MBG - added cast to pacify compiler with 4-byte wchar_t
 }
 
 JSStringRef JSStringRetain(JSStringRef string)
@@ -87,7 +87,7 @@ const JSChar* JSStringGetCharactersPtr(JSStringRef string)
 {
     if (!string)
         return nullptr;
-    return string->characters();
+    return (const JSChar*)string->characters(); //MBG - added cast to pacify compiler with 4-byte wchar_t
 }
 
 size_t JSStringGetMaximumUTF8CStringSize(JSStringRef string)

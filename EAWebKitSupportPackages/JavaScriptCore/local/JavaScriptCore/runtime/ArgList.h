@@ -28,6 +28,11 @@
 #include <wtf/HashSet.h>
 #include <wtf/Vector.h>
 
+//MBG - added to disable tons of warnings
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wnew-returns-null"
+#endif
+
 namespace JSC {
 
 class SlotVisitor;
@@ -142,6 +147,7 @@ private:
     void* operator new[](size_t)
     {
         ASSERT_NOT_REACHED();
+        return nullptr; //MBG added to silence tons of noise
     }
 
     void operator delete[](void*)
@@ -152,6 +158,7 @@ private:
     void* operator new(size_t, void*)
     {
         ASSERT_NOT_REACHED();
+        return nullptr; //MBG added to silence tons of noise
     }
 
     void operator delete(void * p, size_t)

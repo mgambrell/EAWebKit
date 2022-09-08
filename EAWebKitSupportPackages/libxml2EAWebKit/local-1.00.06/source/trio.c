@@ -80,6 +80,11 @@
 #include <wincecompat.h>
 #endif
 
+//MBG HACK
+#ifdef NN_NINTENDO_SDK
+static int errno;
+#endif
+
 /*************************************************************************
  * Generic definitions
  */

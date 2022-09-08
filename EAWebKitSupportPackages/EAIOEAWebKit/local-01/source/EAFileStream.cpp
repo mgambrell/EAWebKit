@@ -41,7 +41,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #if defined(EA_PLATFORM_WINDOWS)
    #include "Win32/EAFileStreamWin32.cpp"
 #else
-   #include "StdC/EAFileStreamStdC.cpp"
+//MBG - modified
+   //#include "StdC/EAFileStreamStdC.cpp"
+   #include "Dummy/EAFileStreamDummy.cpp"
 #endif
 
 

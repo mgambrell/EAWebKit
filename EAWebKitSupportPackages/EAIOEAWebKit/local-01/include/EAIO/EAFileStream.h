@@ -196,7 +196,9 @@ namespace EA
    #include <EAIO/Win32/EAFileStreamWin32.h>
 
 #else
-   #include <EAIO/StdC/EAFileStreamStdC.h>
+//MBG - CHANGED THIS
+   //#include <EAIO/StdC/EAFileStreamStdC.h>
+#include <EAIO/Dummy/EAFileStreamDummy.h>
 #endif
 
 

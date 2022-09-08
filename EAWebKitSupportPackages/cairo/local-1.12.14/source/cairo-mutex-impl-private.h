@@ -158,6 +158,8 @@
 
 #if CAIRO_NO_MUTEX
 
+#pragma message ("OH NO!!! WARNING!!! I MAY HAVE TO DO THIS!!!! ISNT THERE AN ABSTRACTED MUTEX SOMEWHERE IN EA'S LIBS? MAYBE I CAN USE STD::MUTEX")
+
 /* No mutexes */
 
   typedef int cairo_mutex_impl_t;

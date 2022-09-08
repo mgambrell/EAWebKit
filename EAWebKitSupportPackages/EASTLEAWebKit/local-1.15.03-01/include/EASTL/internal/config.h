@@ -613,6 +613,8 @@ namespace eastl
         #define EASTL_DEBUG_BREAK() { __asm int 3 }
     #elif (defined(EA_PROCESSOR_X86) || defined(EA_PROCESSOR_X86_64)) && (defined(EA_ASM_STYLE_ATT) || defined(__GNUC__))
         #define EASTL_DEBUG_BREAK() asm("int3") 
+    #elif defined(EA_PLATFORM_NX)
+      #define EASTL_DEBUG_BREAK() for(;;)
     #else
         void EASTL_DEBUG_BREAK(); // User must define this externally.
     #endif

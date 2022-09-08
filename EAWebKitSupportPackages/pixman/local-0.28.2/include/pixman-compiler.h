@@ -223,5 +223,8 @@
 #else
 
 #    error "Unknown thread local support for this system. Pixman will not work with multiple threads. Define PIXMAN_NO_TLS to acknowledge and accept this limitation and compile pixman without thread-safety support."
+#ifdef PIXMAN_NO_TLS
+#pragma message "PIXMAN_NO_TLS IS DEFINED!!!! THIS MAY CAUSE PROBLEMS DUE TO HOW COMPLEX WEBKIT IS. MUST FIX LATER. (I HAVE AN IMPLEMENTATION OF IT SOMEWHERE, RIGHT?)
+#endif
 
 #endif

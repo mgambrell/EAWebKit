@@ -1,9 +1,9 @@
 /* cairo - a vector graphics library with display and print output
  *
- * Copyright © 2009 Eric Anholt
- * Copyright © 2009 Chris Wilson
- * Copyright © 2005,2010 Red Hat, Inc
- * Copyright © 2011 Intel Corporation
+ * Copyright Â© 2009 Eric Anholt
+ * Copyright Â© 2009 Chris Wilson
+ * Copyright Â© 2005,2010 Red Hat, Inc
+ * Copyright Â© 2011 Intel Corporation
  *
  * This library is free software; you can redistribute it and/or
  * modify it either under the terms of the GNU Lesser General Public
@@ -309,7 +309,7 @@ _cairo_gl_pattern_texture_setup (cairo_gl_operand_t *operand,
     cairo_status_t status;
     cairo_gl_surface_t *surface;
     cairo_gl_context_t *ctx;
-    cairo_surface_t *image;
+    cairo_image_surface_t *image;
     cairo_bool_t src_is_gl_surface = FALSE;
     cairo_rectangle_int_t map_extents;
 
@@ -328,11 +328,7 @@ _cairo_gl_pattern_texture_setup (cairo_gl_operand_t *operand,
 					  extents->width, extents->height);
     map_extents = *extents;
     map_extents.x = map_extents.y = 0;
-    //MBG - WHY ARE WE CREATING AN IMAGE?
-    //APPARENTLY THIS IS THE ONLY WAY WE CAN GET A SLICE?
-    //image = _cairo_surface_map_to_image (&surface->base, &map_extents);
-    double myx = map_extents.x, myy = map_extents.y, myw = map_extents.width, myh = map_extents.height;
-    image = cairo_surface_create_for_rectangle(&surface->base, myx, myy, myw, myh);
+    image = _cairo_surface_map_to_image (&surface->base, &map_extents);
 
     /* If the pattern is a GL surface, it belongs to some other GL context,
        so we need to release this device while we paint it to the image. */
@@ -342,21 +338,19 @@ _cairo_gl_pattern_texture_setup (cairo_gl_operand_t *operand,
 	    goto fail;
     }
 
-    //MBG - modified following the above
-    status = _cairo_surface_offset_paint (image, extents->x, extents->y,
+    status = _cairo_surface_offset_paint (&image->base, extents->x, extents->y,
 					  CAIRO_OPERATOR_SOURCE, _src, NULL);
 
-    //MBG - not needed now
- //   if (src_is_gl_surface) {
-	//status = _cairo_gl_context_acquire (dst->base.device, &ctx);
-	//if (unlikely (status))
-	//    goto fail;
- //   }
+    if (src_is_gl_surface) {
+	status = _cairo_gl_context_acquire (dst->base.device, &ctx);
+	if (unlikely (status))
+	    goto fail;
+    }
 
- //   //status = _cairo_surface_unmap_image (&surface->base, image);
- //   status = _cairo_gl_context_release (ctx, status);
- //   if (unlikely (status))
-	//goto fail;
+    status = _cairo_surface_unmap_image (&surface->base, image);
+    status = _cairo_gl_context_release (ctx, status);
+    if (unlikely (status))
+	goto fail;
 
     *operand = surface->operand;
     operand->texture.owns_surface = surface;

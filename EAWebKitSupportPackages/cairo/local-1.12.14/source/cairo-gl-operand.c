@@ -343,7 +343,7 @@ _cairo_gl_pattern_texture_setup (cairo_gl_operand_t *operand,
     }
 
     //MBG - modified following the above
-    status = _cairo_surface_offset_paint (&image, extents->x, extents->y,
+    status = _cairo_surface_offset_paint (image, extents->x, extents->y,
 					  CAIRO_OPERATOR_SOURCE, _src, NULL);
 
     //MBG - not needed now

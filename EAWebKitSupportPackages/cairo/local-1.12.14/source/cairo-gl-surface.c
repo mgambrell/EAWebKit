@@ -667,6 +667,43 @@ cairo_gl_surface_create_for_texture (cairo_device_t	*abstract_device,
 
     return &surface->base;
 }
+
+//MBG ADDED
+cairo_surface_t *
+cairo_gl_surface_create_for_data(cairo_device_t *abstract_device,
+	unsigned char     *data,
+	cairo_content_t content,
+	int width, int height,
+	int stride
+	)
+{
+	cairo_gl_context_t *glctx = (cairo_gl_context_t *)abstract_device;
+	cairo_surface_t *ret = _create_scratch_internal(glctx, content, width, height, FALSE);
+
+	//COPIED CODE WARNING
+	//MBG - changed from RGBA to BGRA, who even knows what's going on with this kind of stuff?
+	GLenum format;
+	switch (content) {
+		default:
+			ASSERT_NOT_REACHED;
+		case CAIRO_CONTENT_COLOR_ALPHA:
+			format = GL_BGRA;
+			break;
+		case CAIRO_CONTENT_ALPHA:
+			format = GL_BGRA;
+			break;
+		case CAIRO_CONTENT_COLOR:
+			format = GL_BGRA;
+			break;
+	}
+
+	glPixelStorei(GL_UNPACK_ROW_LENGTH,stride/4);
+	glTexImage2D(glctx->tex_target, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	glPixelStorei(GL_UNPACK_ROW_LENGTH,0);
+
+	return ret;
+}
+
 slim_hidden_def (cairo_gl_surface_create_for_texture);
 
 
@@ -904,7 +941,9 @@ _cairo_gl_surface_draw_image (cairo_gl_surface_t *dst,
 	if (src->stride < 0 ||
 	    (ctx->gl_flavor == CAIRO_GL_FLAVOR_ES &&
 	     (src->width * cpp < src->stride - 3 ||
-	      width != src->width)))
+	      width != src->width))
+		&& 0 //MBG - modified to use GL_UNPACK_ROW_LENGTH
+		)
 	{
 	    glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
 	    status = _cairo_gl_surface_extract_image_data (src, src_x, src_y,
@@ -918,7 +957,8 @@ _cairo_gl_surface_draw_image (cairo_gl_surface_t *dst,
 	else
 	{
 	    glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
-	    if (ctx->gl_flavor == CAIRO_GL_FLAVOR_DESKTOP)
+			//MBG - use GL_UNPACK_ROW_LENGTH
+	    //if (ctx->gl_flavor == CAIRO_GL_FLAVOR_DESKTOP)
 		glPixelStorei (GL_UNPACK_ROW_LENGTH, src->stride / cpp);
 	}
 

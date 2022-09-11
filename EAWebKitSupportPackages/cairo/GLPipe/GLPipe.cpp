@@ -17,7 +17,7 @@
 //but I dont think I need to
 
 //declare the function pointers
-#define GLPIPE_PROCENT(ns,a,b) a b;
+#define GLPIPE_PROCENT(ns,fntype,name,rettype,...) fntype name;
 #include "GLPIPE_proclist.inc"
 #undef GLPIPE_PROCENT
 
@@ -27,8 +27,13 @@ void GLPipe_SetProcs(GLPipe_Procs* procs)
 	//e.g. #define glEnable _glpipe_._gles2_glEnable
 	//but.. I didn't.
 
-	#define GLPIPE_PROCENT(ns,a,b) b = (a)procs->b;
+	#define GLPIPE_PROCENT(ns,fntype,name,rettype,...) name = (fntype)procs->name;
 	#include "GLPIPE_proclist.inc"
 	#undef GLPIPE_PROCENT
 }
 
+////REMINDER OF HOW TO GENERATE LIST ON CLIENT SIDE
+//#define GLPIPE_DO_GLES2
+//#define GLPIPE_PROCENT(ns,fntype,name,rettype,...) GLFUNC_EXTERN rettype name __VA_ARGS__;
+//#include "GLPIPE_proclist.inc"
+//#undef GLPIPE_PROCENT

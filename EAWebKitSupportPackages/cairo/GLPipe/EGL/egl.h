@@ -141,8 +141,12 @@ extern PFNEGLCREATEPBUFFERSURFACEPROC _egl_eglCreatePbufferSurface;
 #define eglCreatePbufferSurface _egl_eglCreatePbufferSurface
 
 EGLAPI EGLSurface EGLAPIENTRY eglCreatePixmapSurface (EGLDisplay dpy, EGLConfig config, EGLNativePixmapType pixmap, const EGLint *attrib_list);
-EGLAPI EGLSurface EGLAPIENTRY eglCreateWindowSurface (EGLDisplay dpy, EGLConfig config, EGLNativeWindowType win, const EGLint *attrib_list);
-EGLAPI EGLBoolean EGLAPIENTRY eglDestroyContext (EGLDisplay dpy, EGLContext ctx);
+
+extern PFNEGLCREATEWINDOWSURFACEPROC _egl_eglCreateWindowSurface;
+#define eglCreateWindowSurface _egl_eglCreateWindowSurface
+
+extern PFNEGLDESTROYCONTEXTPROC _egl_eglDestroyContext;
+#define eglDestroyContext _egl_eglDestroyContext
 
 extern PFNEGLDESTROYSURFACEPROC _egl_eglDestroySurface;
 #define eglDestroySurface _egl_eglDestroySurface
@@ -154,7 +158,9 @@ EGLAPI EGLDisplay EGLAPIENTRY eglGetCurrentDisplay (void);
 extern PFNEGLGETCURRENTSURFACEPROC _egl_eglGetCurrentSurface;
 #define eglGetCurrentSurface _egl_eglGetCurrentSurface
 
-EGLAPI EGLDisplay EGLAPIENTRY eglGetDisplay (EGLNativeDisplayType display_id);
+extern PFNEGLGETDISPLAYPROC _egl_eglGetDisplay;
+#define eglGetDisplay _egl_eglGetDisplay
+
 EGLAPI EGLint EGLAPIENTRY eglGetError (void);
 
 extern PFNEGLGETPROCADDRESSPROC _egl_eglGetProcAddress;
@@ -175,7 +181,11 @@ extern PFNEGLTERMINATEPROC _egl_eglTerminate;
 #define eglTerminate _egl_eglTerminate
 
 EGLAPI EGLBoolean EGLAPIENTRY eglWaitGL (void);
-EGLAPI EGLBoolean EGLAPIENTRY eglWaitNative (EGLint engine);
+
+extern PFNEGLWAITNATIVEPROC _egl_eglWaitNative;
+#define eglWaitNative _egl_eglWaitNative;
+
+
 #endif
 #endif /* EGL_VERSION_1_0 */
 

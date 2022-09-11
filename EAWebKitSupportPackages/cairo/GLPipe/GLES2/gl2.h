@@ -503,231 +503,182 @@ typedef void (GL_APIENTRYP PFNGLVERTEXATTRIB4FPROC) (GLuint index, GLfloat x, GL
 typedef void (GL_APIENTRYP PFNGLVERTEXATTRIB4FVPROC) (GLuint index, const GLfloat *v);
 typedef void (GL_APIENTRYP PFNGLVERTEXATTRIBPOINTERPROC) (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer);
 typedef void (GL_APIENTRYP PFNGLVIEWPORTPROC) (GLint x, GLint y, GLsizei width, GLsizei height);
+
 #if GL_GLES_PROTOTYPES
 
-extern PFNGLACTIVETEXTUREPROC _gles2_glActiveTexture;
+//declare the function pointers
+#define GLPIPE_PROCENT(ns,fntype,name,rettype,...) extern fntype ns##name;
+#define GLPIPE_DO_GLES2
+#include "GLPIPE_proclist.inc"
+#undef GLPIPE_DO_GLES2
+#undef GLPIPE_PROCENT
+
+
+//unfortunately we have to do all the #defines here
 #define glActiveTexture _gles2_glActiveTexture
-
-GL_APICALL void GL_APIENTRY glAttachShader (GLuint program, GLuint shader);
-GL_APICALL void GL_APIENTRY glBindAttribLocation (GLuint program, GLuint index, const GLchar *name);
-GL_APICALL void GL_APIENTRY glBindBuffer (GLenum target, GLuint buffer);
-
-extern PFNGLBINDFRAMEBUFFERPROC _gles2_glBindFramebuffer;
+#define glAttachShader _gles2_glAttachShader
+#define glBindAttribLocation _gles2_glBindAttribLocation
+#define glBindBuffer _gles2_glBindBuffer
 #define glBindFramebuffer _gles2_glBindFramebuffer
-
-GL_APICALL void GL_APIENTRY glBindRenderbuffer (GLenum target, GLuint renderbuffer);
-
-extern PFNGLBINDTEXTUREPROC _gles2_glBindTexture;
+#define glBindRenderbuffer _gles2_glBindRenderbuffer
 #define glBindTexture _gles2_glBindTexture
-
-GL_APICALL void GL_APIENTRY glBlendColor (GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
-GL_APICALL void GL_APIENTRY glBlendEquation (GLenum mode);
-GL_APICALL void GL_APIENTRY glBlendEquationSeparate (GLenum modeRGB, GLenum modeAlpha);
-
-extern PFNGLBLENDFUNCPROC _gles2_glBlendFunc;
-extern PFNGLBLENDFUNCSEPARATEPROC _gles2_glBlendFuncSeparate;
+#define glBlendColor _gles2_glBlendColor
+#define glBlendEquation _gles2_glBlendEquation
+#define glBlendEquationSeparate _gles2_glBlendEquationSeparate
 #define glBlendFunc _gles2_glBlendFunc
 #define glBlendFuncSeparate _gles2_glBlendFuncSeparate
-
-GL_APICALL void GL_APIENTRY glBufferData (GLenum target, GLsizeiptr size, const void *data, GLenum usage);
-GL_APICALL void GL_APIENTRY glBufferSubData (GLenum target, GLintptr offset, GLsizeiptr size, const void *data);
-GL_APICALL GLenum GL_APIENTRY glCheckFramebufferStatus (GLenum target);
-
-extern PFNGLCLEARPROC _gles2_glClear;
-extern PFNGLCLEARCOLORPROC _gles2_glClearColor;
-extern PFNGLCLEARDEPTHFPROC _gles2_glClearDepthf;;
-extern PFNGLCLEARSTENCILPROC _gles2_glClearStencil;
-extern PFNGLCOLORMASKPROC _gles2_glColorMask;
+#define glBufferData _gles2_glBufferData
+#define glBufferSubData _gles2_glBufferSubData
+#define glCheckFramebufferStatus _gles2_glCheckFramebufferStatus
 #define glClear _gles2_glClear
 #define glClearColor _gles2_glClearColor
 #define glClearDepthf _gles2_glClearDepthf
 #define glClearStencil _gles2_glClearStencil
 #define glColorMask _gles2_glColorMask
-
-GL_APICALL void GL_APIENTRY glCompileShader (GLuint shader);
-GL_APICALL void GL_APIENTRY glCompressedTexImage2D (GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void *data);
-GL_APICALL void GL_APIENTRY glCompressedTexSubImage2D (GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void *data);
-GL_APICALL void GL_APIENTRY glCopyTexImage2D (GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
-GL_APICALL void GL_APIENTRY glCopyTexSubImage2D (GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height);
-GL_APICALL GLuint GL_APIENTRY glCreateProgram (void);
-GL_APICALL GLuint GL_APIENTRY glCreateShader (GLenum type);
-GL_APICALL void GL_APIENTRY glCullFace (GLenum mode);
-GL_APICALL void GL_APIENTRY glDeleteBuffers (GLsizei n, const GLuint *buffers);
-GL_APICALL void GL_APIENTRY glDeleteFramebuffers (GLsizei n, const GLuint *framebuffers);
-GL_APICALL void GL_APIENTRY glDeleteProgram (GLuint program);
-GL_APICALL void GL_APIENTRY glDeleteRenderbuffers (GLsizei n, const GLuint *renderbuffers);
-GL_APICALL void GL_APIENTRY glDeleteShader (GLuint shader);
-
-extern PFNGLDELETETEXTURESPROC _gles2_glDeleteTextures;
+#define glCompileShader _gles2_glCompileShader
+#define glCompressedTexImage2D _gles2_glCompressedTexImage2D
+#define glCompressedTexSubImage2D _gles2_glCompressedTexSubImage2D
+#define glCopyTexImage2D _gles2_glCopyTexImage2D
+#define glCopyTexSubImage2D _gles2_glCopyTexSubImage2D
+#define glCreateProgram _gles2_glCreateProgram
+#define glCreateShader _gles2_glCreateShader
+#define glCullFace _gles2_glCullFace
+#define glDeleteBuffers _gles2_glDeleteBuffers
+#define glDeleteFramebuffers _gles2_glDeleteFramebuffers
+#define glDeleteProgram _gles2_glDeleteProgram
+#define glDeleteRenderbuffers _gles2_glDeleteRenderbuffers
+#define glDeleteShader _gles2_glDeleteShader
 #define glDeleteTextures _gles2_glDeleteTextures
-
-GL_APICALL void GL_APIENTRY glDepthFunc (GLenum func);
-
-extern PFNGLDEPTHMASKPROC _gles2_glDepthMask;
+#define glDepthFunc _gles2_glDepthFunc
 #define glDepthMask _gles2_glDepthMask
-
-GL_APICALL void GL_APIENTRY glDepthRangef (GLfloat n, GLfloat f);
-GL_APICALL void GL_APIENTRY glDetachShader (GLuint program, GLuint shader);
-
-extern PFNGLDISABLEPROC _gles2_glDisable;
+#define glDepthRangef _gles2_glDepthRangef
+#define glDetachShader _gles2_glDetachShader
 #define glDisable _gles2_glDisable
-
-GL_APICALL void GL_APIENTRY glDisableVertexAttribArray (GLuint index);
-
-extern PFNGLDRAWARRAYSPROC _gles2_glDrawArrays;
-extern PFNGLDRAWELEMENTSPROC _gles2_glDrawElements;
-extern PFNGLENABLEPROC _gles2_glEnable;
+#define glDisableVertexAttribArray _gles2_glDisableVertexAttribArray
 #define glDrawArrays _gles2_glDrawArrays
 #define glDrawElements _gles2_glDrawElements
 #define glEnable _gles2_glEnable
-
-GL_APICALL void GL_APIENTRY glEnableVertexAttribArray (GLuint index);
-GL_APICALL void GL_APIENTRY glFinish (void);
-GL_APICALL void GL_APIENTRY glFlush (void);
-GL_APICALL void GL_APIENTRY glFramebufferRenderbuffer (GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer);
-
-extern PFNGLFRAMEBUFFERTEXTURE2DPROC _gles2_glFramebufferTexture2D;
+#define glEnableVertexAttribArray _gles2_glEnableVertexAttribArray
+#define glFinish _gles2_glFinish
+#define glFlush _gles2_glFlush
+#define glFramebufferRenderbuffer _gles2_glFramebufferRenderbuffer
 #define glFramebufferTexture2D _gles2_glFramebufferTexture2D
-
-GL_APICALL void GL_APIENTRY glFrontFace (GLenum mode);
-GL_APICALL void GL_APIENTRY glGenBuffers (GLsizei n, GLuint *buffers);
-GL_APICALL void GL_APIENTRY glGenerateMipmap (GLenum target);
-
-extern PFNGLGENFRAMEBUFFERSPROC _gles2_glGenFramebuffers;
+#define glFrontFace _gles2_glFrontFace
+#define glGenBuffers _gles2_glGenBuffers
+#define glGenerateMipmap _gles2_glGenerateMipmap
 #define glGenFramebuffers _gles2_glGenFramebuffers
-
-GL_APICALL void GL_APIENTRY glGenRenderbuffers (GLsizei n, GLuint *renderbuffers);
-
-extern PFNGLGENTEXTURESPROC _gles2_glGenTextures;
+#define glGenRenderbuffers _gles2_glGenRenderbuffers
 #define glGenTextures _gles2_glGenTextures
-
-GL_APICALL void GL_APIENTRY glGetActiveAttrib (GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name);
-GL_APICALL void GL_APIENTRY glGetActiveUniform (GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name);
-GL_APICALL void GL_APIENTRY glGetAttachedShaders (GLuint program, GLsizei maxCount, GLsizei *count, GLuint *shaders);
-GL_APICALL GLint GL_APIENTRY glGetAttribLocation (GLuint program, const GLchar *name);
-GL_APICALL void GL_APIENTRY glGetBooleanv (GLenum pname, GLboolean *data);
-GL_APICALL void GL_APIENTRY glGetBufferParameteriv (GLenum target, GLenum pname, GLint *params);
-
-extern PFNGLGETERRORPROC _gles2_glGetError;
+#define glGetActiveAttrib _gles2_glGetActiveAttrib
+#define glGetActiveUniform _gles2_glGetActiveUniform
+#define glGetAttachedShaders _gles2_glGetAttachedShaders
+#define glGetAttribLocation _gles2_glGetAttribLocation
+#define glGetBooleanv _gles2_glGetBooleanv
+#define glGetBufferParameteriv _gles2_glGetBufferParameteriv
 #define glGetError _gles2_glGetError
-
-GL_APICALL void GL_APIENTRY glGetFloatv (GLenum pname, GLfloat *data);
-GL_APICALL void GL_APIENTRY glGetFramebufferAttachmentParameteriv (GLenum target, GLenum attachment, GLenum pname, GLint *params);
-
-extern PFNGLGETINTEGERVPROC _gles2_glGetIntegerv;
+#define glGetFloatv _gles2_glGetFloatv
+#define glGetFramebufferAttachmentParameteriv _gles2_glGetFramebufferAttachmentParameteriv
 #define glGetIntegerv _gles2_glGetIntegerv
-
-GL_APICALL void GL_APIENTRY glGetProgramiv (GLuint program, GLenum pname, GLint *params);
-GL_APICALL void GL_APIENTRY glGetProgramInfoLog (GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
-GL_APICALL void GL_APIENTRY glGetRenderbufferParameteriv (GLenum target, GLenum pname, GLint *params);
-GL_APICALL void GL_APIENTRY glGetShaderiv (GLuint shader, GLenum pname, GLint *params);
-GL_APICALL void GL_APIENTRY glGetShaderInfoLog (GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
-GL_APICALL void GL_APIENTRY glGetShaderPrecisionFormat (GLenum shadertype, GLenum precisiontype, GLint *range, GLint *precision);
-GL_APICALL void GL_APIENTRY glGetShaderSource (GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *source);
-
-extern PFNGLGETSTRINGPROC _gles2_glGetString;
+#define glGetProgramiv _gles2_glGetProgramiv
+#define glGetProgramInfoLog _gles2_glGetProgramInfoLog
+#define glGetRenderbufferParameteriv _gles2_glGetRenderbufferParameteriv
+#define glGetShaderiv _gles2_glGetShaderiv
+#define glGetShaderInfoLog _gles2_glGetShaderInfoLog
+#define glGetShaderPrecisionFormat _gles2_glGetShaderPrecisionFormat
+#define glGetShaderSource _gles2_glGetShaderSource
 #define glGetString _gles2_glGetString
-
-GL_APICALL void GL_APIENTRY glGetTexParameterfv (GLenum target, GLenum pname, GLfloat *params);
-GL_APICALL void GL_APIENTRY glGetTexParameteriv (GLenum target, GLenum pname, GLint *params);
-GL_APICALL void GL_APIENTRY glGetUniformfv (GLuint program, GLint location, GLfloat *params);
-GL_APICALL void GL_APIENTRY glGetUniformiv (GLuint program, GLint location, GLint *params);
-GL_APICALL GLint GL_APIENTRY glGetUniformLocation (GLuint program, const GLchar *name);
-GL_APICALL void GL_APIENTRY glGetVertexAttribfv (GLuint index, GLenum pname, GLfloat *params);
-GL_APICALL void GL_APIENTRY glGetVertexAttribiv (GLuint index, GLenum pname, GLint *params);
-GL_APICALL void GL_APIENTRY glGetVertexAttribPointerv (GLuint index, GLenum pname, void **pointer);
-GL_APICALL void GL_APIENTRY glHint (GLenum target, GLenum mode);
-GL_APICALL GLboolean GL_APIENTRY glIsBuffer (GLuint buffer);
-
-extern PFNGLISENABLEDPROC _gles2_glIsEnabled;
+#define glGetTexParameterfv _gles2_glGetTexParameterfv
+#define glGetTexParameteriv _gles2_glGetTexParameteriv
+#define glGetUniformfv _gles2_glGetUniformfv
+#define glGetUniformiv _gles2_glGetUniformiv
+#define glGetUniformLocation _gles2_glGetUniformLocation
+#define glGetVertexAttribfv _gles2_glGetVertexAttribfv
+#define glGetVertexAttribiv _gles2_glGetVertexAttribiv
+#define glGetVertexAttribPointerv _gles2_glGetVertexAttribPointerv
+#define glHint _gles2_glHint
+#define glIsBuffer _gles2_glIsBuffer
 #define glIsEnabled _gles2_glIsEnabled
-
-GL_APICALL GLboolean GL_APIENTRY glIsFramebuffer (GLuint framebuffer);
-GL_APICALL GLboolean GL_APIENTRY glIsProgram (GLuint program);
-GL_APICALL GLboolean GL_APIENTRY glIsRenderbuffer (GLuint renderbuffer);
-GL_APICALL GLboolean GL_APIENTRY glIsShader (GLuint shader);
-GL_APICALL GLboolean GL_APIENTRY glIsTexture (GLuint texture);
-GL_APICALL void GL_APIENTRY glLineWidth (GLfloat width);
-GL_APICALL void GL_APIENTRY glLinkProgram (GLuint program);
-
-extern PFNGLPIXELSTOREIPROC _gles2_glPixelStorei;
+#define glIsFramebuffer _gles2_glIsFramebuffer
+#define glIsProgram _gles2_glIsProgram
+#define glIsRenderbuffer _gles2_glIsRenderbuffer
+#define glIsShader _gles2_glIsShader
+#define glIsTexture _gles2_glIsTexture
+#define glLineWidth _gles2_glLineWidth
+#define glLinkProgram _gles2_glLinkProgram
 #define glPixelStorei _gles2_glPixelStorei
-
-GL_APICALL void GL_APIENTRY glPolygonOffset (GLfloat factor, GLfloat units);
-
-extern PFNGLREADPIXELSPROC _gles2_glReadPixels;
+#define glPolygonOffset _gles2_glPolygonOffset
 #define glReadPixels _gles2_glReadPixels
-
-GL_APICALL void GL_APIENTRY glReleaseShaderCompiler (void);
-GL_APICALL void GL_APIENTRY glRenderbufferStorage (GLenum target, GLenum internalformat, GLsizei width, GLsizei height);
-GL_APICALL void GL_APIENTRY glSampleCoverage (GLfloat value, GLboolean invert);
-
-extern PFNGLSCISSORPROC _gles2_glScissor;
+#define glReleaseShaderCompiler _gles2_glReleaseShaderCompiler
+#define glRenderbufferStorage _gles2_glRenderbufferStorage
+#define glSampleCoverage _gles2_glSampleCoverage
 #define glScissor _gles2_glScissor
-
-GL_APICALL void GL_APIENTRY glShaderBinary (GLsizei count, const GLuint *shaders, GLenum binaryFormat, const void *binary, GLsizei length);
-GL_APICALL void GL_APIENTRY glShaderSource (GLuint shader, GLsizei count, const GLchar *const*string, const GLint *length);
-
-extern PFNGLSTENCILFUNCPROC _gles2_glStencilFunc;
-extern PFNGLSTENCILFUNCSEPARATEPROC _gles2_glStencilFuncSeparate;
-extern PFNGLSTENCILMASKPROC _gles2_glStencilMask;
-extern PFNGLSTENCILMASKSEPARATEPROC _gles2_glStencilMaskSeparate;
-extern PFNGLSTENCILOPPROC _gles2_glStencilOp;
-extern PFNGLSTENCILOPSEPARATEPROC _gles2_glStencilOpSeparate;
+#define glShaderBinary _gles2_glShaderBinary
+#define glShaderSource _gles2_glShaderSource
 #define glStencilFunc _gles2_glStencilFunc
 #define glStencilFuncSeparate _gles2_glStencilFuncSeparate
 #define glStencilMask _gles2_glStencilMask
 #define glStencilMaskSeparate _gles2_glStencilMaskSeparate
 #define glStencilOp _gles2_glStencilOp
 #define glStencilOpSeparate _gles2_glStencilOpSeparate
-
-extern PFNGLTEXIMAGE2DPROC _gles2_glTexImage2D;
 #define glTexImage2D _gles2_glTexImage2D
-
-GL_APICALL void GL_APIENTRY glTexParameterf (GLenum target, GLenum pname, GLfloat param);
-GL_APICALL void GL_APIENTRY glTexParameterfv (GLenum target, GLenum pname, const GLfloat *params);
-
-extern PFNGLTEXPARAMETERIPROC _gles2_glTexParameteri;
+#define glTexParameterf _gles2_glTexParameterf
+#define glTexParameterfv _gles2_glTexParameterfv
 #define glTexParameteri _gles2_glTexParameteri
-
-GL_APICALL void GL_APIENTRY glTexParameteriv (GLenum target, GLenum pname, const GLint *params);
-
-extern PFNGLTEXIMAGE2DPROC _gles2_glTexSubImage2D;
+#define glTexParameteriv _gles2_glTexParameteriv
 #define glTexSubImage2D _gles2_glTexSubImage2D
-
-GL_APICALL void GL_APIENTRY glUniform1f (GLint location, GLfloat v0);
-GL_APICALL void GL_APIENTRY glUniform1fv (GLint location, GLsizei count, const GLfloat *value);
-GL_APICALL void GL_APIENTRY glUniform1i (GLint location, GLint v0);
-GL_APICALL void GL_APIENTRY glUniform1iv (GLint location, GLsizei count, const GLint *value);
-GL_APICALL void GL_APIENTRY glUniform2f (GLint location, GLfloat v0, GLfloat v1);
-GL_APICALL void GL_APIENTRY glUniform2fv (GLint location, GLsizei count, const GLfloat *value);
-GL_APICALL void GL_APIENTRY glUniform2i (GLint location, GLint v0, GLint v1);
-GL_APICALL void GL_APIENTRY glUniform2iv (GLint location, GLsizei count, const GLint *value);
-GL_APICALL void GL_APIENTRY glUniform3f (GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
-GL_APICALL void GL_APIENTRY glUniform3fv (GLint location, GLsizei count, const GLfloat *value);
-GL_APICALL void GL_APIENTRY glUniform3i (GLint location, GLint v0, GLint v1, GLint v2);
-GL_APICALL void GL_APIENTRY glUniform3iv (GLint location, GLsizei count, const GLint *value);
-GL_APICALL void GL_APIENTRY glUniform4f (GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
-GL_APICALL void GL_APIENTRY glUniform4fv (GLint location, GLsizei count, const GLfloat *value);
-GL_APICALL void GL_APIENTRY glUniform4i (GLint location, GLint v0, GLint v1, GLint v2, GLint v3);
-GL_APICALL void GL_APIENTRY glUniform4iv (GLint location, GLsizei count, const GLint *value);
-GL_APICALL void GL_APIENTRY glUniformMatrix2fv (GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-GL_APICALL void GL_APIENTRY glUniformMatrix3fv (GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-GL_APICALL void GL_APIENTRY glUniformMatrix4fv (GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
-GL_APICALL void GL_APIENTRY glUseProgram (GLuint program);
-GL_APICALL void GL_APIENTRY glValidateProgram (GLuint program);
-GL_APICALL void GL_APIENTRY glVertexAttrib1f (GLuint index, GLfloat x);
-GL_APICALL void GL_APIENTRY glVertexAttrib1fv (GLuint index, const GLfloat *v);
-GL_APICALL void GL_APIENTRY glVertexAttrib2f (GLuint index, GLfloat x, GLfloat y);
-GL_APICALL void GL_APIENTRY glVertexAttrib2fv (GLuint index, const GLfloat *v);
-GL_APICALL void GL_APIENTRY glVertexAttrib3f (GLuint index, GLfloat x, GLfloat y, GLfloat z);
-GL_APICALL void GL_APIENTRY glVertexAttrib3fv (GLuint index, const GLfloat *v);
-GL_APICALL void GL_APIENTRY glVertexAttrib4f (GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
-GL_APICALL void GL_APIENTRY glVertexAttrib4fv (GLuint index, const GLfloat *v);
-GL_APICALL void GL_APIENTRY glVertexAttribPointer (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer);
-
-extern PFNGLVIEWPORTPROC _gles2_glViewport;
+#define glUniform1f _gles2_glUniform1f
+#define glUniform1fv _gles2_glUniform1fv
+#define glUniform1i _gles2_glUniform1i
+#define glUniform1iv _gles2_glUniform1iv
+#define glUniform2f _gles2_glUniform2f
+#define glUniform2fv _gles2_glUniform2fv
+#define glUniform2i _gles2_glUniform2i
+#define glUniform2iv _gles2_glUniform2iv
+#define glUniform3f _gles2_glUniform3f
+#define glUniform3fv _gles2_glUniform3fv
+#define glUniform3i _gles2_glUniform3i
+#define glUniform3iv _gles2_glUniform3iv
+#define glUniform4f _gles2_glUniform4f
+#define glUniform4fv _gles2_glUniform4fv
+#define glUniform4i _gles2_glUniform4i
+#define glUniform4iv _gles2_glUniform4iv
+#define glUniformMatrix2fv _gles2_glUniformMatrix2fv
+#define glUniformMatrix3fv _gles2_glUniformMatrix3fv
+#define glUniformMatrix4fv _gles2_glUniformMatrix4fv
+#define glUseProgram _gles2_glUseProgram
+#define glValidateProgram _gles2_glValidateProgram
+#define glVertexAttrib1f _gles2_glVertexAttrib1f
+#define glVertexAttrib1fv _gles2_glVertexAttrib1fv
+#define glVertexAttrib2f _gles2_glVertexAttrib2f
+#define glVertexAttrib2fv _gles2_glVertexAttrib2fv
+#define glVertexAttrib3f _gles2_glVertexAttrib3f
+#define glVertexAttrib3fv _gles2_glVertexAttrib3fv
+#define glVertexAttrib4f _gles2_glVertexAttrib4f
+#define glVertexAttrib4fv _gles2_glVertexAttrib4fv
+#define glVertexAttribPointer _gles2_glVertexAttribPointer
 #define glViewport _gles2_glViewport
+
+
+//and these dumb things
+#define glBindFramebufferEXT glBindFramebuffer
+#define glBindRenderbufferEXT glBindFramebuffer
+#define glCheckFramebufferStatusEXT glCheckFramebufferStatus
+#define glDeleteFramebuffersEXT glDeleteFramebuffers
+#define glDeleteRenderbuffersEXT glDeleteRenderbuffers
+#define glFramebufferRenderbufferEXT glFramebufferRenderbuffer
+#define glFramebufferTexture2DEXT glFramebufferTexture2D
+#define glGenFramebuffersEXT glGenFramebuffers
+#define glGenRenderbuffersEXT glGenRenderbuffers
+#define glGetFramebufferAttachmentParameterivEXT glGetFramebufferAttachmentParameteriv
+#define glGetRenderbufferParameterivEXT glGetRenderbufferParameteriv
+#define glIsFramebufferEXT glIsFramebuffer
+#define glIsRenderbufferEXT glIsRenderbuffer
+
+
+//MBG - ADDED
+#define GL_RGBA8 0x8058
+#define GL_CLAMP 0x2900
+#define GL_MAX_VARYING_FLOATS 0x8B4B
 
 #endif
 #endif /* GL_ES_VERSION_2_0 */

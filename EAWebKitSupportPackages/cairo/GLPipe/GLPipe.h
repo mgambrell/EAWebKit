@@ -7,7 +7,7 @@ struct GLPipe_Procs
 {
 	#define GLPIPE_DO_EGL
 	#define GLPIPE_DO_GLES2
-	#define GLPIPE_PROCENT(ns,a,b) void* ns##b;
+	#define GLPIPE_PROCENT(ns,fntype,name,rettype,...) void* ns##name;
 	#include "GLPIPE_proclist.inc"
 	#undef GLPIPE_PROCENT
 	#undef GLPIPE_DO_GLES2

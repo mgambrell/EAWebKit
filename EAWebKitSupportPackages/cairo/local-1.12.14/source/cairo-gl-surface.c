@@ -677,8 +677,15 @@ cairo_gl_surface_create_for_data(cairo_device_t *abstract_device,
 	int stride
 	)
 {
-	cairo_gl_context_t *glctx = (cairo_gl_context_t *)abstract_device;
-	cairo_surface_t *ret = _create_scratch_internal(glctx, content, width, height, FALSE);
+	cairo_gl_context_t *ctx;
+	cairo_surface_t *ret;
+	cairo_status_t status;
+
+	status = _cairo_gl_context_acquire (abstract_device, &ctx);
+	if (unlikely (status))
+		return NULL;
+
+	ret = _create_scratch_internal(ctx, content, width, height, FALSE);
 
 	//COPIED CODE WARNING
 	//MBG - changed from RGBA to BGRA, who even knows what's going on with this kind of stuff?
@@ -698,8 +705,10 @@ cairo_gl_surface_create_for_data(cairo_device_t *abstract_device,
 	}
 
 	glPixelStorei(GL_UNPACK_ROW_LENGTH,stride/4);
-	glTexImage2D(glctx->tex_target, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(ctx->tex_target, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 	glPixelStorei(GL_UNPACK_ROW_LENGTH,0);
+
+	_cairo_gl_context_release (ctx, status);
 
 	return ret;
 }

@@ -31,6 +31,7 @@
 #include <runtime/TypedArrayInlines.h>
 #include <runtime/Uint8ClampedArray.h>
 
+//MBG - TODO - ENABLE THIS
 #if HAVE(ARM_NEON_INTRINSICS)
 #include <arm_neon.h>
 #endif

@@ -25,7 +25,8 @@
 #include <wtf/Noncopyable.h>
 
 #if USE(EGL) && !PLATFORM(GTK)
-#include "eglplatform.h"
+//MBG MODIFIED
+#include <EGL/eglplatform.h>
 typedef EGLNativeWindowType GLNativeWindowType;
 #elif PLATFORM(GTK) && PLATFORM(WAYLAND) && !defined(GTK_API_VERSION_2)
 #include <wayland-egl.h>

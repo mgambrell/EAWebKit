@@ -26,7 +26,8 @@
 #include <wtf/ThreadSpecific.h>
 
 #if USE(EGL)
-#include "GLContextEGL.h"
+//MBG - MODIFIED
+#include "egl/GLContextEGL.h"
 #endif
 
 #if USE(GLX)

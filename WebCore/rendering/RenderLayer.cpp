@@ -6895,7 +6895,9 @@ void RenderLayer::updateOrRemoveFilterEffectRenderer()
     if (!filterInfo.renderer()) {
         RefPtr<FilterEffectRenderer> filterRenderer = FilterEffectRenderer::create();
         filterRenderer->setFilterScale(renderer().frame().page()->deviceScaleFactor());
+        //MBG TEST
         RenderingMode renderingMode = renderer().frame().settings().acceleratedFiltersEnabled() ? Accelerated : Unaccelerated;
+        //RenderingMode renderingMode = Accelerated;
         filterRenderer->setRenderingMode(renderingMode);
         filterInfo.setRenderer(WTF::move(filterRenderer));
         

@@ -29,6 +29,9 @@
 
 #include <wtf/text/StringBuilder.h>
 
+//MBG ADDED
+#undef NO_ERROR
+
 #define STRINGIFY(...) #__VA_ARGS__
 
 namespace WebCore {

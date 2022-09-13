@@ -5811,16 +5811,10 @@
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\DisplayRefreshMonitorManager.h">
       <Filter>WebCore\platform\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\BitmapTextureEA.h">
-      <Filter>WebCore\platform\graphics\ea</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\FontCustomPlatformData.h">
       <Filter>WebCore\platform\graphics\ea</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\MediaPlayerPrivateEA.h">
-      <Filter>WebCore\platform\graphics\ea</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\TextureMapperEA.h">
       <Filter>WebCore\platform\graphics\ea</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\TileEA.h">
@@ -9285,9 +9279,6 @@
     <ClInclude Include="..\..\..\..\WebKit\ea\WebCoreSupport\SearchPopupMenuEA.h">
       <Filter>WebKit\ea\WebCoreSupport</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\WebKit\ea\WebCoreSupport\TextureMapperLayerClientEA.h">
-      <Filter>WebKit\ea\WebCoreSupport</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\WebKit\ea\WebCoreSupport\VisitedLinkStoreEA.h">
       <Filter>WebKit\ea\WebCoreSupport</Filter>
     </ClInclude>
@@ -9978,6 +9969,12 @@
     <ClInclude Include="..\..\..\..\WebCore\DerivedSources\XMLViewerCSS.h" />
     <ClInclude Include="..\..\..\..\WebCore\DerivedSources\XMLViewerJS.h" />
     <ClInclude Include="..\..\..\..\WebCore\DerivedSources\XPathGrammar.h" />
+    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ANGLEWebKitBridge.h">
+      <Filter>WebCore\platform\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\WebKit\ea\WebCoreSupport\TextureMapperLayerClientEA.h">
+      <Filter>WebKit\ea\WebCoreSupport</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\WebCore\accessibility\AccessibilityARIAGrid.cpp">
@@ -12296,9 +12293,6 @@
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\CrossfadeGeneratedImage.cpp">
       <Filter>WebCore\platform\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\BitmapTextureEA.cpp">
-      <Filter>WebCore\platform\graphics\ea</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\FontCacheEA.cpp">
       <Filter>WebCore\platform\graphics\ea</Filter>
     </ClCompile>
@@ -12333,9 +12327,6 @@
       <Filter>WebCore\platform\graphics\ea</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\MediaPlayerPrivateEA.cpp">
-      <Filter>WebCore\platform\graphics\ea</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\TextureMapperEA.cpp">
       <Filter>WebCore\platform\graphics\ea</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\TileEA.cpp">
@@ -12540,9 +12531,6 @@
       <Filter>WebCore\platform\graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\NamedImageGeneratedImage.cpp">
-      <Filter>WebCore\platform\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\OpenGLShims.cpp">
       <Filter>WebCore\platform\graphics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opentype\OpenTypeMathData.cpp">
@@ -13418,9 +13406,6 @@
     <ClCompile Include="..\..\..\..\WebKit\ea\WebCoreSupport\SearchPopupMenuEA.cpp">
       <Filter>WebKit\ea\WebCoreSupport</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\WebKit\ea\WebCoreSupport\TextureMapperLayerClientEA.cpp">
-      <Filter>WebKit\ea\WebCoreSupport</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\WebKit\ea\WebCoreSupport\VisitedLinkStoreEA.cpp">
       <Filter>WebKit\ea\WebCoreSupport</Filter>
     </ClCompile>
@@ -13478,6 +13463,42 @@
     <ClCompile Include="..\..\..\..\WebCore\DerivedSources\XPathGrammar.cpp" />
     <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitOffsetsExtractor.cpp">
       <Filter>WebKit\ea\Api\EAWebKit\source\internal\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\Extensions3DOpenGLES.cpp">
+      <Filter>WebCore\platform\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\Extensions3DOpenGLCommon.cpp">
+      <Filter>WebCore\platform\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\GraphicsContext3DOpenGLES.cpp">
+      <Filter>WebCore\platform\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\GraphicsContext3DOpenGLCommon.cpp">
+      <Filter>WebCore\platform\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ANGLEWebKitBridge.cpp">
+      <Filter>WebCore\platform\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\TemporaryOpenGLSetting.cpp">
+      <Filter>WebCore\platform\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\egl\GLContextEGL.cpp">
+      <Filter>WebCore\platform\graphics\egl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\PlatformGraphicsEA.cpp">
+      <Filter>WebCore\platform\graphics\ea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperGL.cpp">
+      <Filter>WebCore\platform\graphics\texmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTextureGL.cpp">
+      <Filter>WebCore\platform\graphics\texmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperShaderProgram.cpp">
+      <Filter>WebCore\platform\graphics\texmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebKit\ea\WebCoreSupport\TextureMapperLayerClientEA.cpp">
+      <Filter>WebKit\ea\WebCoreSupport</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

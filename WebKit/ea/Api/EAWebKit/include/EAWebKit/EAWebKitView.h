@@ -231,6 +231,7 @@ public:
 	void AddTile(WebCore::TileEA* tile);
 	void RemoveTile(WebCore::TileEA* tile);
 
+  //MBG - modified
 	void AddTexture(WebCore::BitmapTextureEA* texture);
 	void RemoveTexture(WebCore::BitmapTextureEA* texture);
 

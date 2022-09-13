@@ -106,6 +106,7 @@
 #include "cairo/cairo-gl.h"
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
+#include "GLContext.h"
 
 namespace EA
 {
@@ -512,36 +513,31 @@ void WebFrame::ClearDisplay(const WebCore::Color &color)
 }
 
 GLuint fbid, texid;
+cairo_surface_t* m_cairoGlSurface;
 
 void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface *surface, const eastl::vector<WebCore::IntRect> &dirtyRegions) 
 {
 	//mbg quick test:
 	static bool notfirst = false;
-	static cairo_device_t* m_dev;
-	static cairo_surface_t* m_cairoGlSurface;
+	cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
 	if(!notfirst)
 	{
 		notfirst = true;
 
-		auto egl = eglCreateContext(0,nullptr,nullptr,nullptr);
-		m_dev = cairo_egl_device_create(0,egl);
-		
 		glGenTextures(1,&texid);
 		glBindTexture(GL_TEXTURE_2D,texid);
 		glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,1280,720,0,GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 		glGenFramebuffers(1,&fbid);
-		if(fbid != 6)
-		{
-			int zzz=9;
-		}
 		glBindFramebuffer(GL_FRAMEBUFFER,fbid);
 		glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D, texid, 0);
 
-		m_cairoGlSurface = cairo_gl_surface_create_for_texture(m_dev,CAIRO_CONTENT_COLOR_ALPHA,texid,1280,720);
+		m_cairoGlSurface = cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice,CAIRO_CONTENT_COLOR_ALPHA,texid,1280,720);
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER,fbid);
 
+	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
 
 	EAW_ASSERT_MSG(!d->page->view()->IsUsingTiledBackingStore(), "non tiled rendering path called but using tiled backing store");
 	if(d->page->view()->IsUsingTiledBackingStore())
@@ -555,62 +551,83 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 		NOTIFY_PROCESS_STATUS(kVProcessTypeClearSurface, EA::WebKit::kVProcessStatusEnded, d->page->view());
     }
 
-    WebCore::FrameView *view = d->frame->view();
+	//MBG - considerably modified to use GL rendering
+	WebCore::FrameView *view = d->frame->view();
 	NOTIFY_PROCESS_STATUS(kVProcessTypeDirtyRectsRender, EA::WebKit::kVProcessStatusStarted, d->page->view());
 	unsigned nDirtyRegionsToDraw = dirtyRegions.size();
 	for (unsigned i = 0; i < nDirtyRegionsToDraw; ++i) 
 	{
 		const auto& dirty = dirtyRegions[i];
 
-		//MBG - EXPERIMENTING HERE WITH GL RENDERING
-		bool isGlRendering = false;
-
-		//I. software
-		//ISurface::SurfaceDescriptor surfaceDescriptor = { 0 };
-		//IntRect eaRect(dirtyRegions[i]);
-		//surface->Lock(&surfaceDescriptor, &eaRect);
-		//auto pRawSurf = cairo_image_surface_create_for_data((unsigned char*)surfaceDescriptor.mData, CAIRO_FORMAT_ARGB32, eaRect.mSize.mWidth, eaRect.mSize.mHeight, surfaceDescriptor.mStride);
-		//RefPtr<cairo_surface_t> cairoSurface = adoptRef(pRawSurf);
-		//RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
-
-				//II. with GL
 		auto pRawCairoContext = cairo_create(m_cairoGlSurface);
-		RefPtr<cairo_t> cairoContext = adoptRef(pRawCairoContext);
-		isGlRendering = true;
+
+		//superstitious: this makes sure the device doesn't depend on any prior state
+		//this is not the correct time for this (it should be aclled when we're DONE with it)
+		//but it works better here... for now..
+		cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+		//apparently nobody knows to do this...
+		cairo_device_flush(WebCore::GLContext::sharingContext()->cairoDevice());
+
+		//clip to this dirty rect
+		double cx = dirty.x(),cy = dirty.y(),cw = dirty.width(),ch = dirty.height();
+		cairo_rectangle(pRawCairoContext,cx,cy,cw,ch);
+		cairo_clip(pRawCairoContext);
 		
+		RefPtr<cairo_t> cairoContext = adoptRef(pRawCairoContext);
 		WebCore::GraphicsContext graphicsContext(cairoContext.get());
 
-        if (!graphicsContext.paintingDisabled() || graphicsContext.updatingControlTints()) 
-        {
-					if(!isGlRendering)
-						graphicsContext.translate(-dirty.x(), -dirty.y());// Translate the context so the drawing starts at the origin of the locked portion. (not needed for GL rendering)
-            view->paint(&graphicsContext, dirty);// Paint contents and scroll bars. Some ports call paintContents and then painScrollbars separately.
-        }
+		if(!graphicsContext.paintingDisabled() || graphicsContext.updatingControlTints())
+		{
+			view->paint(&graphicsContext, dirty);// Paint contents and scroll bars. Some ports call paintContents and then painScrollbars separately.
+		}
 
 		EAW_ASSERT_FORMATTED(cairo_status(cairoContext.get()) == CAIRO_STATUS_SUCCESS, "cairo failed to paint (for example, OOM) - %d",cairo_status(cairoContext.get()));
 
-        if(d->page->view()->ShouldDrawDebugVisuals())
+		if(d->page->view()->ShouldDrawDebugVisuals())
 		{
 			NOTIFY_PROCESS_STATUS(kVProcessTypeDrawDebug, EA::WebKit::kVProcessStatusStarted, d->page->view());
 			graphicsContext.save();
-			
+
 			graphicsContext.setStrokeStyle(WebCore::SolidStroke);
-			graphicsContext.setStrokeColor(WebCore::Color(1.0f,0.0f,0.0f,1.0f), WebCore::ColorSpaceDeviceRGB);
-			graphicsContext.strokeRect(WebCore::FloatRect(dirty.x(),dirty.y(),dirty.width(),dirty.height()),2.0f); 
+			graphicsContext.setStrokeColor(WebCore::Color(1.0f, 0.0f, 0.0f, 1.0f), WebCore::ColorSpaceDeviceRGB);
+			graphicsContext.strokeRect(WebCore::FloatRect(dirty.x(), dirty.y(), dirty.width(), dirty.height()), 2.0f);
 
 			graphicsContext.restore();
 			NOTIFY_PROCESS_STATUS(kVProcessTypeDrawDebug, EA::WebKit::kVProcessStatusEnded, d->page->view());
 		}
 
-        surface->Unlock();
-    }
+		surface->Unlock();
+	}
 	NOTIFY_PROCESS_STATUS(kVProcessTypeDirtyRectsRender, EA::WebKit::kVProcessStatusEnded, d->page->view());
 
 	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusStarted, d->page->view());
+
+	//MBG HACK
+	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//glBindFramebuffer(GL_FRAMEBUFFER,fbid);
+	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//we must fully finish with cairo before going into the composition, since it uses raw GL
+	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//cairo_surface_flush(m_cairoGlSurface);
+	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
+
 	renderCompositedLayers(renderer, surface);
+
 	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusEnded, d->page->view());
 
 	drawHighlightedNodeFromInspector(surface);
+
+
+	//MBG HACK
+	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//glBindFramebuffer(GL_FRAMEBUFFER,fbid);
+	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//we must fully finish with cairo before going into the composition, since it uses raw GL
+	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//cairo_surface_flush(m_cairoGlSurface);
+	//cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
 }
 
 
@@ -734,17 +751,50 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 	if (WebCore::TextureMapperLayerClientEA* client = static_cast<WebCore::ChromeClientEA&>(page->chrome().client()).m_textureMapperLayerClient.get())
 	{
 		WebCore::IntRect fullscreen(IntPoint(0, 0), WebCore::IntSize(d->page->view()->GetSize()));
-		if(renderer)
+		//MBG - always use gpu compositing
+		if(renderer || true)
 		{
 			// GPU compositing
 			// Create a null context for the texture mapper
 			RefPtr<cairo_surface_t> cairoSurface =adoptRef(cairo_image_surface_create_for_data(NULL, CAIRO_FORMAT_ARGB32, 0, 0, 0));
 			RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
 
+			//RefPtr<cairo_surface_t> cairoSurface =adoptRef(cairo_gl_surface_create_for_texture(WebCore::GLContext::sharingContext()->cairoDevice(),CAIRO_CONTENT_COLOR_ALPHA, (NULL, CAIRO_FORMAT_ARGB32, 0, 0, 0));
+			//RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
+			
+			//MBG - we need a gl context active
+			//auto cairo_egl = (cairo_egl_context_t*)EA::WebKit::g_cairoDevice;
+			//cairo_device_se
+			//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
+
+			//needs to be done too>?>>
+			cairo_device_flush(WebCore::GLContext::sharingContext()->cairoDevice());
+
+			WebCore::GLContext::sharingContext()->makeContextCurrent();
+
+			//GraphicsContext3D::RenderToCurrentGLContext is used by TextureMapperGL
+			//therefore GraphicsContext3D does not manage a GL context
+			//That's fine (for now). We can make the "window" used for the current context set to what we want
+			//Consequently, we need to set the appropriate context in advance ourselves before rendering with the TextureMapperGL
+			//in the future, I will probably want to go to an offscreen surface somehow
+			//well, this is obviously not the right way to be doing this, but it works for me...
+			//eglMakeCurrent(0,0,0,g_eglContext);
+			//WebCore::GLContext::sharingContext()->makeContextCurrent(); //inexplicable
+			glBindFramebuffer(GL_FRAMEBUFFER,fbid);
+			glViewport(0,0,1280,720);
+			glDisable(GL_SCISSOR_TEST);
+
+			//MBG - make a GraphicsContext based on m_cairoGlSurface (which is using g_cairoDevice)
+			//auto pRawCairoContext = cairo_create(m_cairoGlSurface);
+			//RefPtr<cairo_t> cairoContext = adoptRef(pRawCairoContext);
 			WebCore::GraphicsContext graphicsContext(cairoContext.get());
+
 
 			client->syncLayers();
 			client->renderCompositedLayers(&graphicsContext, fullscreen);
+
+			//cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+			//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
 		}
 		else
 		{

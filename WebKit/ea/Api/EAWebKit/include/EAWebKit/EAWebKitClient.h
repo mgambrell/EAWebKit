@@ -758,12 +758,18 @@ struct WatchDogNotificationInfo
 
 	}
 };
+
 // The user can provide an instance of this interface to the EAWebKit library. You can think of this instance as a delegate to which EAWebKit
 // refers when it needs to interact with the application.
 class EAWebKitClient
 {
 public:
 	virtual ~EAWebKitClient() { }
+
+	//MBG - added
+	virtual void* GetCairoDevice() { return 0; }
+	virtual void* GetGLPipeProcs() { return 0; }
+	virtual void* GetEGLContext() { return 0; }
 
 	virtual void GetLocalizedString     (LocalizedStringInfo&)          {   }
 	virtual void LoadUpdate				(LoadInfo&)						{	}

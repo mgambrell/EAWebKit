@@ -93,7 +93,9 @@ public:
     virtual IntRect clipBounds() = 0;
     //+EAWebKitChange
     //4/28/2015
-    virtual PassRefPtr<BitmapTexture> createTexture(EA::WebKit::SurfaceType type, const void* data = 0, size_t length = 0) = 0;
+    //MBG - reverted
+    //virtual PassRefPtr<BitmapTexture> createTexture(EA::WebKit::SurfaceType type, const void* data = 0, size_t length = 0) = 0;
+    virtual PassRefPtr<BitmapTexture> createTexture() = 0;
     //-EAWebKitChange
 
     void setImageInterpolationQuality(InterpolationQuality quality) { m_interpolationQuality = quality; }

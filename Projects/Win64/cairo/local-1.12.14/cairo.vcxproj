@@ -190,6 +190,8 @@
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLES2\gl2ext.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLES2\gl2platform.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPipe.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderLang.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderVars.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\KHR\khrplatform.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo-version.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo\cairo.h" />
@@ -199,6 +201,8 @@
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPipe.cpp">
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='pc64-vc-dev-debug|x64'">false</PreprocessToFile>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderLang.cpp" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderVars.cpp" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-egl-context.c" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-composite.c" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-gl-device.c" />

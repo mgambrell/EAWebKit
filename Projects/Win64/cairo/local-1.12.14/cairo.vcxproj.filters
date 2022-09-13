@@ -22,6 +22,12 @@
     <Filter Include="GLPipe\KHR">
       <UniqueIdentifier>{4c70ce63-6c21-43f7-8af3-68f3a5990479}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GLPipe\ANGLE">
+      <UniqueIdentifier>{c1c2f339-7fb9-4ad1-ad04-02adac6df617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLPipe\GLSLANG">
+      <UniqueIdentifier>{4c340353-d1f1-4389-b79c-a272d1f8a105}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo\cairo.h">
@@ -314,6 +320,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\KHR\khrplatform.h">
       <Filter>GLPipe\KHR</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderVars.h">
+      <Filter>GLPipe\GLSLANG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderLang.h">
+      <Filter>GLPipe\GLSLANG</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -676,6 +688,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPipe.cpp">
       <Filter>GLPipe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderLang.cpp">
+      <Filter>GLPipe\GLSLANG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderVars.cpp">
+      <Filter>GLPipe\GLSLANG</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

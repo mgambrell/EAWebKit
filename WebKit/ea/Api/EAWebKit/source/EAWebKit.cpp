@@ -101,6 +101,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 //MBG ADDED
 #include "../../EAWebKitSupportPackages/cairo/GLPipe/GLPipe.h"
+#include "cairo-gl.h"
 
 //MBG ADDED
 void EAWebKitOffsetsExtractor();
@@ -142,6 +143,10 @@ namespace EA
 namespace WebKit
 {
 const char8_t* kDefaultPageGroupName = "default"; // Any name would suffice here.
+
+//MBG ADDED
+void* g_cairoDevice = nullptr;
+void *g_eglContext = nullptr;
 
 static WebKitStatus					sWebKitStatus = kWebKitStatusInactive;
 static EAWebKitClient*				spEAWebKitClient = NULL;
@@ -212,6 +217,13 @@ bool EAWebKitLib::Init(AppCallbacks* appCallbacks /* = NULL */, AppSystems* appS
 
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);
 	return EA::WebKit::Init(appCallbacks,appSystems);
+}
+
+EAWebKitProcs EAWebKitLib::GetProcs()
+{
+	EAWebKitProcs ret;
+	ret.cairo_egl_device_create = (decltype(ret.cairo_egl_device_create))&cairo_egl_device_create;
+	return ret;
 }
 
 void EAWebKitLib::Shutdown()
@@ -693,6 +705,13 @@ bool Init(AppCallbacks* appCallbacks, AppSystems* appSystems)
 			SetTextSystem(appSystems->mTextSystem);
 		if(appSystems->mThreadSystem)
 			SetThreadSystem(appSystems->mThreadSystem);
+
+		//MBG added
+		if(appSystems->mEAWebkitClient)
+			GLPipe_SetProcs((GLPipe_Procs*)appSystems->mEAWebkitClient->GetGLPipeProcs());
+		g_cairoDevice = (cairo_device_t*)appSystems->mEAWebkitClient->GetCairoDevice();
+		//LAME - we should create the cairo device ourselves from this default egl context
+		g_eglContext = appSystems->mEAWebkitClient->GetEGLContext();
 	}
 
 	// Force the creation of allocator if one was not passed. This allows us to use the pointer directly instead of having to call GetAllocator all the time. 
@@ -1460,9 +1479,6 @@ void SetParameters(const Parameters& parameters)
 		//it's hard to prove this, since it seems to only be smoked out when handling errors
 		//(I believe the reserved zone is for creating exceptions?)
 		JSC::Options::reservedZoneSize() = 256*1024;
-
-		//MBG ADDED
-		GLPipe_SetProcs((GLPipe_Procs*)parameters.glp_procs);
 };
 
 ThemeParameters::ThemeParameters()
@@ -1577,6 +1593,9 @@ AutoCollectorStackBase::~AutoCollectorStackBase()
 
 void ClearSurfaceToColor(ISurface *surface, WebCore::Color color)
 {
+	//MBG TEST
+	return;
+
 	int width = 0;
 	int height = 0;
 	surface->GetContentDimensions(&width, &height);
@@ -1584,7 +1603,10 @@ void ClearSurfaceToColor(ISurface *surface, WebCore::Color color)
 	ISurface::SurfaceDescriptor surfaceDescriptor = {0};
 	surface->Lock(&surfaceDescriptor);
 
+	//MBG TODO - CONFUSED, RIGHT NOW. we're getting software surfaces. just stay in software.
+	//MBG TODO - must fix
 	RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_image_surface_create_for_data((unsigned char*)surfaceDescriptor.mData, CAIRO_FORMAT_ARGB32, width, height, surfaceDescriptor.mStride));    
+	//RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_gl_surface_create_for_data((cairo_device_t*)EA::WebKit::g_cairoDevice, (unsigned char*)surfaceDescriptor.mData, CAIRO_CONTENT_COLOR_ALPHA, width, height, surfaceDescriptor.mStride));
 	RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
 
 	WebCore::Color clearColor = color;

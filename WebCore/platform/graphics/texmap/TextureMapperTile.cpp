@@ -53,7 +53,9 @@ void TextureMapperTile::updateContents(TextureMapper* textureMapper, Image* imag
     if (!m_texture) {
         //+EAWebKitChange
         //4/28/2015
-        m_texture = textureMapper->createTexture(EA::WebKit::SurfaceTypeTexture, 0, 0);
+        //m_texture = textureMapper->createTexture(EA::WebKit::SurfaceTypeTexture, 0, 0);
+      //MBG - reverted
+      m_texture = textureMapper->createTexture();
         //-EAWebKitChange
         m_texture->reset(targetRect.size(), image->currentFrameKnownToBeOpaque() ? 0 : BitmapTexture::SupportsAlpha);
     }
@@ -61,21 +63,23 @@ void TextureMapperTile::updateContents(TextureMapper* textureMapper, Image* imag
     m_texture->updateContents(image, targetRect, sourceOffset, updateContentsFlag);
 }
 
-//+EAWebKitChange
-//4/28/2015
-const WTF::String* imageSrcUrl(const GraphicsLayer* layer)
-{
-
-    RenderLayerBacking* backing = static_cast<RenderLayerBacking*>(&(layer->client()));
-    Element* element = backing->owningLayer().renderer().element();
-    if (element && is<HTMLImageElement>(*element))
-    {
-        const AtomicString& url = downcast<HTMLImageElement>(element)->imageSourceURL();
-        return &url.string();
-    }
-    return nullptr;
-}
-//-EAWebKitChange
+//MBG - reverted
+//
+////+EAWebKitChange
+////4/28/2015
+//const WTF::String* imageSrcUrl(const GraphicsLayer* layer)
+//{
+//
+//    RenderLayerBacking* backing = static_cast<RenderLayerBacking*>(&(layer->client()));
+//    Element* element = backing->owningLayer().renderer().element();
+//    if (element && is<HTMLImageElement>(*element))
+//    {
+//        const AtomicString& url = downcast<HTMLImageElement>(element)->imageSourceURL();
+//        return &url.string();
+//    }
+//    return nullptr;
+//}
+////-EAWebKitChange
 
 
 void TextureMapperTile::updateContents(TextureMapper* textureMapper, GraphicsLayer* sourceLayer, const IntRect& dirtyRect, BitmapTexture::UpdateContentsFlag updateContentsFlag)
@@ -89,34 +93,35 @@ void TextureMapperTile::updateContents(TextureMapper* textureMapper, GraphicsLay
     // Normalize targetRect to the texture's coordinates.
     targetRect.move(-m_rect.x(), -m_rect.y());
 
-    //+EAWebKitChange
-    //4/28/2015, 05/08/2015
-    bool customTexture = false;
-    bool srcChanged = false;
-    WTF::String textureName;
-    const WTF::String* url = imageSrcUrl(sourceLayer);
-    const WTF::String kCustomPrefix = String("eawebkit-custom-texture-"); 
+    //MBG - reverted
+    ////+EAWebKitChange
+    ////4/28/2015, 05/08/2015
+    //bool customTexture = false;
+    //bool srcChanged = false;
+    //WTF::String textureName;
+    //const WTF::String* url = imageSrcUrl(sourceLayer);
+    //const WTF::String kCustomPrefix = String("eawebkit-custom-texture-"); 
 
-    if(url && url->startsWith(kCustomPrefix))
-    {
-        customTexture = true;
-        textureName = url->substring(kCustomPrefix.length());
-        if (textureName != m_customTextureName)
-        {
-            srcChanged = true;
-            m_customTextureName = textureName;
-        }
-    }    
+    //if(url && url->startsWith(kCustomPrefix))
+    //{
+    //    customTexture = true;
+    //    textureName = url->substring(kCustomPrefix.length());
+    //    if (textureName != m_customTextureName)
+    //    {
+    //        srcChanged = true;
+    //        m_customTextureName = textureName;
+    //    }
+    //}    
 
-    if (!m_texture || srcChanged) 
-    {
-        if(customTexture)
-            m_texture = textureMapper->createTexture(EA::WebKit::SurfaceTypeCustom, textureName.characters8(), textureName.length());
-        else
-            m_texture = textureMapper->createTexture(EA::WebKit::SurfaceTypeTexture);
-        m_texture->reset(targetRect.size(), BitmapTexture::SupportsAlpha);
-    }
-    //-EAWebKitChange
+    //if (!m_texture || srcChanged) 
+    //{
+    //    if(customTexture)
+    //        m_texture = textureMapper->createTexture(EA::WebKit::SurfaceTypeCustom, textureName.characters8(), textureName.length());
+    //    else
+    //        m_texture = textureMapper->createTexture(EA::WebKit::SurfaceTypeTexture);
+    //    m_texture->reset(targetRect.size(), BitmapTexture::SupportsAlpha);
+    //}
+    ////-EAWebKitChange
 
     m_texture->updateContents(textureMapper, sourceLayer, targetRect, sourceOffset, updateContentsFlag);
 }

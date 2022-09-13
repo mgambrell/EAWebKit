@@ -368,6 +368,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\WebCore\config.h" />
     <ClCompile Include="..\..\..\..\WebCore\DerivedSources.cpp" />
+    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ANGLEWebKitBridge.h" />
     <ClInclude Include="..\..\..\..\WebCore\WebCorePrefix.h" />
     <ClCompile Include="..\..\..\..\WebCore\accessibility\AccessibilityARIAGrid.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\accessibility\AccessibilityARIAGrid.h" />
@@ -3458,6 +3459,17 @@
     <ClInclude Include="..\..\..\..\WebCore\platform\KeyedCoding.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\KeypressCommand.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\KillRing.h" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ANGLEWebKitBridge.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\PlatformGraphicsEA.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\egl\GLContextEGL.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\Extensions3DOpenGLCommon.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\Extensions3DOpenGLES.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\GraphicsContext3DOpenGLCommon.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\GraphicsContext3DOpenGLES.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\TemporaryOpenGLSetting.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTextureGL.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperGL.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperShaderProgram.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\KillRingNone.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\Language.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\Language.h" />
@@ -3796,7 +3808,6 @@
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\NamedImageGeneratedImage.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\NativeImagePtr.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\OpenGLESShims.h" />
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\OpenGLShims.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\OpenGLShims.h" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\Path.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\Path.h" />
@@ -3886,8 +3897,6 @@
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\cpu\arm\filters\FEGaussianBlurNEON.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\cpu\arm\filters\FELightingNEON.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\cpu\arm\filters\NEONHelpers.h" />
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\BitmapTextureEA.cpp" />
-    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\BitmapTextureEA.h" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\FontCacheEA.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\FontCascadeEA.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\FontCustomPlatformData.h" />
@@ -3902,8 +3911,6 @@
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\IntSizeEA.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\MediaPlayerPrivateEA.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\MediaPlayerPrivateEA.h" />
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\TextureMapperEA.cpp" />
-    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\TextureMapperEA.h" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\TileEA.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\TileEA.h" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\TransformationMatrixEA.cpp" />
@@ -5132,8 +5139,8 @@
     <ClCompile Include="..\..\..\..\WebKit\ea\WebCoreSupport\SearchPopupMenuEA.cpp" />
     <ClInclude Include="..\..\..\..\WebKit\ea\WebCoreSupport\SearchPopupMenuEA.h" />
     <ClCompile Include="..\..\..\..\WebKit\ea\WebCoreSupport\TextureMapperLayerClientEA.cpp" />
-    <ClInclude Include="..\..\..\..\WebKit\ea\WebCoreSupport\TextureMapperLayerClientEA.h" />
     <ClCompile Include="..\..\..\..\WebKit\ea\WebCoreSupport\VisitedLinkStoreEA.cpp" />
+    <ClInclude Include="..\..\..\..\WebKit\ea\WebCoreSupport\TextureMapperLayerClientEA.h" />
     <ClInclude Include="..\..\..\..\WebKit\ea\WebCoreSupport\VisitedLinkStoreEA.h" />
     <ClCompile Include="..\..\..\..\WebKit\ea\WebCoreSupport\InspectorServer\HTTPRequest.cpp" />
     <ClInclude Include="..\..\..\..\WebKit\ea\WebCoreSupport\InspectorServer\HTTPRequest.h" />

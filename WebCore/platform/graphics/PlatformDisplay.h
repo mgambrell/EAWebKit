@@ -29,6 +29,8 @@
 #include <wtf/Noncopyable.h>
 #include <wtf/TypeCasts.h>
 
+#include <memory>
+
 #if USE(EGL)
 typedef void *EGLDisplay;
 #endif
@@ -42,6 +44,10 @@ public:
     virtual ~PlatformDisplay();
 
     enum class Type {
+      //MBG ADDED
+      #if PLATFORM(EA)
+      EA
+      #endif
 #if PLATFORM(X11)
         X11,
 #endif

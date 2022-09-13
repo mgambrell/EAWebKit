@@ -57,8 +57,12 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "TileEA.h"
 #endif
 #if USE(ACCELERATED_COMPOSITING)
-#include "TextureMapperEA.h"
-#include "BitmapTextureEA.h"
+//MBG - MODIFIED
+//#include "TextureMapperEA.h"
+//#include "BitmapTextureEA.h"
+#include "TextureMapperGL.h"
+#include "BitmapTextureGL.h"
+
 #include "texmap/TextureMapper.h"
 #include "texmap/TextureMapperPlatformLayer.h"
 #include "TextureMapperLayerClientEA.h"
@@ -197,7 +201,9 @@ public:
 	Tiles mTiles;
 #endif	
 #if USE(ACCELERATED_COMPOSITING)
-	typedef eastl::list<WebCore::BitmapTextureEA*> Textures;
+	//MBG - MODIFIED
+	//typedef eastl::list<WebCore::BitmapTextureEA*> Textures;
+	typedef eastl::list<WebCore::BitmapTextureGL*> Textures;
 	Textures mTextures;
 #endif
 
@@ -351,9 +357,8 @@ void View::Paint()
 			}
 		}
 	}
-             
-    NOTIFY_PROCESS_STATUS(kVProcessTypePaint, EA::WebKit::kVProcessStatusEnded, this);
 
+    NOTIFY_PROCESS_STATUS(kVProcessTypePaint, EA::WebKit::kVProcessStatusEnded, this);
 }
 
 void View::PaintOverlays(void)
@@ -491,6 +496,13 @@ bool View::InitView(const ViewParameters& vp)
 #endif
 		SetSize(IntSize(vp.mWidth, vp.mHeight));
 	}
+
+	//MBG ADDED - not sure how we're supposed to set these properly from the EAWebKit API right now...
+	auto & settings = d->page->handle()->page->settings();
+	settings.setAccelerated2dCanvasEnabled(true);
+	settings.setAcceleratedCompositingEnabled(true);
+	settings.setMinimumAccelerated2dCanvasSize(1); //I will really want to finetune this per game and platform, i guess
+	settings.setAcceleratedFiltersEnabled(true);
 
 	d->mInitialized = true;
 	
@@ -836,7 +848,8 @@ void View::SaveSurfacePNG(const char8_t *filepath)
 	dumpContainerSurfaces(d->mTiles,sPath.c_str(),"tiles");
 #endif
 #if USE(ACCELERATED_COMPOSITING)
-	dumpContainerSurfaces(d->mTextures,sPath.c_str(),"textures");
+	//MBG - doesn't work now really
+	//dumpContainerSurfaces(d->mTextures,sPath.c_str(),"textures");
 #endif
 }
 
@@ -1550,18 +1563,19 @@ void View::RemoveTile(WebCore::TileEA* tile)
 #endif
 }
 
-void View::AddTexture(WebCore::BitmapTextureEA* texture)
-{
-#if USE(ACCELERATED_COMPOSITING)
-	d->mTextures.push_back(texture);
-#endif
-}
-void View::RemoveTexture(WebCore::BitmapTextureEA* texture)
-{
-#if USE(ACCELERATED_COMPOSITING)
-	d->mTextures.remove(texture);
-#endif
-}
+//MBG - are these used?
+//void View::AddTexture(WebCore::BitmapTextureEA* texture)
+//{
+//#if USE(ACCELERATED_COMPOSITING)
+//	d->mTextures.push_back(texture);
+//#endif
+//}
+//void View::RemoveTexture(WebCore::BitmapTextureEA* texture)
+//{
+//#if USE(ACCELERATED_COMPOSITING)
+//	d->mTextures.remove(texture);
+//#endif
+//}
 
 
 ISurface* View::CreateOverlaySurface(int x, int y, int width, int height)

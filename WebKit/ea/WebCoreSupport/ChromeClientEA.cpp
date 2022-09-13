@@ -619,6 +619,10 @@ ChromeClient::CompositingTriggerFlags ChromeClientEA::allowedCompositingTriggers
 
 bool ChromeClientEA::allowsAcceleratedCompositing() const
 {
+  //MBG - I dont know what sense this makes to return true for "CPU" compositing
+  //I just want this to be true always
+  return true;
+
 	if(m_webPage->view()->HardwareAccelerated())
 		return true;
 

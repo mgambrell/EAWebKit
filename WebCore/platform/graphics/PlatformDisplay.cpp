@@ -54,6 +54,10 @@
 #include <Ecore_X.h>
 #endif
 
+#if PLATFORM(EA)
+#include "PlatformGraphicsEA.h"
+#endif
+
 #if USE(EGL)
 //#include <EGL/egl.h>
 #endif
@@ -62,6 +66,10 @@ namespace WebCore {
 
 std::unique_ptr<PlatformDisplay> PlatformDisplay::createPlatformDisplay()
 {
+  #if PLATFORM(EA)
+  return std::make_unique<PlatformDisplayEA>();
+  #endif
+
 #if PLATFORM(GTK)
 #if defined(GTK_API_VERSION_2)
     return std::make_unique<PlatformDisplayX11>(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()));

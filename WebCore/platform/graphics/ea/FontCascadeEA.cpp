@@ -31,6 +31,7 @@
 #include "Font.h"
 #include "WidthIterator.h"
 #include <cairo/cairo.h>
+#include <cairo/cairo-gl.h>
 #include <EAWebKit/EAWebKit.h>
 #include <EAWebKit/EAWebkitAllocator.h>
 #include <EAWebKit/EAWebKitTextInterface.h>
@@ -306,7 +307,9 @@ static void drawGlyphsToContext(GraphicsContext* pGraphicsContext, const EA::Web
      // Draw the final image using Cairo lib   
      cairo_t* context = pGraphicsContext->platformContext()->cr();
      cairo_save(context);
-     cairo_surface_t *surface = cairo_image_surface_create_for_data((unsigned char*)glyphRGBABuffer.data(), CAIRO_FORMAT_ARGB32, srcW, srcH, srcW * sizeof(uint32_t));
+     //MBG MODIFIED
+     //cairo_surface_t *surface = cairo_image_surface_create_for_data((unsigned char*)glyphRGBABuffer.data(), CAIRO_FORMAT_ARGB32, srcW, srcH, srcW * sizeof(uint32_t));
+     cairo_surface_t *surface = cairo_gl_surface_create_for_data((cairo_device_t*)EA::WebKit::g_cairoDevice, (unsigned char*)glyphRGBABuffer.data(), CAIRO_CONTENT_COLOR_ALPHA, srcW, srcH, srcW * sizeof(uint32_t));
      EAW_ASSERT(cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS);
      
      // If we pass sub pixel offsets (e.g. 75.5), some Cario interpolation kicks in and can degrade the font quality.

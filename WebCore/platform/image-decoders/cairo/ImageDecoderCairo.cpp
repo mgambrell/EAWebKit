@@ -28,13 +28,22 @@
 
 #include <cairo.h>
 
+//MBG MODIFIED
+#include <EAWebKit/EAWebKit>
+#include "cairo-gl.h"
+
 namespace WebCore {
 
 PassNativeImagePtr ImageFrame::asNewNativeImage() const
 {
-    return adoptRef(cairo_image_surface_create_for_data(
-        reinterpret_cast<unsigned char*>(const_cast<PixelData*>(m_bytes)),
-        CAIRO_FORMAT_ARGB32, width(), height(), width() * sizeof(PixelData)));
+  //MBG MODIFIED
+    //return adoptRef(cairo_image_surface_create_for_data(
+    //    reinterpret_cast<unsigned char*>(const_cast<PixelData*>(m_bytes)),
+    //    CAIRO_FORMAT_ARGB32, width(), height(), width() * sizeof(PixelData)));
+
+  return adoptRef(cairo_gl_surface_create_for_data((cairo_device_t*)EA::WebKit::g_cairoDevice,
+      reinterpret_cast<unsigned char*>(const_cast<PixelData*>(m_bytes)),
+    CAIRO_CONTENT_COLOR_ALPHA, width(), height(), width() * sizeof(PixelData)));
 }
 
 } // namespace WebCore

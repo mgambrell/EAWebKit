@@ -687,6 +687,9 @@ cairo_gl_surface_create_for_data(cairo_device_t *abstract_device,
 
 	ret = _create_scratch_internal(ctx, content, width, height, FALSE);
 
+	//GUESSED
+	ret->serial = 1;
+
 	//COPIED CODE WARNING
 	//MBG - changed from RGBA to BGRA, who even knows what's going on with this kind of stuff?
 	GLenum format;

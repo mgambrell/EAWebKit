@@ -48,7 +48,9 @@
 #endif
 
 #if USE(OPENGL_ES_2)
-#include "Extensions3DOpenGLES.h"
+//MBG MODIFIED
+//#include "Extensions3DOpenGLES.h"
+#include "../opengl/Extensions3DOpenGLES.h"
 #else
 #include "Extensions3DOpenGL.h"
 #include "OpenGLShims.h"

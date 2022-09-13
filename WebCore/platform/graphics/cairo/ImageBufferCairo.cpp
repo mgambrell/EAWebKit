@@ -49,7 +49,10 @@
 
 #if ENABLE(ACCELERATED_2D_CANVAS)
 #include "GLContext.h"
-#include "OpenGLShims.h"
+//MBG - not needed
+//#include "OpenGLShims.h"
+#include <GLES2/gl2.h>
+//MBG - changed
 #include "TextureMapperGL.h"
 #include <cairo-gl.h>
 #endif
@@ -401,6 +404,7 @@ void ImageBufferData::paintToTextureMapper(TextureMapper* textureMapper, const F
     // Cairo may change the active context, so we make sure to change it back after flushing.
     GLContext* previousActiveContext = GLContext::getCurrent();
     cairo_surface_flush(m_surface.get());
+    cairo_device_flush(cairo_surface_get_device(m_surface.get()));
     previousActiveContext->makeContextCurrent();
 
     static_cast<TextureMapperGL*>(textureMapper)->drawTexture(m_texture, TextureMapperGL::ShouldBlend, m_size, targetRect, matrix, opacity);

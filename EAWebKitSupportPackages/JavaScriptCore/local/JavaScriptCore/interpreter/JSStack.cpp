@@ -90,6 +90,10 @@ bool JSStack::growSlowCase(Register* newTopOfStack)
     // return false.
     ptrdiff_t delta = reinterpret_cast<char*>(m_commitTop) - reinterpret_cast<char*>(newTopOfStackWithReservedZone);
     delta = WTF::roundUpToMultipleOf(commitSize, delta);
+    
+    //MBG - well, I get an assertion fail without this.... I dont know why it's important, but we may as well be careful
+    delta = WTF::roundUpToMultipleOf(WTF::pageSize(), delta);
+
     Register* newCommitTop = m_commitTop - (delta / sizeof(Register));
     if (newCommitTop < reservationTop())
         return false;

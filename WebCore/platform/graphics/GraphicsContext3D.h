@@ -26,7 +26,7 @@
 #ifndef GraphicsContext3D_h
 #define GraphicsContext3D_h
 
-//#include "ANGLEWebKitBridge.h"
+#include "ANGLEWebKitBridge.h"
 #include "GraphicsTypes3D.h"
 #include "Image.h"
 #include "IntRect.h"
@@ -1319,7 +1319,7 @@ private:
         {
         }
 
-        SymbolInfo(GC3Denum type, int size, const String& mappedName, sh::GLenum precision, int staticUse)
+        SymbolInfo(GC3Denum type, int size, const String& mappedName, GLenum precision, int staticUse) //MBG MODIFIED
             : type(type)
             , size(size)
             , mappedName(mappedName)
@@ -1336,7 +1336,7 @@ private:
         GC3Denum type;
         int size;
         String mappedName;
-        sh::GLenum precision;
+        GLenum precision; //MBG MODIFIED
         int staticUse;
     };
 
@@ -1402,7 +1402,7 @@ private:
 
     std::unique_ptr<ShaderNameHash> nameHashMapForShaders;
 
-#if ((PLATFORM(GTK) || PLATFORM(EFL) || PLATFORM(WIN)) && USE(OPENGL_ES_2))
+#if ((PLATFORM(GTK) || PLATFORM(EFL) || PLATFORM(WIN) || PLATFORM(EA)) && USE(OPENGL_ES_2)) //MBG MODIFIED
     friend class Extensions3DOpenGLES;
     std::unique_ptr<Extensions3DOpenGLES> m_extensions;
 #else

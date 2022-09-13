@@ -82,6 +82,8 @@ class MyCompiler
 public:
   int getShaderVersion() { return 2; }
 
+  std::string text;
+
   ShShaderOutput getOutputType()
   {
     //doesnt really matter
@@ -229,7 +231,10 @@ bool ShCompile(
     size_t numStrings,
     int compileOptions)
 {
-  //  return compiler->compile(shaderStrings, numStrings, compileOptions);
+  MyCompiler* base = static_cast<MyCompiler*>(handle);
+  base->text.clear();
+  for(int i=0;i<numStrings;i++)
+    base->text += shaderStrings[i];
   return true;
 }
 
@@ -260,17 +265,14 @@ const std::string &ShGetInfoLog(const ShHandle handle)
   return "";
 }
 
-//
-// Return any object code.
-//
-const std::string &ShGetObjectCode(const ShHandle handle)
+//"Return any object code"
+//but in this case it's just the exact shader string 
+const std::string& ShGetObjectCode(const ShHandle handle)
 {
-  MyCompiler *compiler = GetCompilerFromHandle(handle);
-    assert(compiler);
+	MyCompiler* compiler = GetCompilerFromHandle(handle);
+	assert(compiler);
 
-    //TInfoSink &infoSink = compiler->getInfoSink();
-    //return infoSink.obj.str();
-    return "";
+	return compiler->text;
 }
 
 //const std::map<std::string, std::string> *ShGetNameHashingMap(

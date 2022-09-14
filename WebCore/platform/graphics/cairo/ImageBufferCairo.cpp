@@ -86,7 +86,9 @@ PassRefPtr<cairo_surface_t> createCairoGLSurface(const FloatSize& size, uint32_t
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    glTexImage2D(GL_TEXTURE_2D, 0 /* level */, GL_RGBA8, size.width(), size.height(), 0 /* border */, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    //MBG - changed to match BGRA which seems to be the way I'm leaning
+    //glTexImage2D(GL_TEXTURE_2D, 0 /* level */, GL_RGBA8, size.width(), size.height(), 0 /* border */, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0 /* level */, GL_BGRA, size.width(), size.height(), 0 /* border */, GL_BGRA, GL_UNSIGNED_BYTE, 0);
 
     GLContext* context = GLContext::sharingContext();
     cairo_device_t* device = context->cairoDevice();

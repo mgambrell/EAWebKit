@@ -450,11 +450,13 @@ _create_scratch_internal (cairo_gl_context_t *ctx,
     if (height < 1)
 	height = 1;
 
+		//MBG - _cairo_gl_get_image_format_and_type is returning BGRA (for ME on gles2); therefore that's what will be used for image processing and uploading
+		//consequently, we need to use this here when creating textures (so I changedi t all from GL_RGBA)
     switch (content) {
     default:
 	ASSERT_NOT_REACHED;
     case CAIRO_CONTENT_COLOR_ALPHA:
-	format = GL_RGBA;
+	format = GL_BGRA;
 	break;
     case CAIRO_CONTENT_ALPHA:
 	/* When using GL_ALPHA, compositing doesn't work properly, but for
@@ -463,7 +465,7 @@ _create_scratch_internal (cairo_gl_context_t *ctx,
 	if (for_caching)
 	    format = GL_ALPHA;
 	else
-	    format = GL_RGBA;
+	    format = GL_BGRA;
 	break;
     case CAIRO_CONTENT_COLOR:
 	/* GL_RGB is almost what we want here -- sampling 1 alpha when
@@ -474,7 +476,7 @@ _create_scratch_internal (cairo_gl_context_t *ctx,
 	 * specified.  So, we have to store RGBA, and fill the alpha
 	 * channel with 1 when blending.
 	 */
-	format = GL_RGBA;
+	format = GL_BGRA;
 	break;
     }
 

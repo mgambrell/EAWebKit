@@ -123,6 +123,12 @@ void TextureMapperTile::updateContents(TextureMapper* textureMapper, GraphicsLay
     //}
     ////-EAWebKitChange
 
+    if (!m_texture) 
+    {
+        m_texture = textureMapper->createTexture();
+        m_texture->reset(targetRect.size(), BitmapTexture::SupportsAlpha);
+    }
+
     m_texture->updateContents(textureMapper, sourceLayer, targetRect, sourceOffset, updateContentsFlag);
 }
 

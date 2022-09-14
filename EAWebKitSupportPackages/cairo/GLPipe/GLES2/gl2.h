@@ -677,6 +677,7 @@ typedef void (GL_APIENTRYP PFNGLVIEWPORTPROC) (GLint x, GLint y, GLsizei width, 
 
 //MBG - ADDED
 #define GL_RGBA8 0x8058
+#define GL_BGRA 0x80E1
 #define GL_CLAMP 0x2900
 #define GL_MAX_VARYING_FLOATS 0x8B4B
 

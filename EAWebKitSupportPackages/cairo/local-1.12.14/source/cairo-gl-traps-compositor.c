@@ -153,6 +153,37 @@ FAIL:
     return status;
 }
 
+//MBG - had to add this.. did I do it right?
+static cairo_int_status_t
+copy_boxes (void *surface,
+  cairo_surface_t *src,
+  cairo_boxes_t *boxes,
+  const cairo_rectangle_int_t *extents,
+  int dx, int dy)
+{
+  cairo_gl_composite_t setup;
+  cairo_gl_context_t *ctx;
+  cairo_int_status_t status;
+
+  status = _cairo_gl_composite_init (&setup, CAIRO_OPERATOR_SOURCE, surface, FALSE);
+  if (unlikely (status))
+    goto FAIL;
+
+  _cairo_gl_composite_set_source_operand (&setup,source_to_operand (src));
+  _cairo_gl_operand_translate (&setup.src,dx, dy);
+
+  status = _cairo_gl_composite_begin (&setup, &ctx);
+  if (unlikely (status))
+    goto FAIL;
+
+  emit_aligned_boxes (ctx, boxes);
+  status = _cairo_gl_context_release (ctx, CAIRO_STATUS_SUCCESS);
+
+FAIL:
+  _cairo_gl_composite_fini (&setup);
+  return status;
+}
+
 static cairo_int_status_t
 composite_boxes (void			*_dst,
 		 cairo_operator_t	op,
@@ -537,7 +568,7 @@ _cairo_gl_traps_compositor_get (void)
 	compositor.set_clip_region = set_clip_region;
 	compositor.pattern_to_surface = _cairo_gl_pattern_to_source;
 	compositor.draw_image_boxes = draw_image_boxes;
-	//compositor.copy_boxes = copy_boxes;
+	compositor.copy_boxes = copy_boxes;
 	compositor.fill_boxes = fill_boxes;
 	compositor.check_composite = check_composite;
 	compositor.composite = composite;

@@ -57,13 +57,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "TileEA.h"
 #endif
 #if USE(ACCELERATED_COMPOSITING)
-//MBG - MODIFIED
-//#include "TextureMapperEA.h"
-//#include "BitmapTextureEA.h"
-#include "TextureMapperGL.h"
-#include "BitmapTextureGL.h"
-#include "EGL/GLContextEGL.h"
-
+#include "TextureMapperEA.h"
+#include "BitmapTextureEA.h"
 #include "texmap/TextureMapper.h"
 #include "texmap/TextureMapperPlatformLayer.h"
 #include "TextureMapperLayerClientEA.h"
@@ -90,8 +85,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace EA { namespace WebKit
 {
 
-	//MBG HACK
-	extern WebCore::GLContextEGL* whatever;
 //
 // Private implementation
 //
@@ -204,9 +197,7 @@ public:
 	Tiles mTiles;
 #endif	
 #if USE(ACCELERATED_COMPOSITING)
-	//MBG - MODIFIED
-	//typedef eastl::list<WebCore::BitmapTextureEA*> Textures;
-	typedef eastl::list<WebCore::BitmapTextureGL*> Textures;
+	typedef eastl::list<WebCore::BitmapTextureEA*> Textures;
 	Textures mTextures;
 #endif
 
@@ -238,9 +229,6 @@ void View::Paint()
 	EAWEBKIT_THREAD_CHECK();
 	EAWWBKIT_INIT_CHECK(); 
 	EAW_ASSERT_MSG(d->mInitialized, "View must be initialized!");
-
-	//MBG TEST
-	//whatever->makeContextCurrent();
 	
     NOTIFY_PROCESS_STATUS(kVProcessTypePaint, EA::WebKit::kVProcessStatusStarted, this);
 
@@ -363,8 +351,9 @@ void View::Paint()
 			}
 		}
 	}
-
+             
     NOTIFY_PROCESS_STATUS(kVProcessTypePaint, EA::WebKit::kVProcessStatusEnded, this);
+
 }
 
 void View::PaintOverlays(void)
@@ -854,8 +843,7 @@ void View::SaveSurfacePNG(const char8_t *filepath)
 	dumpContainerSurfaces(d->mTiles,sPath.c_str(),"tiles");
 #endif
 #if USE(ACCELERATED_COMPOSITING)
-	//MBG - doesn't work now really
-	//dumpContainerSurfaces(d->mTextures,sPath.c_str(),"textures");
+	dumpContainerSurfaces(d->mTextures,sPath.c_str(),"textures");
 #endif
 }
 
@@ -1569,19 +1557,18 @@ void View::RemoveTile(WebCore::TileEA* tile)
 #endif
 }
 
-//MBG - are these used?
-//void View::AddTexture(WebCore::BitmapTextureEA* texture)
-//{
-//#if USE(ACCELERATED_COMPOSITING)
-//	d->mTextures.push_back(texture);
-//#endif
-//}
-//void View::RemoveTexture(WebCore::BitmapTextureEA* texture)
-//{
-//#if USE(ACCELERATED_COMPOSITING)
-//	d->mTextures.remove(texture);
-//#endif
-//}
+void View::AddTexture(WebCore::BitmapTextureEA* texture)
+{
+#if USE(ACCELERATED_COMPOSITING)
+	d->mTextures.push_back(texture);
+#endif
+}
+void View::RemoveTexture(WebCore::BitmapTextureEA* texture)
+{
+#if USE(ACCELERATED_COMPOSITING)
+	d->mTextures.remove(texture);
+#endif
+}
 
 
 ISurface* View::CreateOverlaySurface(int x, int y, int width, int height)

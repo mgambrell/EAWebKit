@@ -1,5 +1,3 @@
-//MBG - changed to use GL
-
 /*
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies)
  * Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies)
@@ -36,8 +34,7 @@
 #include "TextureMapperLayer.h"
 #include "GraphicsContext.h"
 #include "PlatformContextCairo.h"
-#include "TextureMapperGL.h"
-#include <EAWebKit/EAWebKit.h>
+#include "TextureMapperEA.h"
 
 using namespace WebCore;
 
@@ -84,11 +81,10 @@ void TextureMapperLayerClientEA::setRootGraphicsLayer(GraphicsLayer* layer)
         m_rootGraphicsLayer->setMasksToBounds(false);
         m_rootGraphicsLayer->setSize(IntSize(1, 1));
         
-        //MBG MODIFIED
-  //      if (m_frame->page()->view()->HardwareAccelerated())
-		//	m_textureMapper = TextureMapperEA::create(m_frame->page()->view());
-		//else
-			m_textureMapper = TextureMapperGL::create();
+        if (m_frame->page()->view()->HardwareAccelerated())
+			m_textureMapper = TextureMapperEA::create(m_frame->page()->view());
+		else
+			m_textureMapper = TextureMapper::create();
 
         m_rootTextureMapperLayer->setTextureMapper(m_textureMapper.get());
         syncRootLayer();
@@ -100,11 +96,6 @@ void TextureMapperLayerClientEA::setRootGraphicsLayer(GraphicsLayer* layer)
 
 void TextureMapperLayerClientEA::syncLayers()
 {
-  //MBG HACK - did this thing that always needs to happen at about this time. god, what a mess
-  auto glTextureMapper = ((TextureMapperGL*)m_textureMapper.get())->graphicsContext3D();
-  glTextureMapper->makeContextCurrent();
-
-
     if(!m_needSync)
 		return;
 
@@ -123,7 +114,6 @@ void TextureMapperLayerClientEA::renderCompositedLayers(GraphicsContext* context
 
 	if (!m_rootTextureMapperLayer || !m_textureMapper)
         return;
-
 
 	//Use of this GC is in the TextureMapper implementation layer (so like TexttureMapperImageBuffer/TextureMapperEA). It is not used
 	//elsewhere.
@@ -144,20 +134,15 @@ void TextureMapperLayerClientEA::renderCompositedLayers(GraphicsContext* context
         m_rootGraphicsLayer->setTransform(matrix);
         downcast<GraphicsLayerTextureMapper>(*m_rootGraphicsLayer).updateBackingStoreIncludingSubLayers();
     //}
-
-        
-        
     m_textureMapper->beginPainting();
-
-    //if(m_frame->page()->view()->GetHardwareRenderer()->UseCustomClip()) //MBG - removed
+    if(m_frame->page()->view()->GetHardwareRenderer()->UseCustomClip())
 		m_textureMapper->beginClip(matrix, clip);
     m_rootTextureMapperLayer->paint();
     m_fpsCounter.updateFPSAndDisplay(m_textureMapper.get(), IntPoint::zero(), matrix);
-	//if(m_frame->page()->view()->GetHardwareRenderer()->UseCustomClip()) //MBG - removed
+	if(m_frame->page()->view()->GetHardwareRenderer()->UseCustomClip())
 		m_textureMapper->endClip();
     m_textureMapper->endPainting();
 
-    //cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
 }
 
 #endif

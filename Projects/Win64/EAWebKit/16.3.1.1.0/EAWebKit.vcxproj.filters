@@ -6312,9 +6312,6 @@
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexture.h">
       <Filter>WebCore\platform\graphics\texmap</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTextureGL.h">
-      <Filter>WebCore\platform\graphics\texmap</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexturePool.h">
       <Filter>WebCore\platform\graphics\texmap</Filter>
     </ClInclude>
@@ -6364,9 +6361,6 @@
       <Filter>WebCore\platform\graphics\texmap</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperFPSCounter.h">
-      <Filter>WebCore\platform\graphics\texmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperGL.h">
       <Filter>WebCore\platform\graphics\texmap</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperLayer.h">
@@ -9975,6 +9969,9 @@
     <ClInclude Include="..\..\..\..\WebKit\ea\WebCoreSupport\TextureMapperLayerClientEA.h">
       <Filter>WebKit\ea\WebCoreSupport</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\TextureMapperEA.h">
+      <Filter>WebCore\platform\graphics\ea</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\WebCore\accessibility\AccessibilityARIAGrid.cpp">
@@ -13488,17 +13485,14 @@
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\PlatformGraphicsEA.cpp">
       <Filter>WebCore\platform\graphics\ea</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperGL.cpp">
-      <Filter>WebCore\platform\graphics\texmap</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTextureGL.cpp">
-      <Filter>WebCore\platform\graphics\texmap</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperShaderProgram.cpp">
       <Filter>WebCore\platform\graphics\texmap</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\WebKit\ea\WebCoreSupport\TextureMapperLayerClientEA.cpp">
       <Filter>WebKit\ea\WebCoreSupport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\TextureMapperEA.cpp">
+      <Filter>WebCore\platform\graphics\ea</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

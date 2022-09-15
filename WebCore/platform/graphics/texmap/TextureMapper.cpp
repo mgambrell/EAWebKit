@@ -50,8 +50,7 @@ TextureMapper::TextureMapper()
 //+EAWebKitChange
 //10/06/2015 construct the m_texturePool too
 #if PLATFORM(EA)    
-//MBG - reverted
-	//, m_texturePool(std::make_unique<BitmapTexturePool>(this))
+	, m_texturePool(std::make_unique<BitmapTexturePool>(this))
 #endif
 //-EAWebKitChange
     , m_isMaskMode(false)

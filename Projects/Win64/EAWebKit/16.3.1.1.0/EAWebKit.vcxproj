@@ -369,6 +369,7 @@
     <ClInclude Include="..\..\..\..\WebCore\config.h" />
     <ClCompile Include="..\..\..\..\WebCore\DerivedSources.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ANGLEWebKitBridge.h" />
+    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ea\TextureMapperEA.h" />
     <ClInclude Include="..\..\..\..\WebCore\WebCorePrefix.h" />
     <ClCompile Include="..\..\..\..\WebCore\accessibility\AccessibilityARIAGrid.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\accessibility\AccessibilityARIAGrid.h" />
@@ -3461,14 +3462,13 @@
     <ClInclude Include="..\..\..\..\WebCore\platform\KillRing.h" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ANGLEWebKitBridge.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\PlatformGraphicsEA.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\TextureMapperEA.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\egl\GLContextEGL.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\Extensions3DOpenGLCommon.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\Extensions3DOpenGLES.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\GraphicsContext3DOpenGLCommon.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\GraphicsContext3DOpenGLES.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\TemporaryOpenGLSetting.cpp" />
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTextureGL.cpp" />
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperGL.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperShaderProgram.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\KillRingNone.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\Language.cpp" />
@@ -4011,7 +4011,6 @@
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\surfaces\GraphicsSurfaceToken.h" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexture.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexture.h" />
-    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTextureGL.h" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexturePool.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexturePool.h" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\GraphicsLayerTextureMapper.cpp" />
@@ -4024,7 +4023,6 @@
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperBackingStore.h" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperFPSCounter.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperFPSCounter.h" />
-    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperGL.h" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperLayer.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperLayer.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperPlatformLayer.h" />

@@ -107,11 +107,15 @@
 #include <GLES2/gl2.h>
 #include <EGL/egl.h>
 #include "GLContext.h"
+#include "egl/GLContextEGL.h"
 
 namespace EA
 {
 namespace WebKit
 {
+	//MBG HACK BLECK
+	extern WebCore::GLContextEGL* whatever;
+
     WebFrameData::WebFrameData(WebCore::Page* parentPage, WebCore::Frame* parentFrame,
                              WebCore::HTMLFrameOwnerElement* ownerFrameElement,
                              const WTF::String& frameName)
@@ -759,7 +763,7 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 			RefPtr<cairo_surface_t> cairoSurface =adoptRef(cairo_image_surface_create_for_data(NULL, CAIRO_FORMAT_ARGB32, 0, 0, 0));
 			RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
 
-			//RefPtr<cairo_surface_t> cairoSurface =adoptRef(cairo_gl_surface_create_for_texture(WebCore::GLContext::sharingContext()->cairoDevice(),CAIRO_CONTENT_COLOR_ALPHA, (NULL, CAIRO_FORMAT_ARGB32, 0, 0, 0));
+			//RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice,CAIRO_CONTENT_COLOR_ALPHA, texid, 1280, 720));
 			//RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
 			
 			//MBG - we need a gl context active
@@ -768,29 +772,29 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 			//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
 
 			//needs to be done too>?>>
-			cairo_device_flush(WebCore::GLContext::sharingContext()->cairoDevice());
+			//cairo_device_flush(WebCore::GLContext::sharingContext()->cairoDevice());
 
-			WebCore::GLContext::sharingContext()->makeContextCurrent();
-
-			//GraphicsContext3D::RenderToCurrentGLContext is used by TextureMapperGL
-			//therefore GraphicsContext3D does not manage a GL context
-			//That's fine (for now). We can make the "window" used for the current context set to what we want
-			//Consequently, we need to set the appropriate context in advance ourselves before rendering with the TextureMapperGL
-			//in the future, I will probably want to go to an offscreen surface somehow
-			//well, this is obviously not the right way to be doing this, but it works for me...
-			//eglMakeCurrent(0,0,0,g_eglContext);
-			//WebCore::GLContext::sharingContext()->makeContextCurrent(); //inexplicable
-			glBindFramebuffer(GL_FRAMEBUFFER,fbid);
-			glViewport(0,0,1280,720);
-			glDisable(GL_SCISSOR_TEST);
+			//WebCore::GLContext::sharingContext()->makeContextCurrent();
+			//NEEDED???
+			//whatever->makeContextCurrent();
 
 			//MBG - make a GraphicsContext based on m_cairoGlSurface (which is using g_cairoDevice)
 			//auto pRawCairoContext = cairo_create(m_cairoGlSurface);
 			//RefPtr<cairo_t> cairoContext = adoptRef(pRawCairoContext);
 			WebCore::GraphicsContext graphicsContext(cairoContext.get());
 
-
+			//MBG HACK!
+			//after this, the GraphicsContext3D* which the TMAP client (that is, the TMAP itself) uses for doing stuff has been made current
+			//therefore, we can bind the framebuffer we intend for it to draw to
 			client->syncLayers();
+
+			//so.. prepare it for darwing to that
+			//the alternative is for it to use the "current context" which requires this to be set up, as well...
+			//but it has the deficiency that there isn't enough wisdom in enough places to reset the context after cairo whacks it internally all the damn time
+			glBindFramebuffer(GL_FRAMEBUFFER,fbid);
+			glViewport(0,0,1280,720);
+			glDisable(GL_SCISSOR_TEST);
+
 			client->renderCompositedLayers(&graphicsContext, fullscreen);
 
 			//cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);

@@ -100,6 +100,11 @@ void TextureMapperLayerClientEA::setRootGraphicsLayer(GraphicsLayer* layer)
 
 void TextureMapperLayerClientEA::syncLayers()
 {
+  //MBG HACK - did this thing that always needs to happen at about this time. god, what a mess
+  auto glTextureMapper = ((TextureMapperGL*)m_textureMapper.get())->graphicsContext3D();
+  glTextureMapper->makeContextCurrent();
+
+
     if(!m_needSync)
 		return;
 
@@ -118,6 +123,7 @@ void TextureMapperLayerClientEA::renderCompositedLayers(GraphicsContext* context
 
 	if (!m_rootTextureMapperLayer || !m_textureMapper)
         return;
+
 
 	//Use of this GC is in the TextureMapper implementation layer (so like TexttureMapperImageBuffer/TextureMapperEA). It is not used
 	//elsewhere.

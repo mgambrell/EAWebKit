@@ -71,6 +71,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "InitWebCoreEA.h"
 #include "SchemeRegistry.h"
 #include "WebInspectorServer.h"
+#include "GraphicsContext3D.h"
 
 //+ Following are mainly included to fix leaks(call finalize() type functions).
 #include "PageCache.h"
@@ -102,6 +103,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //MBG ADDED
 #include "../../EAWebKitSupportPackages/cairo/GLPipe/GLPipe.h"
 #include "cairo-gl.h"
+#include "GLContext.h"
+#include "egl/GLContextEGL.h"
 
 //MBG ADDED
 void EAWebKitOffsetsExtractor();
@@ -147,6 +150,7 @@ const char8_t* kDefaultPageGroupName = "default"; // Any name would suffice here
 //MBG ADDED
 void* g_cairoDevice = nullptr;
 void *g_eglContext = nullptr;
+WebCore::GLContextEGL* whatever;
 
 static WebKitStatus					sWebKitStatus = kWebKitStatusInactive;
 static EAWebKitClient*				spEAWebKitClient = NULL;
@@ -712,6 +716,15 @@ bool Init(AppCallbacks* appCallbacks, AppSystems* appSystems)
 		g_cairoDevice = (cairo_device_t*)appSystems->mEAWebkitClient->GetCairoDevice();
 		//LAME - we should create the cairo device ourselves from this default egl context
 		g_eglContext = appSystems->mEAWebkitClient->GetEGLContext();
+
+		//we're going to need a GLContext done well in advance
+		//GLContext
+		//GraphicsContext3D::platformGraphicsContext3D();
+		//WebCore::GLContext::sharingContext()
+		//WebCore::GLContext::createContextForWindow(
+		//GLContext::makeCurrent()
+		whatever = new WebCore::GLContextEGL(g_eglContext, 0, WebCore::GLContextEGL::EGLSurfaceType::WindowSurface);
+		//whatever->makeContextCurrent();
 	}
 
 	// Force the creation of allocator if one was not passed. This allows us to use the pointer directly instead of having to call GetAllocator all the time. 

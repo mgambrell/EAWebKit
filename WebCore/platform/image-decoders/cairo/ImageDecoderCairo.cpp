@@ -31,6 +31,7 @@
 //MBG MODIFIED
 #include <EAWebKit/EAWebKit>
 #include "cairo-gl.h"
+#include "GLContext.h"
 
 namespace WebCore {
 
@@ -41,9 +42,16 @@ PassNativeImagePtr ImageFrame::asNewNativeImage() const
     //    reinterpret_cast<unsigned char*>(const_cast<PixelData*>(m_bytes)),
     //    CAIRO_FORMAT_ARGB32, width(), height(), width() * sizeof(PixelData)));
 
-  return adoptRef(cairo_gl_surface_create_for_data((cairo_device_t*)EA::WebKit::g_cairoDevice,
+    // Cairo may change the active context, so we make sure to change it back after (doing anything with cairo)
+  //GLContext* previousActiveContext = GLContext::getCurrent();
+
+  auto ret = adoptRef(cairo_gl_surface_create_for_data((cairo_device_t*)EA::WebKit::g_cairoDevice,
       reinterpret_cast<unsigned char*>(const_cast<PixelData*>(m_bytes)),
     CAIRO_CONTENT_COLOR_ALPHA, width(), height(), width() * sizeof(PixelData)));
+
+  //previousActiveContext->makeContextCurrent();
+  
+  return ret;
 }
 
 } // namespace WebCore

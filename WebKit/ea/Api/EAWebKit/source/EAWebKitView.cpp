@@ -62,6 +62,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //#include "BitmapTextureEA.h"
 #include "TextureMapperGL.h"
 #include "BitmapTextureGL.h"
+#include "EGL/GLContextEGL.h"
 
 #include "texmap/TextureMapper.h"
 #include "texmap/TextureMapperPlatformLayer.h"
@@ -89,6 +90,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace EA { namespace WebKit
 {
 
+	//MBG HACK
+	extern WebCore::GLContextEGL* whatever;
 //
 // Private implementation
 //
@@ -235,6 +238,9 @@ void View::Paint()
 	EAWEBKIT_THREAD_CHECK();
 	EAWWBKIT_INIT_CHECK(); 
 	EAW_ASSERT_MSG(d->mInitialized, "View must be initialized!");
+
+	//MBG TEST
+	//whatever->makeContextCurrent();
 	
     NOTIFY_PROCESS_STATUS(kVProcessTypePaint, EA::WebKit::kVProcessStatusStarted, this);
 

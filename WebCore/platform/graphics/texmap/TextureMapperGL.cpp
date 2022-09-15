@@ -206,7 +206,8 @@ void TextureMapperGL::ClipStack::apply(GraphicsContext3D* context)
         return;
 
     context->scissor(clipState.scissorBox.x(),
-        (yAxisMode == InvertedYAxis) ? size.height() - clipState.scissorBox.maxY() : clipState.scissorBox.y(),
+      //MBG - unfluck (never flip scissor)
+        ((yAxisMode == InvertedYAxis) && false) ? size.height() - clipState.scissorBox.maxY() : clipState.scissorBox.y(),
         clipState.scissorBox.width(), clipState.scissorBox.height());
     context->stencilOp(GraphicsContext3D::KEEP, GraphicsContext3D::KEEP, GraphicsContext3D::KEEP);
     context->stencilFunc(GraphicsContext3D::EQUAL, clipState.stencilIndex - 1, clipState.stencilIndex - 1);

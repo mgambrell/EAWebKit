@@ -327,6 +327,7 @@ void View::Paint()
 							frame->renderNonTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mDirtyRegions); //Actually render the content on the d->mDisplaySurface				
 						NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusEnded, this);
 
+						//MBG TODO - everything involving mHardwareRenderer needs to be checked again
 						if(d->mHardwareRenderer)
 						{
 							//Send down overlays each tick to the compositor

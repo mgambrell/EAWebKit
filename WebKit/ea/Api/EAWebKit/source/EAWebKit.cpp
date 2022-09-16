@@ -713,9 +713,16 @@ bool Init(AppCallbacks* appCallbacks, AppSystems* appSystems)
 		//MBG added
 		if(appSystems->mEAWebkitClient)
 			GLPipe_SetProcs((GLPipe_Procs*)appSystems->mEAWebkitClient->GetGLPipeProcs());
-		g_cairoDevice = (cairo_device_t*)appSystems->mEAWebkitClient->GetCairoDevice();
+		//g_cairoDevice = (cairo_device_t*)appSystems->mEAWebkitClient->GetCairoDevice();
+
+		//MBG ADDED:
+		//magic ritual that sets up contexts or devices or whatever in the way we need
+		auto context = WebCore::GLContext::sharingContext();
+		g_cairoDevice = context->cairoDevice();
+
 		//LAME - we should create the cairo device ourselves from this default egl context
-		g_eglContext = appSystems->mEAWebkitClient->GetEGLContext();
+		//g_eglContext = appSystems->mEAWebkitClient->GetEGLContext();
+		g_eglContext = context->platformContext();
 
 		//we're going to need a GLContext done well in advance
 		//GLContext
@@ -723,7 +730,7 @@ bool Init(AppCallbacks* appCallbacks, AppSystems* appSystems)
 		//WebCore::GLContext::sharingContext()
 		//WebCore::GLContext::createContextForWindow(
 		//GLContext::makeCurrent()
-		whatever = new WebCore::GLContextEGL(g_eglContext, 0, WebCore::GLContextEGL::EGLSurfaceType::WindowSurface);
+		//whatever = new WebCore::GLContextEGL(g_eglContext, 0, WebCore::GLContextEGL::EGLSurfaceType::WindowSurface);
 		//whatever->makeContextCurrent();
 	}
 
@@ -834,8 +841,22 @@ void Destroy()
 	//WTF::fastDelete<EAWebkitConcrete>(this);
 }
 
+//MBG DIRTY HACKS IGNORE ME NOW
+extern GLuint fbid, texid;
+extern cairo_surface_t* m_cairoGlSurface;
+
 void Tick()
 {
+	//MBG - ticking can draw.. so.. prepare for it
+	//DIRTY HACKS IGNORE ME NOW
+	cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	glBindFramebuffer(GL_FRAMEBUFFER,fbid);
+	glViewport(0,0,1280,720);
+	glDisable(GL_SCISSOR_TEST);
+	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
+
+
 	NOTIFY_PROCESS_STATUS(EA::WebKit::kVProcessTypeLibTick, EA::WebKit::kVProcessStatusStarted, 0);
 
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);   

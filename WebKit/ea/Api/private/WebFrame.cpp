@@ -570,7 +570,7 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 		//but it works better here... for now..
 		cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
 		//apparently nobody knows to do this...
-		cairo_device_flush(WebCore::GLContext::sharingContext()->cairoDevice());
+		//cairo_device_flush(WebCore::GLContext::sharingContext()->cairoDevice());
 
 		//clip to this dirty rect
 		double cx = dirty.x(),cy = dirty.y(),cw = dirty.width(),ch = dirty.height();

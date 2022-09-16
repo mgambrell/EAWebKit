@@ -42,6 +42,7 @@
 #include "PlatformContextCairo.h"
 #include "TextRun.h"
 #include "ShadowBlur.h"
+#include "GLContext.h"
 
 namespace WebCore {
 
@@ -308,9 +309,15 @@ static void drawGlyphsToContext(GraphicsContext* pGraphicsContext, const EA::Web
      cairo_t* context = pGraphicsContext->platformContext()->cr();
      cairo_save(context);
      //MBG MODIFIED
+     // Cairo may change the active context, so we make sure to change it back after (doing anything with cairo)
+     GLContext* previousActiveContext = GLContext::getCurrent();
+
      //cairo_surface_t *surface = cairo_image_surface_create_for_data((unsigned char*)glyphRGBABuffer.data(), CAIRO_FORMAT_ARGB32, srcW, srcH, srcW * sizeof(uint32_t));
      cairo_surface_t *surface = cairo_gl_surface_create_for_data((cairo_device_t*)EA::WebKit::g_cairoDevice, (unsigned char*)glyphRGBABuffer.data(), CAIRO_CONTENT_COLOR_ALPHA, srcW, srcH, srcW * sizeof(uint32_t));
      EAW_ASSERT(cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS);
+
+     if(previousActiveContext)
+      previousActiveContext->makeContextCurrent();
      
      // If we pass sub pixel offsets (e.g. 75.5), some Cario interpolation kicks in and can degrade the font quality.
      // So we use pixel grid "snapping" to disable this.  This might cause some jitter if the font is animating/moving slowly. 

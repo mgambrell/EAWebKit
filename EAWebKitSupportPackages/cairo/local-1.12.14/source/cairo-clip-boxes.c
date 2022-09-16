@@ -505,7 +505,10 @@ _cairo_clip_reduce_to_boxes (cairo_clip_t *clip)
     cairo_clip_path_t *clip_path;
     cairo_status_t status;
 
-	return clip;
+		//MBG - ported this fix
+	//return clip; 
+	//https://gitlab.freedesktop.org/cairo/cairo/-/commit/cb871c6c692af68d8e0bf9e26472af45435f8a2c#aa07dd142555415a94247e5289e77867230211ef
+
     if (clip->path == NULL)
 	return clip;
 

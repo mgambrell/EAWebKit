@@ -65,19 +65,33 @@ _cairo_clip_copy_intersect_clip (const cairo_clip_t *clip,
     return _cairo_clip_intersect_clip (_cairo_clip_copy (clip), other);
 }
 
+//MBG - applied https://gitlab.freedesktop.org/cairo/cairo/-/commit/61cd11a39095cb51b9e87beba10905e895567151
 static inline void
 _cairo_clip_steal_boxes (cairo_clip_t *clip, cairo_boxes_t *boxes)
 {
-    _cairo_boxes_init_for_array (boxes, clip->boxes, clip->num_boxes);
-    clip->boxes = NULL;
-    clip->num_boxes = 0;
+  cairo_box_t *array = clip->boxes;
+
+  if (array == &clip->embedded_box) {
+    assert (clip->num_boxes == 1);
+    boxes->boxes_embedded[0] = clip->embedded_box;
+    array = &boxes->boxes_embedded[0];
+  }
+  _cairo_boxes_init_for_array (boxes, array, clip->num_boxes);
+  clip->boxes = NULL;
+  clip->num_boxes = 0;
 }
 
 static inline void
 _cairo_clip_unsteal_boxes (cairo_clip_t *clip, cairo_boxes_t *boxes)
 {
+  if (boxes->chunks.base == &boxes->boxes_embedded[0]) {
+    assert(boxes->num_boxes == 1);
+    clip->embedded_box = *boxes->chunks.base;
+    clip->boxes = &clip->embedded_box;
+  } else {
     clip->boxes = boxes->chunks.base;
-    clip->num_boxes = boxes->num_boxes;
+  }
+  clip->num_boxes = boxes->num_boxes;
 }
 
 #endif /* CAIRO_CLIP_INLINE_H */

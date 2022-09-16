@@ -96,6 +96,10 @@ _egl_query_current_state (cairo_egl_context_t *ctx)
     }
 }
 
+#ifdef CAIRO_UGLIEST_WINDOWS_ONLY_DEBUG_HACK_CONTEXT_LOGGING
+#include <Windows.h>
+#endif
+
 static void
 _egl_acquire (void *abstract_ctx)
 {
@@ -104,7 +108,16 @@ _egl_acquire (void *abstract_ctx)
 
     _egl_query_current_state (ctx);
     if (!_context_acquisition_changed_egl_state (ctx, current_surface))
+    {
+      #ifdef CAIRO_UGLIEST_WINDOWS_ONLY_DEBUG_HACK_CONTEXT_LOGGING
+      OutputDebugStringA("!_context_acquisition_changed_egl_state\n");
+      #endif
 	return;
+    }
+
+    #ifdef CAIRO_UGLIEST_WINDOWS_ONLY_DEBUG_HACK_CONTEXT_LOGGING
+  OutputDebugStringA("_egl_acquire: eglMakeCurrent\n");
+  #endif
 
     eglMakeCurrent (ctx->display,
 		    current_surface, current_surface, ctx->context);

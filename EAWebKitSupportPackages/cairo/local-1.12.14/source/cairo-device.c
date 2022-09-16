@@ -37,6 +37,10 @@
 #include "cairo-device-private.h"
 #include "cairo-error-private.h"
 
+#ifdef CAIRO_UGLIEST_WINDOWS_ONLY_DEBUG_HACK_CONTEXT_LOGGING
+#include <Windows.h>
+#endif
+
 /**
  * SECTION:cairo-device
  * @Title: cairo_device_t
@@ -419,8 +423,21 @@ cairo_device_acquire (cairo_device_t *device)
 
     CAIRO_MUTEX_LOCK (device->mutex);
     if (device->mutex_depth++ == 0) {
+      #ifdef CAIRO_UGLIEST_WINDOWS_ONLY_DEBUG_HACK_CONTEXT_LOGGING
+        char tmp[100];
+        sprintf(tmp,"[%p] cairo_device_acquire: context acquisition\n",device);
+      OutputDebugStringA(tmp);
+      #endif
 	if (device->backend->lock != NULL)
 	    device->backend->lock (device);
+    }
+    else
+    {
+      #ifdef CAIRO_UGLIEST_WINDOWS_ONLY_DEBUG_HACK_CONTEXT_LOGGING
+      char tmp[200];
+      sprintf(tmp,"[%p] cairo_device_acquire: SKIPPING context acquisition at mutex depth %d\n",device,device->mutex_depth);
+      OutputDebugStringA(tmp);
+      #endif
     }
 
     return CAIRO_STATUS_SUCCESS;
@@ -445,9 +462,23 @@ cairo_device_release (cairo_device_t *device)
     assert (device->mutex_depth > 0);
 
     if (--device->mutex_depth == 0) {
+      #ifdef CAIRO_UGLIEST_WINDOWS_ONLY_DEBUG_HACK_CONTEXT_LOGGING
+      char tmp[100];
+      sprintf(tmp,"[%p] cairo_device_release: context release\n",device);
+      OutputDebugStringA(tmp);
+      #endif
 	if (device->backend->unlock != NULL)
 	    device->backend->unlock (device);
     }
+    else
+    {
+      #ifdef CAIRO_UGLIEST_WINDOWS_ONLY_DEBUG_HACK_CONTEXT_LOGGING
+      char tmp[200];
+      sprintf(tmp,"[%p] cairo_device_release: SKIPPING context release at mutex depth %d\n",device,device->mutex_depth);
+      OutputDebugStringA(tmp);
+      #endif
+    }
+
 
     CAIRO_MUTEX_UNLOCK (device->mutex);
 }

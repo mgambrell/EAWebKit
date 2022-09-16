@@ -101,8 +101,8 @@ void TextureMapperLayerClientEA::setRootGraphicsLayer(GraphicsLayer* layer)
 void TextureMapperLayerClientEA::syncLayers()
 {
   //MBG HACK - did this thing that always needs to happen at about this time. god, what a mess
-  auto glTextureMapper = ((TextureMapperGL*)m_textureMapper.get())->graphicsContext3D();
-  glTextureMapper->makeContextCurrent();
+  auto gc3d = ((TextureMapperGL*)m_textureMapper.get())->graphicsContext3D();
+  gc3d->makeContextCurrent();
 
 
     if(!m_needSync)

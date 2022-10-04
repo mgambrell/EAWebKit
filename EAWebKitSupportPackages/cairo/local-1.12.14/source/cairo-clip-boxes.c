@@ -174,7 +174,7 @@ _cairo_clip_intersect_rectangle_box (cairo_clip_t *clip,
 	    clip->extents = *r;
 	} else {
 	    if (! _cairo_rectangle_intersect (&clip->extents, r))
-		clip = _cairo_clip_set_all_clipped (clip);
+		return _cairo_clip_set_all_clipped (clip);
 	}
 	if (clip->path == NULL)
 	    clip->is_region = _cairo_box_is_pixel_aligned (box);
@@ -316,10 +316,12 @@ _cairo_clip_intersect_boxes (cairo_clip_t *clip,
     _cairo_boxes_extents (boxes, &limits);
 
     _cairo_box_round_to_rectangle (&limits, &extents);
-    if (clip->path == NULL)
-	clip->extents = extents;
-    else if (! _cairo_rectangle_intersect (&clip->extents, &extents))
-	clip = _cairo_clip_set_all_clipped (clip);
+    if (clip->path == NULL) {
+			clip->extents = extents;
+		} else if (! _cairo_rectangle_intersect (&clip->extents, &extents)) {
+			clip = _cairo_clip_set_all_clipped (clip);
+			goto out;
+		}
 
     if (clip->region) {
 	cairo_region_destroy (clip->region);
@@ -508,6 +510,9 @@ _cairo_clip_reduce_to_boxes (cairo_clip_t *clip)
 		//MBG - ported this fix
 	//return clip; 
 	//https://gitlab.freedesktop.org/cairo/cairo/-/commit/cb871c6c692af68d8e0bf9e26472af45435f8a2c#aa07dd142555415a94247e5289e77867230211ef
+
+		//MBG - READDED THIS . WTF IS GOING ON IN HERE? see 2d1a137f3d27b60538c58b25e867288c7b0b61bc
+		return clip;
 
     if (clip->path == NULL)
 	return clip;

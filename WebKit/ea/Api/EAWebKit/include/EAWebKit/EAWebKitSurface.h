@@ -61,6 +61,11 @@ public:
 	, mStride(0)
     {}
 
+    //MBG - ADDED
+    void Clear(int red, int green, int blue, int alpha) {}
+    virtual unsigned int GetGlTexId() { return 0; }
+    virtual unsigned int GetGlFbId() { return 0; }
+
     virtual ~ISurface(void) {}
     // If rect is NULL, Lock the entire surface. Otherwise, lock the given rectangle and fill the SurfaceDescriptor struct.
 	virtual void Lock(SurfaceDescriptor *pSDOut, const IntRect *rect = NULL) = 0;

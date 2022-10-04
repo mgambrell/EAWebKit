@@ -81,6 +81,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "WebInspector.h"
 
+//MBG GL TEST
+#include "cairo/cairo-gl.h"
 
 // Note by Arpit Baldeva:
 // We use SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended); in ALL the virtual functions (To keep guideline simple)
@@ -123,7 +125,8 @@ public:
 	ViewPrivate(View *view)
 	: view(view)
 	, page(0)
-    , mDisplaySurface(NULL)
+	, mDisplaySurface(NULL)
+	, mCairoGlSurface(NULL)
 	, mpUserData(NULL)
 	, mEAWebKitClient(NULL)
     , mHardwareRenderer(NULL)
@@ -167,6 +170,7 @@ public:
 	FixedString16_128 mTitle;
 
     ISurface *mDisplaySurface;
+		cairo_surface_t* mCairoGlSurface;
 	void *mpUserData;
 	EAWebKitClient* mEAWebKitClient;
     IHardwareRenderer *mHardwareRenderer;
@@ -241,6 +245,7 @@ void View::Paint()
 
 	//MBG TEST
 	//whatever->makeContextCurrent();
+	//WebCore::GLContext::sharingContext()->makeContextCurrent();
 	
     NOTIFY_PROCESS_STATUS(kVProcessTypePaint, EA::WebKit::kVProcessStatusStarted, this);
 
@@ -291,7 +296,11 @@ void View::Paint()
 
 					}
 
-					if(!d->mDirtyRegions.empty() || d->mHardwareRenderer) //If we have hardware renderer, we need to render frame every tick because compositing needs to happen every tick.
+					if(!d->mDirtyRegions.empty()
+						//MBG - revised to be true without "hardware renderer"
+						//|| d->mHardwareRenderer
+						|| true
+						) //If we have hardware renderer, we need to render frame every tick because compositing needs to happen every tick.
 					{
 						ViewUpdateInfo info;
 						info.mpView = this;
@@ -321,10 +330,11 @@ void View::Paint()
 						
 						
 						NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusStarted, this);
+
 						if(IsUsingTiledBackingStore())
 							frame->renderTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mDirtyRegions); //Simply copy the tiles on the d->mDisplaySurface
 						else
-							frame->renderNonTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mDirtyRegions); //Actually render the content on the d->mDisplaySurface				
+							frame->renderNonTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mCairoGlSurface, d->mDirtyRegions); //Actually render the content on the d->mDisplaySurface				
 						NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusEnded, this);
 
 						//MBG TODO - everything involving mHardwareRenderer needs to be checked again
@@ -773,7 +783,11 @@ void View::SetSize(IntSize size)
 	if (d->mDisplaySurface) 
     {
         d->mDisplaySurface->SetContentDimensions(size.mWidth, size.mHeight);
-    	
+
+				//MBG - we can't have a proper cairo surface until we have a size.
+				cairo_surface_destroy(d->mCairoGlSurface);
+				d->mCairoGlSurface = cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice,CAIRO_CONTENT_COLOR_ALPHA,d->mDisplaySurface->GetGlTexId(),size.mWidth, size.mHeight);
+
 		// Clear any old dirty regions since the resize could have invalidated them.
         d->mDirtyRegions.clear();
     }

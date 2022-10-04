@@ -516,44 +516,15 @@ void WebFrame::ClearDisplay(const WebCore::Color &color)
     d->mClearDisplayColor = color;
 }
 
-GLuint fbid, texid;
-cairo_surface_t* m_cairoGlSurface;
-
-void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface *surface, const eastl::vector<WebCore::IntRect> &dirtyRegions) 
+void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface *surface, cairo_surface_t* cairoSurface, const eastl::vector<WebCore::IntRect> &dirtyRegions) 
 {
-	//mbg quick test:
-	static bool notfirst = false;
-	cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	if(!notfirst)
+	if(d->mClearDisplaySurface)
 	{
-		notfirst = true;
-
-		glGenTextures(1,&texid);
-		glBindTexture(GL_TEXTURE_2D,texid);
-		glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,1280,720,0,GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-		glGenFramebuffers(1,&fbid);
-		glBindFramebuffer(GL_FRAMEBUFFER,fbid);
-		glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D, texid, 0);
-
-		m_cairoGlSurface = cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice,CAIRO_CONTENT_COLOR_ALPHA,texid,1280,720);
-	}
-
-	glBindFramebuffer(GL_FRAMEBUFFER,fbid);
-
-	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
-
-	EAW_ASSERT_MSG(!d->page->view()->IsUsingTiledBackingStore(), "non tiled rendering path called but using tiled backing store");
-	if(d->page->view()->IsUsingTiledBackingStore())
-		return;
-
-	if (d->mClearDisplaySurface)
-    {
 		NOTIFY_PROCESS_STATUS(kVProcessTypeClearSurface, EA::WebKit::kVProcessStatusStarted, d->page->view());
-        EA::WebKit::ClearSurfaceToColor(surface,d->mClearDisplayColor);
-        d->mClearDisplaySurface = false;
+		EA::WebKit::ClearSurfaceToColor(surface, d->mClearDisplayColor);
+		d->mClearDisplaySurface = false;
 		NOTIFY_PROCESS_STATUS(kVProcessTypeClearSurface, EA::WebKit::kVProcessStatusEnded, d->page->view());
-    }
+	}
 
 	//MBG - considerably modified to use GL rendering
 	WebCore::FrameView *view = d->frame->view();
@@ -563,10 +534,11 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 	{
 		const auto& dirty = dirtyRegions[i];
 
-		auto pRawCairoContext = cairo_create(m_cairoGlSurface);
+		RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface));
+		WebCore::GraphicsContext graphicsContext(cairoContext.get());
 
 		//superstitious: this makes sure the device doesn't depend on any prior state
-		//this is not the correct time for this (it should be aclled when we're DONE with it)
+		//this is not the correct time for this (it should be called when we're DONE with it)
 		//but it works better here... for now..
 		cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
 		//apparently nobody knows to do this...
@@ -574,16 +546,11 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 
 		//clip to this dirty rect
 		double cx = dirty.x(),cy = dirty.y(),cw = dirty.width(),ch = dirty.height();
-		cairo_rectangle(pRawCairoContext,cx,cy,cw,ch);
-		cairo_clip(pRawCairoContext);
+		cairo_rectangle(cairoContext.get(),cx,cy,cw,ch);
+		cairo_clip(cairoContext.get());
 		
-		RefPtr<cairo_t> cairoContext = adoptRef(pRawCairoContext);
-		WebCore::GraphicsContext graphicsContext(cairoContext.get());
-
-		if(!graphicsContext.paintingDisabled() || graphicsContext.updatingControlTints())
-		{
-			view->paint(&graphicsContext, dirty);// Paint contents and scroll bars. Some ports call paintContents and then painScrollbars separately.
-		}
+		//MBG - removed stuff about paintingDisabled and updatingControlTints because the context is fresh, how could these ever be wrong
+		view->paint(&graphicsContext, dirty);// Paint contents and scroll bars. Some ports call paintContents and then painScrollbars separately.
 
 		EAW_ASSERT_FORMATTED(cairo_status(cairoContext.get()) == CAIRO_STATUS_SUCCESS, "cairo failed to paint (for example, OOM) - %d",cairo_status(cairoContext.get()));
 
@@ -788,10 +755,10 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 			//therefore, we can bind the framebuffer we intend for it to draw to
 			client->syncLayers();
 
-			//so.. prepare it for darwing to that
+			//so.. prepare it for drawing to that
 			//the alternative is for it to use the "current context" which requires this to be set up, as well...
 			//but it has the deficiency that there isn't enough wisdom in enough places to reset the context after cairo whacks it internally all the damn time
-			glBindFramebuffer(GL_FRAMEBUFFER,fbid);
+			glBindFramebuffer(GL_FRAMEBUFFER,surface->GetGlFbId());
 			glViewport(0,0,1280,720);
 			glDisable(GL_SCISSOR_TEST);
 

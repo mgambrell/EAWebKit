@@ -47,7 +47,6 @@ namespace WebCore
 	class FrameView;
 }
 
-
 #include <EAWebKit/EAWebKitSystem.h>
 #include <EAWebKit/EAWebKitConfig.h>
 #include <EAWebkit/EAWebkitView.h>
@@ -59,6 +58,8 @@ namespace WebCore
 #include "IntRect.h"
 #include "IntSize.h"
 #include "Color.h"
+
+#include "cairo/cairo-gl.h"
 
 namespace EA
 {
@@ -150,7 +151,7 @@ public:
 		AllLayers = 0xff
 	};
 
-    void renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface *surface, const eastl::vector<WebCore::IntRect> &dirtyRegions);
+	void renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface *surface, cairo_surface_t* cairoSurface, const eastl::vector<WebCore::IntRect> &dirtyRegions);
 	void renderTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface* surface, const eastl::vector<WebCore::IntRect> &dirtyRegions); //surface is eventually going to be null
 	
 	void drawHighlightedNodeFromInspector(EA::WebKit::ISurface* surface);

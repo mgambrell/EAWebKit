@@ -849,12 +849,12 @@ void Tick()
 {
 	//MBG - ticking can draw.. so.. prepare for it
 	//DIRTY HACKS IGNORE ME NOW
-	cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	glBindFramebuffer(GL_FRAMEBUFFER,fbid);
-	glViewport(0,0,1280,720);
-	glDisable(GL_SCISSOR_TEST);
-	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//glBindFramebuffer(GL_FRAMEBUFFER,fbid);
+	//glViewport(0,0,1280,720);
+	//glDisable(GL_SCISSOR_TEST);
+	//cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
 
 
 	NOTIFY_PROCESS_STATUS(EA::WebKit::kVProcessTypeLibTick, EA::WebKit::kVProcessStatusStarted, 0);
@@ -1627,7 +1627,8 @@ AutoCollectorStackBase::~AutoCollectorStackBase()
 
 void ClearSurfaceToColor(ISurface *surface, WebCore::Color color)
 {
-	//MBG TEST
+	//MBG CUSTOMIZED
+	surface->Clear(color.red(), color.green(), color.blue(), color.alpha());
 	return;
 
 	int width = 0;
@@ -1637,10 +1638,7 @@ void ClearSurfaceToColor(ISurface *surface, WebCore::Color color)
 	ISurface::SurfaceDescriptor surfaceDescriptor = {0};
 	surface->Lock(&surfaceDescriptor);
 
-	//MBG TODO - CONFUSED, RIGHT NOW. we're getting software surfaces. just stay in software.
-	//MBG TODO - must fix
 	RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_image_surface_create_for_data((unsigned char*)surfaceDescriptor.mData, CAIRO_FORMAT_ARGB32, width, height, surfaceDescriptor.mStride));    
-	//RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_gl_surface_create_for_data((cairo_device_t*)EA::WebKit::g_cairoDevice, (unsigned char*)surfaceDescriptor.mData, CAIRO_CONTENT_COLOR_ALPHA, width, height, surfaceDescriptor.mStride));
 	RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
 
 	WebCore::Color clearColor = color;

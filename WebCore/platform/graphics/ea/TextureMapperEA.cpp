@@ -48,10 +48,15 @@ IntSize TextureMapperEA::maxTextureSize() const
 	return IntSize(maxTextureSize, maxTextureSize);
 }
 
-PassRefPtr<BitmapTexture> TextureMapperEA::createTexture(EA::WebKit::SurfaceType type, const void* data /* = 0 */, size_t length /* = 0 */)
+//PassRefPtr<BitmapTexture> TextureMapperEA::createTexture(EA::WebKit::SurfaceType type, const void* data /* = 0 */, size_t length /* = 0 */)
+//{
+//	EA::WebKit::ISurface *surface = mRenderer->CreateSurface(type, data, length);
+//	return adoptRef(new BitmapTextureEA(surface,mView));
+//}
+
+PassRefPtr<BitmapTexture> TextureMapperEA::createTexture()
 {
-	EA::WebKit::ISurface *surface = mRenderer->CreateSurface(type, data, length);
-	return adoptRef(new BitmapTextureEA(surface,mView));
+	return nullptr;
 }
 
 bool TextureMapperEA::beginScissorClip(const TransformationMatrix& modelViewMatrix, const FloatRect& targetRect)

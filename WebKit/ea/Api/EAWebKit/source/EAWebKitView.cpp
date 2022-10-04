@@ -1584,19 +1584,16 @@ void View::RemoveTile(WebCore::TileEA* tile)
 #endif
 }
 
-//MBG - are these used?
-//void View::AddTexture(WebCore::BitmapTextureEA* texture)
-//{
-//#if USE(ACCELERATED_COMPOSITING)
-//	d->mTextures.push_back(texture);
-//#endif
-//}
-//void View::RemoveTexture(WebCore::BitmapTextureEA* texture)
-//{
-//#if USE(ACCELERATED_COMPOSITING)
-//	d->mTextures.remove(texture);
-//#endif
-//}
+void View::AddTexture(WebCore::BitmapTextureEA* texture)
+{
+	//not supported
+	abort();
+}
+void View::RemoveTexture(WebCore::BitmapTextureEA* texture)
+{
+	//not supported
+	abort();
+}
 
 
 ISurface* View::CreateOverlaySurface(int x, int y, int width, int height)

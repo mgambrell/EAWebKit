@@ -15,6 +15,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPipe.cpp" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderLang.cpp" />
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderVars.cpp" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-analysis-surface.c" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-arc.c" />
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-array.c" />
@@ -136,12 +138,15 @@
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\ANGLEWebKitBridge.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\EGL\egl.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\EGL\eglplatform.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLES2\gl2.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLES2\gl2ext.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLES2\gl2platform.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPipe.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderLang.h" />
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderVars.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\KHR\khrplatform.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo\cairo-deprecated.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo\cairo-features.h" />

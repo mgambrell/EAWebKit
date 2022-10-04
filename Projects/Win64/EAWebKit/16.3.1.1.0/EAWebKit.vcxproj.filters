@@ -13500,6 +13500,9 @@
     <ClCompile Include="..\..\..\..\WebKit\ea\WebCoreSupport\TextureMapperLayerClientEA.cpp">
       <Filter>WebKit\ea\WebCoreSupport</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\DisplayRefreshMonitor.cpp">
+      <Filter>WebCore\platform\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\win32\EAWebKit.rc">

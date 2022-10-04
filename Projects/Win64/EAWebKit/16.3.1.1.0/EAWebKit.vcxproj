@@ -3460,6 +3460,7 @@
     <ClInclude Include="..\..\..\..\WebCore\platform\KeypressCommand.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\KillRing.h" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ANGLEWebKitBridge.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\DisplayRefreshMonitor.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\PlatformGraphicsEA.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\egl\GLContextEGL.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\Extensions3DOpenGLCommon.cpp" />

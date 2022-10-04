@@ -22,6 +22,9 @@
     <Filter Include="source">
       <UniqueIdentifier>{3d2cd667-e57b-4e76-ac1e-644aa511b0cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GLPipe\GLSLANG">
+      <UniqueIdentifier>{392f74c1-6af1-4634-afc3-552ccc84795e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPIPE_proclist.inc">
@@ -389,6 +392,12 @@
     <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-user-font.c">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderVars.cpp">
+      <Filter>GLPipe\GLSLANG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderLang.cpp">
+      <Filter>GLPipe\GLSLANG</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLPipe.h">
@@ -678,6 +687,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\source\cairo-user-font-private.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderVars.h">
+      <Filter>GLPipe\GLSLANG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\GLSLANG\ShaderLang.h">
+      <Filter>GLPipe\GLSLANG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe\ANGLEWebKitBridge.h">
+      <Filter>GLPipe</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

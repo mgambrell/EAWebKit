@@ -9889,6 +9889,9 @@
     <ClInclude Include="..\..\..\..\WebCore\WebCorePrefix.h">
       <Filter>WebCore</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ANGLEWebKitBridge.h">
+      <Filter>WebCore\platform\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\WebCore\DerivedSources\ExceptionCodeDescription.cpp" />
@@ -12677,9 +12680,6 @@
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\StringTruncator.cpp">
       <Filter>WebCore\platform\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\OpenGLShims.cpp">
-      <Filter>WebCore\platform\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\Path.cpp">
       <Filter>WebCore\platform\graphics</Filter>
     </ClCompile>
@@ -13429,6 +13429,39 @@
     <ClCompile Include="..\..\..\..\WebCore\DerivedSources\XMLNSNames.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\mock\ScrollbarThemeMock.cpp">
       <Filter>WebCore\platform\mock</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ANGLEWebKitBridge.cpp">
+      <Filter>WebCore\platform\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\TemporaryOpenGLSetting.cpp">
+      <Filter>WebCore\platform\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\Extensions3DOpenGLCommon.cpp">
+      <Filter>WebCore\platform\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\Extensions3DOpenGLES.cpp">
+      <Filter>WebCore\platform\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\GraphicsContext3DOpenGLCommon.cpp">
+      <Filter>WebCore\platform\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\GraphicsContext3DOpenGLES.cpp">
+      <Filter>WebCore\platform\graphics\opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\egl\GLContextEGL.cpp">
+      <Filter>WebCore\platform\graphics\egl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\PlatformGraphicsEA.cpp">
+      <Filter>WebCore\platform\graphics\ea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperGL.cpp">
+      <Filter>WebCore\platform\graphics\texmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTextureGL.cpp">
+      <Filter>WebCore\platform\graphics\texmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperShaderProgram.cpp">
+      <Filter>WebCore\platform\graphics\texmap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

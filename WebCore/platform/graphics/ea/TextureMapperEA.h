@@ -66,7 +66,8 @@ public:
 	virtual void endClip() override; 
 	virtual IntRect clipBounds() override;
 	virtual IntSize maxTextureSize() const override; //MBG - FIXED
-	virtual PassRefPtr<BitmapTexture> createTexture(EA::WebKit::SurfaceType type, const void* data = 0, size_t length = 0) override;
+	//virtual PassRefPtr<BitmapTexture> createTexture(EA::WebKit::SurfaceType type, const void* data = 0, size_t length = 0) override;
+	virtual PassRefPtr<BitmapTexture> createTexture() override;
 	virtual void beginPainting(PaintFlags = 0) override;
 	virtual void endPainting() override;
 

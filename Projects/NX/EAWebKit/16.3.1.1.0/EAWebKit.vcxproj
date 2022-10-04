@@ -2369,6 +2369,7 @@
     <ClInclude Include="..\..\..\..\WebCore\platform\glib\BatteryProviderUPower.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\glib\KeyedDecoderGlib.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\glib\KeyedEncoderGlib.h" />
+    <ClInclude Include="..\..\..\..\WebCore\platform\graphics\ANGLEWebKitBridge.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\AudioTrackPrivate.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\BitmapImage.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\graphics\cairo\BackingStoreBackendCairo.h" />
@@ -4358,6 +4359,7 @@
     <ClCompile Include="..\..\..\..\WebCore\platform\FileChooser.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\FileStream.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\FileSystem.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ANGLEWebKitBridge.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\BitmapImage.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\cairo\BackingStoreBackendCairoImpl.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\cairo\BackingStoreBackendCairoX11.cpp" />
@@ -4394,9 +4396,11 @@
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\IntRectEA.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\IntSizeEA.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\MediaPlayerPrivateEA.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\PlatformGraphicsEA.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\TextureMapperEA.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\TileEA.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\ea\TransformationMatrixEA.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\egl\GLContextEGL.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\filters\DistantLightSource.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\filters\FEBlend.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\filters\FEColorMatrix.cpp" />
@@ -4463,7 +4467,11 @@
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\MediaPlaybackTargetPicker.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\MediaPlayer.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\NamedImageGeneratedImage.cpp" />
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\OpenGLShims.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\Extensions3DOpenGLCommon.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\Extensions3DOpenGLES.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\GraphicsContext3DOpenGLCommon.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\GraphicsContext3DOpenGLES.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opengl\TemporaryOpenGLSetting.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opentype\OpenTypeMathData.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\opentype\OpenTypeVerticalData.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\Path.cpp" />
@@ -4479,13 +4487,16 @@
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\SurrogatePairAwareTextIterator.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\SVGGlyph.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexture.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTextureGL.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexturePool.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\GraphicsLayerTextureMapper.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapper.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperAnimation.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperBackingStore.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperFPSCounter.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperGL.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperLayer.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperShaderProgram.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperSurfaceBackingStore.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperTile.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\TextureMapperTiledBackingStore.cpp" />

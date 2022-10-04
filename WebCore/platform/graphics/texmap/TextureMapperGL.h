@@ -112,7 +112,7 @@ public:
     virtual void endClip() override;
     virtual IntRect clipBounds() override;
     virtual IntSize maxTextureSize() const override { return IntSize(2000, 2000); }
-    virtual PassRefPtr<BitmapTexture> createTexture(); //MBG MODIFIED
+    virtual PassRefPtr<BitmapTexture> createTexture() override; //MBG MODIFIED
     inline GraphicsContext3D* graphicsContext3D() const { return m_context3D.get(); }
 
     void drawFiltered(const BitmapTexture& sourceTexture, const BitmapTexture* contentTexture, const FilterOperation&, int pass);

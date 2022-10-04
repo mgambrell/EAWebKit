@@ -64,7 +64,7 @@ _cairo_gl_get_flavor (void)
     if (version == NULL)
 	flavor = CAIRO_GL_FLAVOR_NONE;
     else if (strstr (version, "OpenGL ES") != NULL)
-	flavor = CAIRO_GL_FLAVOR_ES;
+	flavor = CAIRO_GL_FLAVOR_ES2;
     else
 	flavor = CAIRO_GL_FLAVOR_DESKTOP;
 

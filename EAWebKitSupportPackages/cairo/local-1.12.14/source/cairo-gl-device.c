@@ -171,7 +171,7 @@ test_can_read_bgra (cairo_gl_flavor_t gl_flavor)
     if (gl_flavor == CAIRO_GL_FLAVOR_DESKTOP)
 	return TRUE;
 
-    assert (gl_flavor == CAIRO_GL_FLAVOR_ES);
+    assert (gl_flavor == CAIRO_GL_FLAVOR_ES2);
 
    /* For OpenGL ES we have to look for the specific extension and BGRA only
     * matches cairo's integer packed bytes on little-endian machines. */
@@ -190,7 +190,7 @@ _cairo_gl_context_init (cairo_gl_context_t *ctx)
     int n;
 
     cairo_bool_t is_desktop = gl_flavor == CAIRO_GL_FLAVOR_DESKTOP;
-    cairo_bool_t is_gles = gl_flavor == CAIRO_GL_FLAVOR_ES;
+    cairo_bool_t is_gles = gl_flavor == CAIRO_GL_FLAVOR_ES2;
 
     _cairo_device_init (&ctx->base, &_cairo_gl_device_backend);
 
@@ -297,7 +297,9 @@ _cairo_gl_context_init (cairo_gl_context_t *ctx)
     if (unlikely (status))
         return status;
 
-    ctx->vb = _cairo_malloc (CAIRO_GL_VBO_SIZE);
+    ctx->vbo_size = CAIRO_GL_VBO_SIZE_DEFAULT;
+
+    ctx->vb = _cairo_malloc (CAIRO_GL_VBO_SIZE_DEFAULT);
     if (unlikely (ctx->vb == NULL)) {
 	    _cairo_cache_fini (&ctx->gradients);
 	    return _cairo_error (CAIRO_STATUS_NO_MEMORY);
@@ -379,7 +381,7 @@ _cairo_gl_ensure_msaa_gles_framebuffer (cairo_gl_context_t *ctx,
 }
 #endif
 
-static void
+void
 _cairo_gl_ensure_framebuffer (cairo_gl_context_t *ctx,
                               cairo_gl_surface_t *surface)
 {
@@ -400,7 +402,7 @@ _cairo_gl_ensure_framebuffer (cairo_gl_context_t *ctx,
        does not require an explicit multisample resolution. */
 #if CAIRO_HAS_GLESV2_SURFACE
     if (surface->supports_msaa && _cairo_gl_msaa_compositor_enabled () &&
-	ctx->gl_flavor == CAIRO_GL_FLAVOR_ES) {
+	ctx->gl_flavor == CAIRO_GL_FLAVOR_ES2) {
 	_cairo_gl_ensure_msaa_gles_framebuffer (ctx, surface);
     } else
 #endif
@@ -507,7 +509,7 @@ _cairo_gl_ensure_msaa_depth_stencil_buffer (cairo_gl_context_t *ctx,
 #endif
 
 #if CAIRO_HAS_GLESV2_SURFACE
-    if (ctx->gl_flavor == CAIRO_GL_FLAVOR_ES) {
+    if (ctx->gl_flavor == CAIRO_GL_FLAVOR_ES2) {
 	dispatch->FramebufferRenderbuffer (GL_FRAMEBUFFER,
 					   GL_DEPTH_ATTACHMENT,
 					   GL_RENDERBUFFER,
@@ -686,7 +688,7 @@ _cairo_gl_context_set_destination (cairo_gl_context_t *ctx,
      * so we don't need to check whether we are switching modes for that
      * surface type. */
     if (ctx->current_target == surface && ! surface->needs_update &&
-	(ctx->gl_flavor == CAIRO_GL_FLAVOR_ES ||
+	(ctx->gl_flavor == CAIRO_GL_FLAVOR_ES2||
 	 surface->msaa_active == multisampling))
 	return;
 
@@ -696,7 +698,7 @@ _cairo_gl_context_set_destination (cairo_gl_context_t *ctx,
     surface->needs_update = FALSE;
 
     if (_cairo_gl_surface_is_texture (surface)) {
-	if (ctx->gl_flavor == CAIRO_GL_FLAVOR_ES) {
+	if (ctx->gl_flavor == CAIRO_GL_FLAVOR_ES2) {
 	    _cairo_gl_ensure_framebuffer (ctx, surface);
 	    ctx->dispatch.BindFramebuffer (GL_FRAMEBUFFER, surface->fb);
 #if CAIRO_HAS_GL_SURFACE

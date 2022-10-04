@@ -71,8 +71,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|NX64'">
     <ClCompile>
-      <PreprocessorDefinitions>_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;NDEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DS_PLATFORM;_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;NDEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\DirtySDKEAWebKit\local\platform;..\..\..\..\EAWebKitSupportPackages\DirtySDKEAWebKit\local\core\include</AdditionalIncludeDirectories>
+      <OptimizationLevel>O3</OptimizationLevel>
+      <Vectorization>true</Vectorization>
+      <Inlinefunctions>true</Inlinefunctions>
+      <ImplicitFloat>true</ImplicitFloat>
     </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup Label="Configuration">

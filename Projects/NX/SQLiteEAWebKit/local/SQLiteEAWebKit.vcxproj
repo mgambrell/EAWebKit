@@ -60,6 +60,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|NX64'">
     <ClCompile>
       <PreprocessorDefinitions>SQLITE_OS_OTHER;_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;NDEBUG</PreprocessorDefinitions>
+      <OptimizationLevel>O3</OptimizationLevel>
+      <UnrollLoops>true</UnrollLoops>
+      <Vectorization>true</Vectorization>
+      <Inlinefunctions>true</Inlinefunctions>
+      <ImplicitFloat>true</ImplicitFloat>
     </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup Label="Configuration">

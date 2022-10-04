@@ -105,6 +105,11 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include;%(PreprocessorDefinitions)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;NDEBUG;PIXMAN_NO_TLS=1;PACKAGE=pixman</PreprocessorDefinitions>
+      <OptimizationLevel>O3</OptimizationLevel>
+      <UnrollLoops>true</UnrollLoops>
+      <Vectorization>true</Vectorization>
+      <Inlinefunctions>true</Inlinefunctions>
+      <ImplicitFloat>true</ImplicitFloat>
     </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup Label="Configuration">

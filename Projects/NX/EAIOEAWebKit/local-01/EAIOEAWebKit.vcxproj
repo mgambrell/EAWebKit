@@ -92,6 +92,11 @@
     <ClCompile>
       <PreprocessorDefinitions>UTF_USE_EAASSERT=1;_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;NDEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\include;..\..\..\..\EAWebKitSupportPackages\coreallocatorEAWebKit\local-1.03.10-01\include;..\..\..\..\EAWebKitSupportPackages\EAAssertEAWebKit\local-1.03.04-01\include;..\..\..\..\EAWebKitSupportPackages\EABaseEAWebKit\local-2.06.05-01\include\Common;..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OptimizationLevel>O3</OptimizationLevel>
+      <UnrollLoops>true</UnrollLoops>
+      <Vectorization>true</Vectorization>
+      <Inlinefunctions>true</Inlinefunctions>
+      <ImplicitFloat>true</ImplicitFloat>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|NX64'">

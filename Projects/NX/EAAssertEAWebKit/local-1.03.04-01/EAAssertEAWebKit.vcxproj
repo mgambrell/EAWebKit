@@ -61,6 +61,11 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\EAAssertEAWebKit\local-1.03.04-01\include;..\..\..\..\EAWebKitSupportPackages\EABaseEAWebKit\local-2.06.05-01\include\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;NDEBUG</PreprocessorDefinitions>
+      <OptimizationLevel>O3</OptimizationLevel>
+      <UnrollLoops>true</UnrollLoops>
+      <Vectorization>true</Vectorization>
+      <Inlinefunctions>true</Inlinefunctions>
+      <ImplicitFloat>true</ImplicitFloat>
     </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup Label="Configuration">

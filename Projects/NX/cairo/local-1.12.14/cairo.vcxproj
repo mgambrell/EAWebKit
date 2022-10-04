@@ -285,6 +285,11 @@
       <PreprocessorDefinitions>CAIRO_HAS_EGL_FUNCTIONS=1;CAIRO_HAS_GLESV2_SURFACE=1;HAVE_UINT64_T=1;CAIRO_NO_MUTEX=1;HAVE_STDINT_H=1;_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;NDEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\cairo\GLPipe;..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include\cairo;..\..\..\..\EAWebKitSupportPackages\cairo\local-1.12.14\include;..\..\..\..\EAWebKitSupportPackages\libpngEAWebKit\local-1.01.00-01\include\libpng;..\..\..\..\EAWebKitSupportPackages\pixman\local-0.28.2\include;..\..\..\..\EAWebKitSupportPackages\zlibEAWebKit\local-1.2.5-7-01\install;..\..\..\..\EAWebKitSupportPackages\zlibEAWebKit\local-1.2.5-7-01\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>enum-conversion</DisableSpecificWarnings>
+      <OptimizationLevel>O3</OptimizationLevel>
+      <UnrollLoops>true</UnrollLoops>
+      <Vectorization>true</Vectorization>
+      <Inlinefunctions>true</Inlinefunctions>
+      <ImplicitFloat>true</ImplicitFloat>
     </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup Label="Configuration">

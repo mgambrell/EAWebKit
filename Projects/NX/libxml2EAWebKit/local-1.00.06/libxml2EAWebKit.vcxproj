@@ -144,6 +144,11 @@
     <ClCompile>
       <PreprocessorDefinitions>_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;NDEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\libxml2EAWebKit\local-1.00.06\include;..\..\..\..\EAWebKitSupportPackages\EABaseEAWebKit\local-2.06.05-01\include\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OptimizationLevel>O3</OptimizationLevel>
+      <UnrollLoops>true</UnrollLoops>
+      <Vectorization>true</Vectorization>
+      <Inlinefunctions>true</Inlinefunctions>
+      <ImplicitFloat>true</ImplicitFloat>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|NX64'">

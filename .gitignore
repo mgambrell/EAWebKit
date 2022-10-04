@@ -2,3 +2,4 @@ Projects/Win64/EAWebKit/16.3.1.1.0/.vs
 Projects/Win64/EAWebKit/16.3.1.1.0/x64
 Projects/Win64/EAWebKit/16.3.1.1.0/pc64-vc-dev-debug
 Projects/Win64/EAWebKit/16.3.1.1.0/*.user
+*.vcxproj.user

@@ -126,6 +126,11 @@
     <ClCompile>
       <PreprocessorDefinitions>_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;EATEXT_BITMAP_USE_EAGIMEX=0;EATEXT_USE_FREETYPE=1;ENABLE_NON_RAM_STREAM=1;UTF_USE_EAASSERT=1;NDEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\EATextEAWebKit\local-1.09.01\include;..\..\..\..\EAWebKitSupportPackages\EATextEAWebKit\local-1.09.01\source;..\..\..\..\EAWebKitSupportPackages\coreallocatorEAWebKit\local-1.03.10-01\include;..\..\..\..\EAWebKitSupportPackages\EAAssertEAWebKit\local-1.03.04-01\include;..\..\..\..\EAWebKitSupportPackages\EABaseEAWebKit\local-2.06.05-01\include\Common;..\..\..\..\EAWebKitSupportPackages\EAIOEAWebKit\local-01\include;..\..\..\..\EAWebKitSupportPackages\EASTLEAWebKit\local-1.15.03-01\include;..\..\..\..\EAWebKitSupportPackages\FreeTypeEAWebKit\local-2.4.8.02-01\freetype-2.4.8\include;..\..\..\..\EAWebKitSupportPackages\PPMallocEAWebKit\local-01\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OptimizationLevel>O3</OptimizationLevel>
+      <UnrollLoops>true</UnrollLoops>
+      <Vectorization>true</Vectorization>
+      <Inlinefunctions>true</Inlinefunctions>
+      <ImplicitFloat>true</ImplicitFloat>
     </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup Label="Configuration">

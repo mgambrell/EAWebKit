@@ -91,6 +91,11 @@
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\FreeTypeEAWebKit\local-2.4.8.02-01\freetype-2.4.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;FT2_BUILD_LIBRARY;NDEBUG</PreprocessorDefinitions>
+      <OptimizationLevel>O3</OptimizationLevel>
+      <UnrollLoops>true</UnrollLoops>
+      <Vectorization>true</Vectorization>
+      <Inlinefunctions>true</Inlinefunctions>
+      <ImplicitFloat>true</ImplicitFloat>
     </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup Label="Configuration">

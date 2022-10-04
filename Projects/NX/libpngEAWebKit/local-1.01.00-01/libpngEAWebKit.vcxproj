@@ -76,6 +76,7 @@
     <ClCompile>
       <PreprocessorDefinitions>_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;_DEBUG;EA_DEBUG</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\..\EAWebKitSupportPackages\libpngEAWebKit\local-1.01.00-01\include\libpng;..\..\..\..\EAWebKitSupportPackages\zlibEAWebKit\local-1.2.5-7-01\install;..\..\..\..\EAWebKitSupportPackages\zlibEAWebKit\local-1.2.5-7-01\include;..\..\..\..\EAWebKitSupportPackages\EABaseEAWebKit\local-2.06.05-01\include\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-fvisibility=protected</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|NX64'">

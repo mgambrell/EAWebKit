@@ -188,7 +188,7 @@
       <MapFileName>pc64-vc-dev-opt\bin\EAWebKit.map</MapFileName>
       <ModuleDefinitionFile>..\..\..\..\EAWebkit_Windows.def</ModuleDefinitionFile>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>pc64-vc-dev-opt\bin\EAWebKit.dll</OutputFile>
+      <OutputFile>$(OutDir)EAWebKit.dll</OutputFile>
       <ProgramDatabaseFile>pc64-vc-dev-opt\bin\EAWebKit.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <SuppressStartupBanner>TRUE</SuppressStartupBanner>
@@ -214,7 +214,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-opt|x64' ">
-    <OutDir>pc64-vc-dev-opt\bin\</OutDir>
+    <OutDir>..\..\..\..\glWebKit-master\bin64\</OutDir>
     <IntDir>pc64-vc-dev-opt\build\EAWebKit\vstmp\</IntDir>
     <TargetName>EAWebKit</TargetName>
     <TargetExt>.dll</TargetExt>

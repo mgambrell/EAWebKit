@@ -73,7 +73,14 @@ ImageBufferData::ImageBufferData(const IntSize& size)
 #if ENABLE(ACCELERATED_2D_CANVAS)
 PassRefPtr<cairo_surface_t> createCairoGLSurface(const FloatSize& size, uint32_t& texture)
 {
-    GLContext::sharingContext()->makeContextCurrent();
+  GLContext* context = GLContext::sharingContext();
+
+
+  //MBG - added
+  cairo_device_t* device = context->cairoDevice();
+  cairo_device_flush(device);
+
+  context->makeContextCurrent();
 
     // We must generate the texture ourselves, because there is no Cairo API for extracting it
     // from a pre-existing surface.
@@ -90,8 +97,7 @@ PassRefPtr<cairo_surface_t> createCairoGLSurface(const FloatSize& size, uint32_t
     //glTexImage2D(GL_TEXTURE_2D, 0 /* level */, GL_RGBA8, size.width(), size.height(), 0 /* border */, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glTexImage2D(GL_TEXTURE_2D, 0 /* level */, GL_BGRA, size.width(), size.height(), 0 /* border */, GL_BGRA, GL_UNSIGNED_BYTE, 0);
 
-    GLContext* context = GLContext::sharingContext();
-    cairo_device_t* device = context->cairoDevice();
+    cairo_device_flush(device);
 
     // Thread-awareness is a huge performance hit on non-Intel drivers.
     cairo_gl_device_set_thread_aware(device, FALSE);

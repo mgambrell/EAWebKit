@@ -87,6 +87,8 @@ GLPIPE_PROCENT(_gles2_,PFNGLFINISHPROC,glFinish	,	void	,	(void)						)
 GLPIPE_PROCENT(_gles2_,PFNGLFLUSHPROC,glFlush	,	void	,	(void)						)
 GLPIPE_PROCENT(_gles2_,PFNGLFRAMEBUFFERRENDERBUFFERPROC,glFramebufferRenderbuffer	,	void	,	(GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer)						)
 GLPIPE_PROCENT(_gles2_,PFNGLFRAMEBUFFERTEXTURE2DPROC,glFramebufferTexture2D	,	void	,	(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)						)
+GLPIPE_PROCENT(_gles2_,PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC,glFramebufferTexture2DMultisampleEXT, void, (GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level, GLsizei samples) )
+GLPIPE_PROCENT(_gles2_,PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC,glRenderbufferStorageMultisampleEXT, void, (GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height) )
 GLPIPE_PROCENT(_gles2_,PFNGLFRONTFACEPROC,glFrontFace	,	void	,	(GLenum mode)						)
 GLPIPE_PROCENT(_gles2_,PFNGLGENBUFFERSPROC,glGenBuffers	,	void	,	(GLsizei n, GLuint *buffers)						)
 GLPIPE_PROCENT(_gles2_,PFNGLGENERATEMIPMAPPROC,glGenerateMipmap	,	void	,	(GLenum target)						)
@@ -181,6 +183,5 @@ GLPIPE_PROCENT(_gles2_,PFNGLVERTEXATTRIB4FPROC,glVertexAttrib4f	,	void	,	(GLuint
 GLPIPE_PROCENT(_gles2_,PFNGLVERTEXATTRIB4FVPROC,glVertexAttrib4fv	,	void	,	(GLuint index, const GLfloat *v)						)
 GLPIPE_PROCENT(_gles2_,PFNGLVERTEXATTRIBPOINTERPROC,glVertexAttribPointer	,	void	,	(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer)						)
 GLPIPE_PROCENT(_gles2_,PFNGLVIEWPORTPROC,glViewport	,	void	,	(GLint x, GLint y, GLsizei width, GLsizei height)						)
-
 
 #endif

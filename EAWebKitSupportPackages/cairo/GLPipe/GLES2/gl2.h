@@ -503,6 +503,8 @@ typedef void (GL_APIENTRYP PFNGLVERTEXATTRIB4FPROC) (GLuint index, GLfloat x, GL
 typedef void (GL_APIENTRYP PFNGLVERTEXATTRIB4FVPROC) (GLuint index, const GLfloat *v);
 typedef void (GL_APIENTRYP PFNGLVERTEXATTRIBPOINTERPROC) (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer);
 typedef void (GL_APIENTRYP PFNGLVIEWPORTPROC) (GLint x, GLint y, GLsizei width, GLsizei height);
+typedef void (GL_APIENTRYP PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC) (GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level, GLsizei samples);
+typedef void (GL_APIENTRYP PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) (GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height);
 
 #if GL_GLES_PROTOTYPES
 
@@ -561,8 +563,10 @@ typedef void (GL_APIENTRYP PFNGLVIEWPORTPROC) (GLint x, GLint y, GLsizei width, 
 #define glEnableVertexAttribArray _gles2_glEnableVertexAttribArray
 #define glFinish _gles2_glFinish
 #define glFlush _gles2_glFlush
+#define glRenderbufferStorageMultisampleEXT _gles2_glRenderbufferStorageMultisampleEXT
 #define glFramebufferRenderbuffer _gles2_glFramebufferRenderbuffer
 #define glFramebufferTexture2D _gles2_glFramebufferTexture2D
+#define glFramebufferTexture2DMultisampleEXT _gles2_glFramebufferTexture2DMultisampleEXT
 #define glFrontFace _gles2_glFrontFace
 #define glGenBuffers _gles2_glGenBuffers
 #define glGenerateMipmap _gles2_glGenerateMipmap

@@ -87,6 +87,8 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>nx64-$(Configuration)\lib\</OutDir>
     <IntDir>nx64-$(Configuration)\build\$(ProjectName)\vstmp\</IntDir>
+    <LinkTimeOptimization>Thin</LinkTimeOptimization>
+    <ThinLTOCache>.ltocache</ThinLTOCache>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|NX64'">
     <ClCompile>

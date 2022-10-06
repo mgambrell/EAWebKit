@@ -64,10 +64,13 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>nx64-$(Configuration)\lib\</OutDir>
     <IntDir>nx64-$(Configuration)\build\$(ProjectName)\vstmp\</IntDir>
+    <LinkTimeOptimization>Thin</LinkTimeOptimization>
+    <ThinLTOCache>.ltocache</ThinLTOCache>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|NX64'">
     <ClCompile>
       <PreprocessorDefinitions>MY_ZCALLOC;_LIB;BUILDING_EA__=1;_HAS_EXCEPTIONS=0;_DEBUG;EA_DEBUG</PreprocessorDefinitions>
+      <AdditionalOptions>-fvisibility=protected %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|NX64'">
@@ -78,6 +81,7 @@
       <Vectorization>true</Vectorization>
       <Inlinefunctions>true</Inlinefunctions>
       <ImplicitFloat>true</ImplicitFloat>
+      <AdditionalOptions>-fvisibility=protected %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <PropertyGroup Label="Configuration">

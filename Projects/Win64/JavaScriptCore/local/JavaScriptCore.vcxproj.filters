@@ -4813,9 +4813,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Masm Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\DerivedSources\pc64\dev-opt\LowLevelInterpreterWin.asm">
-      <Filter>JavaScriptCore\DerivedSources\pc64\dev-opt</Filter>
-    </Masm>
     <Masm Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\jit\JITStubsMSVC64.asm">
       <Filter>JavaScriptCore\jit</Filter>
     </Masm>

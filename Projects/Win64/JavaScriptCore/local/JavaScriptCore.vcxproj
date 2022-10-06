@@ -640,10 +640,6 @@
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\DerivedSources\pc64\dev-opt\Lexer.lut.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\DerivedSources\pc64\dev-opt\LLIntAssembly.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\DerivedSources\pc64\dev-opt\LLIntDesiredOffsets.h" />
-    <Masm Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\DerivedSources\pc64\dev-opt\LowLevelInterpreterWin.asm">
-      <ObjectFileName Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-opt|x64' ">pc64-vc-dev-opt\build\JavaScriptCore\DerivedSources\pc64\dev-opt\LowLevelInterpreterWin.asm.obj</ObjectFileName>
-      <ExcludedFromBuild Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-debug|x64' ">TRUE</ExcludedFromBuild>
-    </Masm>
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\DerivedSources\pc64\dev-opt\NumberConstructor.lut.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\DerivedSources\pc64\dev-opt\NumberPrototype.lut.h" />
     <ClInclude Include="..\..\..\..\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\DerivedSources\pc64\dev-opt\ObjectConstructor.lut.h" />

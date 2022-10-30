@@ -12575,9 +12575,6 @@
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\SVGGlyph.cpp">
       <Filter>WebCore\platform\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexture.cpp">
-      <Filter>WebCore\platform\graphics\texmap</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexturePool.cpp">
       <Filter>WebCore\platform\graphics\texmap</Filter>
     </ClCompile>
@@ -13502,6 +13499,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\DisplayRefreshMonitor.cpp">
       <Filter>WebCore\platform\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexture.cpp">
+      <Filter>WebCore\platform\graphics\texmap\coordinated</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

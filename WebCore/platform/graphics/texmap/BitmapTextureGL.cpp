@@ -173,7 +173,7 @@ void BitmapTextureGL::didReset()
   m_textureSize = contentSize();
 
   imageBuffer = ImageBuffer::create(m_textureSize, 1.0f, WebCore::ColorSpaceDeviceRGB, WebCore::RenderingMode::Accelerated);
-  m_id = imageBuffer->m_data.m_texture;
+  m_id = imageBuffer->GetData().m_texture;
 
   //MBG - BIG PROBLEMS HAPPEN IF I DO THIS!
   //at least for now, probably because it's messing up the current GL context or something

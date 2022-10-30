@@ -134,6 +134,9 @@ public:
     static FloatSize clampedSize(const FloatSize&, FloatSize& scale);
     static FloatRect clampedRect(const FloatRect&);
 
+    //MBG - added this to ease some interoperability
+    const ImageBufferData& GetData() { return m_data; }
+
 private:
 #if USE(CG)
     // The returned image might be larger than the internalSize(). If you want the smaller

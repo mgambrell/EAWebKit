@@ -519,7 +519,7 @@ bool View::InitView(const ViewParameters& vp)
 	settings.setAccelerated2dCanvasEnabled(true);
 	settings.setAcceleratedCompositingEnabled(true);
 	settings.setMinimumAccelerated2dCanvasSize(1); //I will really want to finetune this per game and platform, i guess
-	settings.setAcceleratedFiltersEnabled(true);
+	//settings.setAcceleratedFiltersEnabled(true); //hmm it seems only open CL acceleration is supported. this isn't worth fighting for now
 
 	d->mInitialized = true;
 	

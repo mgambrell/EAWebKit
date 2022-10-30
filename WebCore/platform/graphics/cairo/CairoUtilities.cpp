@@ -222,8 +222,11 @@ PassRefPtr<cairo_surface_t> copyCairoImageSurface(cairo_surface_t* originalSurfa
     // See http://lists.cairographics.org/archives/cairo/2007-June/010877.html
     // Once cairo provides the way, use the function instead of this.
     IntSize size = cairoSurfaceSize(originalSurface);
-    RefPtr<cairo_surface_t> newSurface = adoptRef(cairo_surface_create_similar(originalSurface,
-        cairo_surface_get_content(originalSurface), size.width(), size.height()));
+    //MBG - this function is called "copy cairo IMAGE SURFACE", so actually return an image surface
+    //RefPtr<cairo_surface_t> newSurface = adoptRef(cairo_surface_create_similar(originalSurface,
+        //cairo_surface_get_content(originalSurface), size.width(), size.height()));
+    RefPtr<cairo_surface_t> newSurface = adoptRef(cairo_surface_create_similar_image(originalSurface,
+      CAIRO_FORMAT_ARGB32, size.width(), size.height()));
 
     RefPtr<cairo_t> cr = adoptRef(cairo_create(newSurface.get()));
     cairo_set_source_surface(cr.get(), originalSurface, 0, 0);

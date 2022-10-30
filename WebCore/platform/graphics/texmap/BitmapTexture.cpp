@@ -37,6 +37,10 @@ void BitmapTexture::updateContents(TextureMapper* textureMapper, GraphicsLayer* 
 {
     std::unique_ptr<ImageBuffer> imageBuffer = ImageBuffer::create(targetRect.size());
 
+    //MBG NOTE - the following code could be used instead of the prior, since I've made some implied accommodations
+    //but it won't help matters any since it just results in more copies.
+    //std::unique_ptr<ImageBuffer> imageBuffer = ImageBuffer::create(targetRect.size(), 1.0f, WebCore::ColorSpaceDeviceRGB, WebCore::RenderingMode::Accelerated);
+
     if (!imageBuffer)
         return;
 

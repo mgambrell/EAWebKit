@@ -32,6 +32,7 @@
 #include "NotImplemented.h"
 #include "TextureMapperShaderProgram.h"
 #include "Timer.h"
+#include "GLContext.h"
 #include <wtf/HashMap.h>
 #include <wtf/PassRefPtr.h>
 #include <wtf/RefCounted.h>
@@ -206,8 +207,8 @@ void TextureMapperGL::ClipStack::apply(GraphicsContext3D* context)
         return;
 
     context->scissor(clipState.scissorBox.x(),
-      //MBG - unfluck (never flip scissor)
-        ((yAxisMode == InvertedYAxis) && false) ? size.height() - clipState.scissorBox.maxY() : clipState.scissorBox.y(),
+      //MBG - UNFLUCKED
+        ((yAxisMode == InvertedYAxisDoNotUse)) ? size.height() - clipState.scissorBox.maxY() : clipState.scissorBox.y(),
         clipState.scissorBox.width(), clipState.scissorBox.height());
     context->stencilOp(GraphicsContext3D::KEEP, GraphicsContext3D::KEEP, GraphicsContext3D::KEEP);
     context->stencilFunc(GraphicsContext3D::EQUAL, clipState.stencilIndex - 1, clipState.stencilIndex - 1);
@@ -267,7 +268,9 @@ void TextureMapperGL::beginPainting(PaintFlags flags)
     m_context3D->depthMask(0);
     m_context3D->getIntegerv(GraphicsContext3D::VIEWPORT, data().viewport);
     m_context3D->getIntegerv(GraphicsContext3D::SCISSOR_BOX, data().previousScissor);
-    m_clipStack.reset(IntRect(0, 0, data().viewport[2], data().viewport[3]), ClipStack::InvertedYAxis);
+    //MBG - UNFLUCKED
+    //m_clipStack.reset(IntRect(0, 0, data().viewport[2], data().viewport[3]), ClipStack::InvertedYAxis);
+    m_clipStack.reset(IntRect(0, 0, data().viewport[2], data().viewport[3]), ClipStack::DefaultYAxis);
     m_context3D->getIntegerv(GraphicsContext3D::FRAMEBUFFER_BINDING, &data().targetFrameBuffer);
     data().PaintFlags = flags;
     bindSurface(0);
@@ -703,7 +706,9 @@ void TextureMapperGL::bindSurface(BitmapTexture *surface)
     }
 
     static_cast<BitmapTextureGL*>(surface)->bindAsSurface(m_context3D.get());
-    data().projectionMatrix = createProjectionMatrix(surface->size(), true /* mirrored */);
+    //MBG - UNFLUCKED
+    //data().projectionMatrix = createProjectionMatrix(surface->size(), true /* mirrored */);
+    data().projectionMatrix = createProjectionMatrix(surface->size(), false);
     data().currentSurface = surface;
 }
 

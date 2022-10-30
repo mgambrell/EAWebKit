@@ -57,7 +57,9 @@ public:
         // Y-axis should be inverted only when painting into the window.
         enum YAxisMode {
             DefaultYAxis,
-            InvertedYAxis
+            //MBG - UNFLUCKED (dont use inverted axis)
+            //InvertedYAxis
+            InvertedYAxisDoNotUse
         };
 
         void push();
@@ -96,6 +98,8 @@ public:
     };
 
     typedef int Flags;
+
+    TextureMapperGL* m_BackupMapper = nullptr; //MBG - added
 
     // TextureMapper implementation
     virtual void drawBorder(const Color&, float borderWidth, const FloatRect&, const TransformationMatrix&) override;

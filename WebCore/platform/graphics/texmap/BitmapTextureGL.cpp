@@ -40,6 +40,12 @@
 #include "RefPtrCairo.h"
 #include <cairo.h>
 #include <wtf/text/CString.h>
+ //MBG HACK
+#include "cairo/cairo-gl.h"
+#include "EAWebKit\EAWebKit.h"
+#include "GraphicsLayer.h"
+#include "GLContext.h"
+#include "ImageBuffer.h"
 #endif
 
 #if !USE(TEXMAP_OPENGL_ES_2)
@@ -68,6 +74,46 @@ BitmapTextureGL::BitmapTextureGL(PassRefPtr<GraphicsContext3D> context3D)
     , m_shouldClear(true)
     , m_context3D(context3D)
 {
+}
+
+
+//MBG - ADDED BitmapTextureGL VERSION TO DO MORE STUFF ON GPU
+void BitmapTextureGL::updateContents(TextureMapper* textureMapper, GraphicsLayer* sourceLayer, const IntRect& targetRect, const IntPoint& offset, UpdateContentsFlag updateContentsFlag)
+{
+  //FOR REFERENCE: do whatever we did before
+  //BitmapTexture::updateContents(textureMapper, sourceLayer, targetRect, offset, updateContentsFlag);
+  //return;
+
+  //FOR OPTIMIZATION: paint directly to our managed ImageBuffer
+
+  //what is the meaning of this???
+  if(updateContentsFlag == UpdateCannotModifyOriginalImageData)
+    abort();
+
+  //paint the needed content to our imageBuffer in the needed spot.
+  //confirmed: clipping and clearing are needed for proper results
+  //confirmed: context save/restore are needed
+  //assumed: the interpolation/text stuff was copied from the base implementation's
+  GraphicsContext* context = imageBuffer->context();
+  context->save();
+  context->setImageInterpolationQuality(textureMapper->imageInterpolationQuality());
+  context->setTextDrawingMode(textureMapper->textDrawingMode());
+  context->clip(targetRect);
+  context->clearRect(targetRect);
+  sourceLayer->paintGraphicsLayerContents(*context, targetRect);
+  context->restore();
+
+  //QUESTIONABLE CONTEXT
+  //well, I debugged it and thought this would be needed because I saw it do work.
+  //but it doesn't seem to be important. However, that must be because in the cases I tested there were no pending primitives.
+  //I'm leaving this one because I think it must be important.
+  //In any event, we have to assume the current GL context is cleared when cairo_device_flush() is called, so pay attention to what comes next
+  cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+
+  //QUESTIONABLE CONTEXT
+  //this does not seem necessary, even though I think it should be necessary
+  //perhaps TextureMapper and associated types are diligent about setting their context current
+  //m_context3D->makeContextCurrent();
 }
 
 bool BitmapTextureGL::canReuseWith(const IntSize& contentsSize, Flags)
@@ -113,33 +159,33 @@ static bool driverSupportsSubImage(GraphicsContext3D* context)
     return true;
 }
 
+//MBG - changed this to just be a wrapper on ImageBuffer. this makes it ready-to-go for rendering onto an ImageBuffer
 void BitmapTextureGL::didReset()
 {
-    if (!m_id)
-        m_id = m_context3D->createTexture();
+  m_shouldClear = true;
 
-    m_shouldClear = true;
-    if (m_textureSize == contentSize())
-        return;
+  if (m_textureSize == contentSize())
+    return;
 
+  if(m_fbo)
+    m_context3D->deleteFramebuffer(m_fbo);
 
-    m_textureSize = contentSize();
-    m_context3D->bindTexture(GraphicsContext3D::TEXTURE_2D, m_id);
-    m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_MIN_FILTER, GraphicsContext3D::LINEAR);
-    m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_MAG_FILTER, GraphicsContext3D::LINEAR);
-    m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_WRAP_S, GraphicsContext3D::CLAMP_TO_EDGE);
-    m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_WRAP_T, GraphicsContext3D::CLAMP_TO_EDGE);
+  m_textureSize = contentSize();
 
-    Platform3DObject internalFormat = GraphicsContext3D::RGBA;
-    Platform3DObject externalFormat = GraphicsContext3D::BGRA;
-    if (m_context3D->isGLES2Compliant()) {
-        if (driverSupportsExternalTextureBGRA(m_context3D.get()))
-            internalFormat = GraphicsContext3D::BGRA;
-        else
-            externalFormat = GraphicsContext3D::RGBA;
-    }
+  imageBuffer = ImageBuffer::create(m_textureSize, 1.0f, WebCore::ColorSpaceDeviceRGB, WebCore::RenderingMode::Accelerated);
+  m_id = imageBuffer->m_data.m_texture;
 
-    m_context3D->texImage2DDirect(GraphicsContext3D::TEXTURE_2D, 0, internalFormat, m_textureSize.width(), m_textureSize.height(), 0, externalFormat, DEFAULT_TEXTURE_PIXEL_TRANSFER_TYPE, 0);
+  //MBG - BIG PROBLEMS HAPPEN IF I DO THIS!
+  //at least for now, probably because it's messing up the current GL context or something
+  //createFboIfNeeded();
+
+  //MBG - REMINDER - IS THIS IMPORTANT? MAYBE, FOR THE FILTERING... BUT...
+  //THIS IS ONLY USED FOR COMPOSITING AND COMPOSITING SHOULD RUN AT 1X, SO...?
+  //check createCairoGLSurface() to see what it does by default.
+  //m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_MIN_FILTER, GraphicsContext3D::LINEAR);
+  //m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_MAG_FILTER, GraphicsContext3D::LINEAR);
+  //m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_WRAP_S, GraphicsContext3D::CLAMP_TO_EDGE);
+  //m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_WRAP_T, GraphicsContext3D::CLAMP_TO_EDGE);
 }
 
 void BitmapTextureGL::updateContentsNoSwizzle(const void* srcData, const IntRect& targetRect, const IntPoint& sourceOffset, int bytesPerLine, unsigned bytesPerPixel, Platform3DObject glFormat)
@@ -218,6 +264,17 @@ void BitmapTextureGL::updateContents(Image* image, const IntRect& targetRect, co
     cairo_surface_t* surface = frameImage.get();
     imageData = reinterpret_cast<const char*>(cairo_image_surface_get_data(surface));
     bytesPerLine = cairo_image_surface_get_stride(surface);
+
+    //MBG - added this, so we can support copying GL surfaces
+    //it's not ideal, but it helps me change one piece at a time
+    RefPtr<cairo_surface_t> tempSurface;
+    if(!imageData)
+    {
+      tempSurface = copyCairoImageSurface(surface);
+      imageData = reinterpret_cast<const char*>(cairo_image_surface_get_data(tempSurface.get()));
+      bytesPerLine = cairo_image_surface_get_stride(tempSurface.get());
+    }
+
 #endif
 
     updateContents(imageData, targetRect, offset, bytesPerLine, updateContentsFlag);
@@ -353,8 +410,9 @@ void BitmapTextureGL::bindAsSurface(GraphicsContext3D* context3D)
 
 BitmapTextureGL::~BitmapTextureGL()
 {
-    if (m_id)
-        m_context3D->deleteTexture(m_id);
+    //MBG - this is owned by the ImageBuffer now
+    //if (m_id)
+    //    m_context3D->deleteTexture(m_id);
 
     if (m_fbo)
         m_context3D->deleteFramebuffer(m_fbo);

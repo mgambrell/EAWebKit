@@ -48,6 +48,7 @@ public:
     virtual uint32_t id() const { return m_id; }
     uint32_t textureTarget() const { return GraphicsContext3D::TEXTURE_2D; }
     IntSize textureSize() const { return m_textureSize; }
+    void updateContents(TextureMapper* textureMapper, GraphicsLayer* sourceLayer, const IntRect& targetRect, const IntPoint& offset, UpdateContentsFlag updateContentsFlag) override;
     virtual void updateContents(Image*, const IntRect&, const IntPoint&, UpdateContentsFlag) override;
     virtual void updateContents(const void*, const IntRect& target, const IntPoint& sourceOffset, int bytesPerLine, UpdateContentsFlag) override;
     void updateContentsNoSwizzle(const void*, const IntRect& target, const IntPoint& sourceOffset, int bytesPerLine, unsigned bytesPerPixel = 4, Platform3DObject glFormat = GraphicsContext3D::RGBA);
@@ -79,6 +80,7 @@ private:
     bool m_shouldClear;
     TextureMapperGL::ClipStack m_clipStack;
     RefPtr<GraphicsContext3D> m_context3D;
+    std::unique_ptr<ImageBuffer> imageBuffer;
 
     BitmapTextureGL();
 

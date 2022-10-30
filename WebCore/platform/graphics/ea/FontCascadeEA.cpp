@@ -316,8 +316,7 @@ static void drawGlyphsToContext(GraphicsContext* pGraphicsContext, const EA::Web
      cairo_surface_t *surface = cairo_gl_surface_create_for_data((cairo_device_t*)EA::WebKit::g_cairoDevice, (unsigned char*)glyphRGBABuffer.data(), CAIRO_CONTENT_COLOR_ALPHA, srcW, srcH, srcW * sizeof(uint32_t));
      EAW_ASSERT(cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS);
 
-     if(previousActiveContext)
-      previousActiveContext->makeContextCurrent();
+
      
      // If we pass sub pixel offsets (e.g. 75.5), some Cario interpolation kicks in and can degrade the font quality.
      // So we use pixel grid "snapping" to disable this.  This might cause some jitter if the font is animating/moving slowly. 
@@ -327,6 +326,7 @@ static void drawGlyphsToContext(GraphicsContext* pGraphicsContext, const EA::Web
      cairo_set_source_surface(context, surface, x, y);
      drawGlyphsShadow(pGraphicsContext, x, y, srcW, srcH, surface);
      cairo_paint(context);
+
  
      // Uncomment to save text runs.
      //static int runNumber = 0;
@@ -337,6 +337,10 @@ static void drawGlyphsToContext(GraphicsContext* pGraphicsContext, const EA::Web
      
      cairo_surface_destroy(surface);
      cairo_restore(context);
+
+     //MBG - moved (or added, I cant remember)
+     if(previousActiveContext)
+       previousActiveContext->makeContextCurrent();
  
      // Uncomment to visualize text runs.
      //cairo_save(context);

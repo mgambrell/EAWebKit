@@ -277,6 +277,7 @@ can_use_msaa_compositor (cairo_gl_surface_t *surface,
     if (! surface->supports_stencil)
 	return FALSE;
 
+		//MBG - can we remove this?
     /* Multisampling OpenGL ES surfaces only maintain one multisampling
        framebuffer and thus must use the spans compositor to do non-antialiased
        rendering. */

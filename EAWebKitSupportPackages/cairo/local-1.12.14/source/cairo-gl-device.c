@@ -160,8 +160,11 @@ static const cairo_device_backend_t _cairo_gl_device_backend = {
 static cairo_bool_t
 _cairo_gl_msaa_compositor_enabled (void)
 {
-    const char *env = getenv ("CAIRO_GL_COMPOSITOR");
-    return env && strcmp(env, "msaa") == 0;
+  //MBG - hardcoded to 1 rather than rely on getenv
+    //const char *env = getenv ("CAIRO_GL_COMPOSITOR");
+    //return env && strcmp(env, "msaa") == 0;
+  return 1;
+  //return 0;
 }
 
 static cairo_bool_t

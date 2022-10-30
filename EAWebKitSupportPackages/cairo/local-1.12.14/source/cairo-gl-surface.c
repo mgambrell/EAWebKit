@@ -1182,6 +1182,8 @@ _cairo_gl_surface_map_to_image (void      *abstract_surface,
     _cairo_gl_context_set_destination (ctx, surface, FALSE);
 
     flipped = ! _cairo_gl_surface_is_texture (surface);
+		//MBG - UNFLUCKED
+		flipped = 0;
     mesa_invert = flipped && ctx->has_mesa_pack_invert;
 
     glPixelStorei (GL_PACK_ALIGNMENT, 4);

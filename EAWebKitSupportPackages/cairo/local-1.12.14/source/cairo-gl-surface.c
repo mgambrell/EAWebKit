@@ -1078,10 +1078,15 @@ _cairo_gl_surface_finish (void *abstract_surface)
     if (surface->owns_tex)
 	glDeleteTextures (1, &surface->tex);
 
-#if CAIRO_HAS_GL_SURFACE
+		//MBG - seemed like a mistake... msaa_depth_stencil can be created without  CAIRO_HAS_GL_SURFACE.
+		//indeed the way things are set up, the variable wouldnt exist if it couldnt be used
+		//the way I see it, if the variable exists, it should be freed
+		//(and I saw it getting freed at least once)
+		//#if CAIRO_HAS_GL_SURFACE
     if (surface->msaa_depth_stencil)
 	ctx->dispatch.DeleteRenderbuffers (1, &surface->msaa_depth_stencil);
-    if (surface->msaa_fb)
+		#if CAIRO_HAS_GL_SURFACE
+		if (surface->msaa_fb)
 	ctx->dispatch.DeleteFramebuffers (1, &surface->msaa_fb);
     if (surface->msaa_rb)
 	ctx->dispatch.DeleteRenderbuffers (1, &surface->msaa_rb);

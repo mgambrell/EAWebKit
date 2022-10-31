@@ -501,8 +501,9 @@ _scissor_to_doubles (cairo_gl_surface_t	*surface,
     double height;
 
     height = y2 - y1;
-    if (_cairo_gl_surface_is_texture (surface) == FALSE)
-	y1 = surface->height - (y1 + height);
+    //MBG - UNFLUCKED
+ //   if (_cairo_gl_surface_is_texture (surface) == FALSE)
+	//y1 = surface->height - (y1 + height);
     glScissor (x1, y1, x2 - x1, height);
     glEnable (GL_SCISSOR_TEST);
 }

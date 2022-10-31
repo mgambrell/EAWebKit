@@ -90,18 +90,49 @@ void BitmapTextureGL::updateContents(TextureMapper* textureMapper, GraphicsLayer
   if(updateContentsFlag == UpdateCannotModifyOriginalImageData)
     abort();
 
-  //paint the needed content to our imageBuffer in the needed spot.
-  //confirmed: clipping and clearing are needed for proper results
-  //confirmed: context save/restore are needed
-  //assumed: the interpolation/text stuff was copied from the base implementation's
-  GraphicsContext* context = imageBuffer->context();
-  context->save();
-  context->setImageInterpolationQuality(textureMapper->imageInterpolationQuality());
-  context->setTextDrawingMode(textureMapper->textDrawingMode());
-  context->clip(targetRect);
-  context->clearRect(targetRect);
-  sourceLayer->paintGraphicsLayerContents(*context, targetRect);
-  context->restore();
+  //this should only happen if we're using tiles and since they default to 2k in size, it wont happen
+  if(targetRect.x() != offset.x()
+    || targetRect.y() != offset.y())
+  {
+    abort();
+  }
+
+  ////--------------------------
+  ////THIS SHOULD WORK, BUT DOESNT. WHY?
+
+  ////paint the needed content to our imageBuffer in the needed spot.
+  ////confirmed: clipping and clearing are needed for proper results
+  ////confirmed: context save/restore are needed
+  ////assumed: the interpolation/text stuff was copied from the base implementation's
+  //GraphicsContext* context = imageBuffer->context();
+  //context->save();
+  //context->setImageInterpolationQuality(textureMapper->imageInterpolationQuality());
+  //context->setTextDrawingMode(textureMapper->textDrawingMode());
+  //context->clip(targetRect);
+  //context->clearRect(targetRect);
+  //sourceLayer->paintGraphicsLayerContents(*context, targetRect);
+  //context->restore();
+  ////--------------------------
+
+  //--------------------------
+  //USE THIS INSTEAD.. AN INTERMEDIATE BUFFER. BLEH. AT LEAST IT'S ALL ON GPU
+
+  //1. draw the same way as BitmapTexture does, but to "Accelerated" surface
+  std::unique_ptr<ImageBuffer> tempImageBuffer = ImageBuffer::create(targetRect.size(), 1.0f, WebCore::ColorSpaceDeviceRGB, WebCore::RenderingMode::Accelerated);
+  GraphicsContext* tempContext = tempImageBuffer->context();
+  tempContext->setImageInterpolationQuality(textureMapper->imageInterpolationQuality());
+  tempContext->setTextDrawingMode(textureMapper->textDrawingMode());
+  tempContext->clearRect(FloatRect(0,0,targetRect.width(),targetRect.height()));
+  IntRect sourceRect(targetRect);
+  sourceRect.setLocation(offset);
+  tempContext->translate(-offset.x(), -offset.y());
+  sourceLayer->paintGraphicsLayerContents(*tempContext, sourceRect);
+
+  //2. Copy it onto our own image
+  ImagePaintingOptions opts(CompositeOperator::CompositeCopy);
+  imageBuffer->context()->drawImageBuffer(tempImageBuffer.get(), WebCore::ColorSpaceDeviceRGB,targetRect,opts);
+
+  //--------------------------
 
   //QUESTIONABLE CONTEXT
   //well, I debugged it and thought this would be needed because I saw it do work.

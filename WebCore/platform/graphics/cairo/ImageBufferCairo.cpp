@@ -135,6 +135,9 @@ ImageBuffer::ImageBuffer(const FloatSize& size, float /* resolutionScale */, Col
 
 ImageBuffer::~ImageBuffer()
 {
+  //MBG - WHOOPSIE!!! SOMEONE FORGOT TO DO THIS!
+  if(m_data.m_texture)
+    glDeleteTextures(1, &m_data.m_texture);
 }
 
 GraphicsContext* ImageBuffer::context() const

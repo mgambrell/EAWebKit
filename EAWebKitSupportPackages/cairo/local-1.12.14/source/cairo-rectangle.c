@@ -109,15 +109,10 @@ void
 _cairo_box_round_to_rectangle (const cairo_box_t     *box,
 			       cairo_rectangle_int_t *rectangle)
 {
-  //MBG - I objected to this.
-    //rectangle->x = _cairo_fixed_integer_floor (box->p1.x);
-    //rectangle->y = _cairo_fixed_integer_floor (box->p1.y);
-    //rectangle->width = _cairo_fixed_integer_ceil (box->p2.x) - rectangle->x;
-    //rectangle->height = _cairo_fixed_integer_ceil (box->p2.y) - rectangle->y;
-  rectangle->x = _cairo_fixed_integer_floor (box->p1.x);
-  rectangle->y = _cairo_fixed_integer_floor (box->p1.y);
-  rectangle->width = _cairo_fixed_integer_floor (box->p2.x - box->p1.x);
-  rectangle->height = _cairo_fixed_integer_floor (box->p2.y - box->p1.y);
+    rectangle->x = _cairo_fixed_integer_floor (box->p1.x);
+    rectangle->y = _cairo_fixed_integer_floor (box->p1.y);
+    rectangle->width = _cairo_fixed_integer_ceil (box->p2.x) - rectangle->x;
+    rectangle->height = _cairo_fixed_integer_ceil (box->p2.y) - rectangle->y;
 }
 
 cairo_bool_t

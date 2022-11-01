@@ -97,8 +97,8 @@ void BitmapTextureGL::updateContents(TextureMapper* textureMapper, GraphicsLayer
     abort();
   }
 
-  ////--------------------------
-  ////THIS SHOULD WORK, BUT DOESNT. WHY?
+  //----------------------------------------------------
+  //I. THIS SHOULD WORK, BUT DOESNT. WHY?
 
   ////paint the needed content to our imageBuffer in the needed spot.
   ////confirmed: clipping and clearing are needed for proper results
@@ -112,27 +112,45 @@ void BitmapTextureGL::updateContents(TextureMapper* textureMapper, GraphicsLayer
   //context->clearRect(targetRect);
   //sourceLayer->paintGraphicsLayerContents(*context, targetRect);
   //context->restore();
-  ////--------------------------
+  
+  //----------------------------------------------------
 
-  //--------------------------
-  //USE THIS INSTEAD.. AN INTERMEDIATE BUFFER. BLEH. AT LEAST IT'S ALL ON GPU
+  //----------------------------------------------------
+  //II. THIS DOES WORK. AN INTERMEDIATE BUFFER. BLEH. AT LEAST IT'S ALL ON GPU
 
-  //1. draw the same way as BitmapTexture does, but to "Accelerated" surface
-  std::unique_ptr<ImageBuffer> tempImageBuffer = ImageBuffer::create(targetRect.size(), 1.0f, WebCore::ColorSpaceDeviceRGB, WebCore::RenderingMode::Accelerated);
-  GraphicsContext* tempContext = tempImageBuffer->context();
-  tempContext->setImageInterpolationQuality(textureMapper->imageInterpolationQuality());
-  tempContext->setTextDrawingMode(textureMapper->textDrawingMode());
-  tempContext->clearRect(FloatRect(0,0,targetRect.width(),targetRect.height()));
-  IntRect sourceRect(targetRect);
-  sourceRect.setLocation(offset);
-  tempContext->translate(-offset.x(), -offset.y());
-  sourceLayer->paintGraphicsLayerContents(*tempContext, sourceRect);
+  ////1. draw the same way as BitmapTexture does, but to "Accelerated" surface
+  //std::unique_ptr<ImageBuffer> tempImageBuffer = ImageBuffer::create(targetRect.size(), 1.0f, WebCore::ColorSpaceDeviceRGB, WebCore::RenderingMode::Accelerated);
+  //GraphicsContext* tempContext = tempImageBuffer->context();
+  //tempContext->setImageInterpolationQuality(textureMapper->imageInterpolationQuality());
+  //tempContext->setTextDrawingMode(textureMapper->textDrawingMode());
+  //tempContext->clearRect(FloatRect(0,0,targetRect.width(),targetRect.height()));
+  //IntRect sourceRect(targetRect);
+  //sourceRect.setLocation(offset);
+  //tempContext->translate(-offset.x(), -offset.y());
+  //sourceLayer->paintGraphicsLayerContents(*tempContext, sourceRect);
+
+  ////2. Copy it onto our own image
+  //ImagePaintingOptions opts(CompositeOperator::CompositeCopy);
+  //imageBuffer->context()->drawImageBuffer(tempImageBuffer.get(), WebCore::ColorSpaceDeviceRGB,targetRect,opts);
+
+  //----------------------------------------------------
+  //III. THIS IS BETTER. IT PROVES THE IDEA BASICALLY WORKS, THE PROBLEM IS JUST.... I DONT KNOW.
+  //WHAT WE DO HERE IS DRAW TO A CLIPPED REGION OF A BIG TEMP BUFFER (AKA METHOD I.) AND THEN IN THE END BLIT IT TO OUR MAIN BACKBUFFER
+  
+  GraphicsContext* context = imageBuffer2->context();
+  context->save();
+  context->setImageInterpolationQuality(textureMapper->imageInterpolationQuality());
+  context->setTextDrawingMode(textureMapper->textDrawingMode());
+  context->clip(targetRect);
+  context->clearRect(targetRect);
+  sourceLayer->paintGraphicsLayerContents(*context, targetRect);
+  context->restore();
 
   //2. Copy it onto our own image
   ImagePaintingOptions opts(CompositeOperator::CompositeCopy);
-  imageBuffer->context()->drawImageBuffer(tempImageBuffer.get(), WebCore::ColorSpaceDeviceRGB,targetRect,opts);
+  imageBuffer->context()->drawImageBuffer(imageBuffer2.get(), WebCore::ColorSpaceDeviceRGB,targetRect,targetRect,opts);
 
-  //--------------------------
+  //----------------------------------------------------
 
   //QUESTIONABLE CONTEXT
   //well, I debugged it and thought this would be needed because I saw it do work.
@@ -205,6 +223,11 @@ void BitmapTextureGL::didReset()
 
   imageBuffer = ImageBuffer::create(m_textureSize, 1.0f, WebCore::ColorSpaceDeviceRGB, WebCore::RenderingMode::Accelerated);
   m_id = imageBuffer->GetData().m_texture;
+
+  //MBG - to cut down on texture allocation churn, preallocate another buffer of the needed size
+  //unfortunately, it seems I need to paint to a temporary texture (that's this) instead of directly to imageBuffer.. I have no idea why
+  //it's only an extra GPU blit to copy from a rect of imageBuffer2 to imageBuffer, so it's not so bad
+  imageBuffer2 = ImageBuffer::create(m_textureSize, 1.0f, WebCore::ColorSpaceDeviceRGB, WebCore::RenderingMode::Accelerated);
 
   //MBG - BIG PROBLEMS HAPPEN IF I DO THIS!
   //at least for now, probably because it's messing up the current GL context or something

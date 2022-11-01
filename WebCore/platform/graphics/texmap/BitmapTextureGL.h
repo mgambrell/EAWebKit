@@ -81,6 +81,7 @@ private:
     TextureMapperGL::ClipStack m_clipStack;
     RefPtr<GraphicsContext3D> m_context3D;
     std::unique_ptr<ImageBuffer> imageBuffer;
+    std::unique_ptr<ImageBuffer> imageBuffer2;
 
     BitmapTextureGL();
 

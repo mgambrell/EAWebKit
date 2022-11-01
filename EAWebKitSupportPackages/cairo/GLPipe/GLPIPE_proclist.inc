@@ -184,4 +184,7 @@ GLPIPE_PROCENT(_gles2_,PFNGLVERTEXATTRIB4FVPROC,glVertexAttrib4fv	,	void	,	(GLui
 GLPIPE_PROCENT(_gles2_,PFNGLVERTEXATTRIBPOINTERPROC,glVertexAttribPointer	,	void	,	(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer)						)
 GLPIPE_PROCENT(_gles2_,PFNGLVIEWPORTPROC,glViewport	,	void	,	(GLint x, GLint y, GLsizei width, GLsizei height)						)
 
+GLPIPE_PROCENT(_gles2_,PFNGLCLEARTEXIMAGE,glClearTexImage, void, (GLuint texture, GLint level, GLenum format, GLenum type, const void * data) )
+GLPIPE_PROCENT(_gles2_,PFNGLCLEARTEXIMAGE,glClearTexSubImage, void, (GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const void * data) )
+
 #endif

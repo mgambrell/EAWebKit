@@ -1279,10 +1279,13 @@ _cairo_gl_surface_acquire_source_image (void		       *abstract_surface,
 
 static void
 _cairo_gl_surface_release_source_image (void		      *abstract_surface,
-					cairo_image_surface_t *image,
-					void		      *image_extra)
+	cairo_image_surface_t *image,
+	void		      *image_extra)
 {
-    cairo_surface_destroy (&image->base);
+	//MBG - this seems like it was missing....
+	_cairo_gl_surface_unmap_image(abstract_surface, image);
+
+	cairo_surface_destroy (&image->base);
 }
 
 static cairo_int_status_t

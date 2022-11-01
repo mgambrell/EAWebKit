@@ -508,6 +508,8 @@ typedef void (GL_APIENTRYP PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) (GLenum t
 typedef void (GL_APIENTRYP PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) (GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height);
 typedef void (GL_APIENTRYP PFNGLCLEARTEXIMAGE) (GLuint texture, GLint level, GLenum format, GLenum type, const void * data);
 typedef void (GL_APIENTRYP PFNGLCLEARTEXSUBIMAGE) (GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const void * data);
+typedef void (GL_APIENTRYP PFNGLMAPTEXTURERATA) (GLuint texture, void** pLockHandle, GLint level, int read, int write, int discard, void **pixels, GLint *strideBytes);
+typedef void (GL_APIENTRYP PFNGLUNMAPTEXTURERATA) (GLuint texture, void* lockHandle);
 
 #if GL_GLES_PROTOTYPES
 
@@ -690,6 +692,8 @@ typedef void (GL_APIENTRYP PFNGLCLEARTEXSUBIMAGE) (GLuint texture, GLint level, 
 
 #define glClearTexImage _gles2_glClearTexImage
 #define glClearTexSubImage _gles2_glClearTexSubImage
+#define glMapTextureRATA _gles2_glMapTextureRATA
+#define glUnmapTextureRATA _gles2_glUnmapTextureRATA
 
 #endif
 #endif /* GL_ES_VERSION_2_0 */

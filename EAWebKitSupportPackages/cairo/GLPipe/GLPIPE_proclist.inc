@@ -185,6 +185,9 @@ GLPIPE_PROCENT(_gles2_,PFNGLVERTEXATTRIBPOINTERPROC,glVertexAttribPointer	,	void
 GLPIPE_PROCENT(_gles2_,PFNGLVIEWPORTPROC,glViewport	,	void	,	(GLint x, GLint y, GLsizei width, GLsizei height)						)
 
 GLPIPE_PROCENT(_gles2_,PFNGLCLEARTEXIMAGE,glClearTexImage, void, (GLuint texture, GLint level, GLenum format, GLenum type, const void * data) )
-GLPIPE_PROCENT(_gles2_,PFNGLCLEARTEXIMAGE,glClearTexSubImage, void, (GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const void * data) )
+GLPIPE_PROCENT(_gles2_,PFNGLCLEARTEXSUBIMAGE,glClearTexSubImage, void, (GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const void * data) )
+
+GLPIPE_PROCENT(_gles2_,PFNGLMAPTEXTURERATA,glMapTextureRATA, void, (GLuint texture, void** pLockHandle, GLint level, int read, int write, int discard, void **pixels, GLint *strideBytes) );
+GLPIPE_PROCENT(_gles2_,PFNGLUNMAPTEXTURERATA,glUnmapTextureRATA, void, (GLuint texture, void* lockHandle));
 
 #endif

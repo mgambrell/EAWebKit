@@ -97,6 +97,11 @@ PassRefPtr<cairo_surface_t> createCairoGLSurface(const FloatSize& size, uint32_t
     //glTexImage2D(GL_TEXTURE_2D, 0 /* level */, GL_RGBA8, size.width(), size.height(), 0 /* border */, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glTexImage2D(GL_TEXTURE_2D, 0 /* level */, GL_BGRA, size.width(), size.height(), 0 /* border */, GL_BGRA, GL_UNSIGNED_BYTE, 0);
 
+    //MBG - this is an awesome API, let's use this awesome API
+    uint32_t zero = 0;
+    glClearTexImage(texture,0,GL_BGRA,GL_UNSIGNED_BYTE,&zero);
+
+    //this is probably not the right time for this.. do we even need this?
     cairo_device_flush(device);
 
     // Thread-awareness is a huge performance hit on non-Intel drivers.

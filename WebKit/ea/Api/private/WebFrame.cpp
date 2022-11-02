@@ -595,19 +595,10 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 	if (!page)
 		return;
 
-
 	// Composite the auxiliary layers if we have them
 	if (WebCore::TextureMapperLayerClientEA* client = static_cast<WebCore::ChromeClientEA&>(page->chrome().client()).m_textureMapperLayerClient.get())
 	{
 		WebCore::IntRect fullscreen(IntPoint(0, 0), WebCore::IntSize(d->page->view()->GetSize()));
-		
-		// GPU compositing
-		// Create a null context for the texture mapper
-		RefPtr<cairo_surface_t> cairoSurface =adoptRef(cairo_image_surface_create_for_data(NULL, CAIRO_FORMAT_ARGB32, 0, 0, 0));
-		RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
-		WebCore::GraphicsContext graphicsContext(cairoContext.get());
-
-		client->syncLayers();
 
 		//we need to set the mapper's context current so that next, when we bind the surface and set the viewport, it goes into the right context
 		WebCore::TextureMapperGL* mapperGL = (WebCore::TextureMapperGL*)client->GetTextureMapper();
@@ -618,6 +609,11 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 		surface->Bind();
 		glViewport(0,0,fullscreen.width(), fullscreen.height());
 
+		//I think there's some kinds of drawing configuration that can only be stored on the GraphicsContext, so we need to make one of those
+		WebCore::GraphicsContext graphicsContext((cairo_t*)nullptr);
+
+		//finally, get the job done
+		client->syncLayers();
 		client->renderCompositedLayers(&graphicsContext, fullscreen);
 	}
 }

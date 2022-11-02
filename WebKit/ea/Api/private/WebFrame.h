@@ -152,7 +152,6 @@ public:
 	};
 
 	void renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface *surface, cairo_surface_t* cairoSurface, const eastl::vector<WebCore::IntRect> &dirtyRegions);
-	void renderTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface* surface, const eastl::vector<WebCore::IntRect> &dirtyRegions); //surface is eventually going to be null
 	
 	void drawHighlightedNodeFromInspector(EA::WebKit::ISurface* surface);
 	void setTextSizeMultiplier(float factor);

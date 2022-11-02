@@ -602,68 +602,6 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 }
 
 
-void WebFrame::renderTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface* surface, const eastl::vector<WebCore::IntRect> &dirtyRegions)
-{
-#if USE(COORDINATED_GRAPHICS)
-	EAW_ASSERT_MSG(d->page->view()->IsUsingTiledBackingStore(), "tiled rendering path called but not using tiled backing store");
-	
-	if(!d->page->view()->IsUsingTiledBackingStore())
-		return;
-
-	if(!d->page->view()->HardwareAccelerated())//Don't need to copy the tiled rects to main surface in GPU compositing path
-	{
-		for (unsigned i = 0; i < dirtyRegions.size(); ++i) 
-		{
-			ISurface::SurfaceDescriptor surfaceDescriptor = {0};
-
-			// Only lock the portion of the surface that is being rendered to.
-			IntRect eaRect(dirtyRegions[i]);
-			surface->Lock(&surfaceDescriptor, &eaRect);
-
-			RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_image_surface_create_for_data((unsigned char*)surfaceDescriptor.mData, CAIRO_FORMAT_ARGB32, eaRect.mSize.mWidth, eaRect.mSize.mHeight, surfaceDescriptor.mStride));    
-			RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
-
-			WebCore::GraphicsContext graphicsContext(cairoContext.get());
-			int scrollX = d->frame->view()->scrollX();
-			int scrollY = d->frame->view()->scrollY();
-
-			if (!graphicsContext.paintingDisabled() || graphicsContext.updatingControlTints()) 
-			{
-				const WebCore::IntRect& dirty = dirtyRegions[i];
-				graphicsContext.translate(-dirty.x(), -dirty.y());// Translate the context so the dirty region is the origin.
-				graphicsContext.translate(-scrollX, -scrollY); // This is simply written so due to the way TileCairo is implemented 
-
-				WebCore::IntRect dirtyRectContents(scrollX+dirty.x(), scrollY+dirty.y(), dirty.width(),dirty.height());
-				//EAWEBKITBUILDFIX - method no longer exists on object
-				//d->frame->tiledBackingStore()->paint(&graphicsContext, dirtyRectContents);
-
-				graphicsContext.translate(scrollX, scrollY); // Scroll bars stay at place so translate back the scroll offset
-				d->frame->view()->paintScrollbars(&graphicsContext, dirty); //scroll bars check if the dirty rect intersect them so we don't explicitly do it outside (well, at least on CPU path for now)
-			}
-
-			EAW_ASSERT_FORMATTED(cairo_status(cairoContext.get()) == CAIRO_STATUS_SUCCESS, "cairo failed to paint (for example, OOM) - %d",cairo_status(cairoContext.get()));
-			surface->Unlock();
-		}
-	}
-	renderCompositedLayers(renderer, surface);
-
-
-	if(d->page->view()->HardwareAccelerated())
-	{
-		NOTIFY_PROCESS_STATUS(kVProcessTypePaintScrollbars, EA::WebKit::kVProcessStatusStarted, d->page->view());
-		// Paint/render scrollbars.
-		renderScrollbar(d->horizontalScrollBar(), renderer, &d->mHorizontalScroll, dirtyRegions);
-		renderScrollbar(d->verticalScrollBar(), renderer, &d->mVerticalScroll, dirtyRegions);
-		renderScrollCorner(d->frame->view(), renderer, &d->mScrollCorner, dirtyRegions);
-		NOTIFY_PROCESS_STATUS(kVProcessTypePaintScrollbars, EA::WebKit::kVProcessStatusEnded, d->page->view());
-
-	}
-
-
-	drawHighlightedNodeFromInspector(surface);
-#endif
-}
-
 void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, ISurface* surface)
 {
 #if USE(ACCELERATED_COMPOSITING)

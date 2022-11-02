@@ -247,129 +247,79 @@ void View::Paint()
 	//whatever->makeContextCurrent();
 	//WebCore::GLContext::sharingContext()->makeContextCurrent();
 	
-    NOTIFY_PROCESS_STATUS(kVProcessTypePaint, EA::WebKit::kVProcessStatusStarted, this);
+	NOTIFY_PROCESS_STATUS(kVProcessTypePaint, EA::WebKit::kVProcessStatusStarted, this);
 
-	if(IsUsingCPUCompositing() && !d->mHardwareRenderer)
-		ForceInvalidateFullView();//EAWebKitTODO: Major hack - currently turned off as CPU compositing is turned off
-
-    if (d->page)
-	{ 
-        WebFrame *frame = d->page->mainFrame();
-        if (frame) 
+	if(d->page)
+	{
+		WebFrame* frame = d->page->mainFrame();
+		if(frame)
 		{
-            WebCore::Frame *coreFrame = WebFramePrivate::core(frame);
-            if (coreFrame) 
+			WebCore::Frame* coreFrame = WebFramePrivate::core(frame);
+			if(coreFrame)
 			{
-                WebCore::FrameView *coreView = coreFrame->view();
-                if (coreView && coreFrame->contentRenderer()) 
+				WebCore::FrameView* coreView = coreFrame->view();
+				if(coreView && coreFrame->contentRenderer())
 				{
-#if ENABLE(REQUEST_ANIMATION_FRAME)
-                    if (d->mNeedsAnimation)
-                    {
+					#if ENABLE(REQUEST_ANIMATION_FRAME)
+					if(d->mNeedsAnimation)
+					{
 						WebCore::AnimationUpdateBlock updateBlock(&coreView->frame().animation());
-                        d->mNeedsAnimation = false;
-                        NOTIFY_PROCESS_STATUS(kVProcessTypeAnimation, EA::WebKit::kVProcessStatusStarted, this);
-                        coreView->serviceScriptedAnimations(WebCore::convertSecondsToDOMTimeStamp(WTF::currentTime()));
-                        NOTIFY_PROCESS_STATUS(kVProcessTypeAnimation, EA::WebKit::kVProcessStatusEnded, this);
-                    }
-#endif
-					// To consider: Lot of this code can move to the WebFrame::render* itself. Though that would mean we doing some calculations 
-					// after we send the ViewUpdateInfo::Begin event (unless we rework code).
-					if(IsUsingTiledBackingStore())
-					{
-#if USE(COORDINATED_GRAPHICS)
-						//EAWEBKITBUILDFIX - MainFrame no longer has tiled backing store
-						//if (WebCore::TiledBackingStore *backingStore = WebFramePrivate::core(d->page->mainFrame())->tiledBackingStore())
-						//{
-						//	NOTIFY_PROCESS_STATUS(kVProcessTypePaintTilesCPU, EA::WebKit::kVProcessStatusStarted, this);
-						//	backingStore->updateTilesIfNeeded();
-						//	NOTIFY_PROCESS_STATUS(kVProcessTypePaintTilesCPU, EA::WebKit::kVProcessStatusEnded, this);
-						//}
-#endif
+						d->mNeedsAnimation = false;
+						NOTIFY_PROCESS_STATUS(kVProcessTypeAnimation, EA::WebKit::kVProcessStatusStarted, this);
+						coreView->serviceScriptedAnimations(WebCore::convertSecondsToDOMTimeStamp(WTF::currentTime()));
+						NOTIFY_PROCESS_STATUS(kVProcessTypeAnimation, EA::WebKit::kVProcessStatusEnded, this);
 					}
-					else
-					{
-						NOTIFY_PROCESS_STATUS(kVProcessTypeLayout, EA::WebKit::kVProcessStatusStarted, this);
-						//Following is done as part of Frame::tiledBackingStorePaintBegin() so we don't need it on the tiled backing store path
-						coreView->updateLayoutAndStyleIfNeededRecursive();
-						NOTIFY_PROCESS_STATUS(kVProcessTypeLayout, EA::WebKit::kVProcessStatusEnded, this);
+					#endif
 
+					NOTIFY_PROCESS_STATUS(kVProcessTypeLayout, EA::WebKit::kVProcessStatusStarted, this);
+					//Following is done as part of Frame::tiledBackingStorePaintBegin() so we don't need it on the tiled backing store path
+					coreView->updateLayoutAndStyleIfNeededRecursive();
+					NOTIFY_PROCESS_STATUS(kVProcessTypeLayout, EA::WebKit::kVProcessStatusEnded, this);
+
+					ViewUpdateInfo info;
+					info.mpView = this;
+					info.mpUserData = d->mpUserData;
+					info.mStage = ViewUpdateInfo::Begin;
+
+					// Translate the dirty regions into something we can export outside the DLL.
+					eastl::vector<IntRect> eaDirtyRegions(d->mDirtyRegions.size());
+					for (int i = 0; i < (int) d->mDirtyRegions.size(); ++i)
+					{
+						eaDirtyRegions[i] = d->mDirtyRegions[i];
 					}
 
-					if(!d->mDirtyRegions.empty()
-						//MBG - revised to be true without "hardware renderer"
-						//|| d->mHardwareRenderer
-						|| true
-						) //If we have hardware renderer, we need to render frame every tick because compositing needs to happen every tick.
+					info.mDirtyRegions = eaDirtyRegions.data();
+					info.mDirtyRegionCount = eaDirtyRegions.size();
+
+					EAWebKitClient *pClient = GetEAWebKitClient(this);
+						
+					if (pClient) 
 					{
-						ViewUpdateInfo info;
-						info.mpView = this;
-						info.mpUserData = d->mpUserData;
-						info.mStage = ViewUpdateInfo::Begin;
-
-						// Translate the dirty regions into something we can export outside the DLL.
-						eastl::vector<IntRect> eaDirtyRegions(d->mDirtyRegions.size());
-						for (int i = 0; i < (int) d->mDirtyRegions.size(); ++i)
-						{
-							eaDirtyRegions[i] = d->mDirtyRegions[i];
-						}
-
-						info.mDirtyRegions = eaDirtyRegions.data();
-						info.mDirtyRegionCount = eaDirtyRegions.size();
-
-						EAWebKitClient *pClient = GetEAWebKitClient(this);
-						
-						if(d->mHardwareRenderer)
-							d->mHardwareRenderer->BeginPainting();
-						else if (pClient) 
-						{
-							NOTIFY_PROCESS_STATUS(kVProcessTypeBeginViewUpdate, EA::WebKit::kVProcessStatusStarted, this);
-							pClient->ViewUpdate(info);
-							NOTIFY_PROCESS_STATUS(kVProcessTypeBeginViewUpdate, EA::WebKit::kVProcessStatusEnded, this);
-						}
-						
-						
-						NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusStarted, this);
-
-						if(IsUsingTiledBackingStore())
-							frame->renderTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mDirtyRegions); //Simply copy the tiles on the d->mDisplaySurface
-						else
-							frame->renderNonTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mCairoGlSurface, d->mDirtyRegions); //Actually render the content on the d->mDisplaySurface				
-						NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusEnded, this);
-
-						//MBG TODO - everything involving mHardwareRenderer needs to be checked again
-						if(d->mHardwareRenderer)
-						{
-							//Send down overlays each tick to the compositor
-							ViewPrivate::OverlaySurfaces::const_iterator iter = d->mOverlaySurfaces.begin();    
-							ViewPrivate::OverlaySurfaces::const_iterator end = d->mOverlaySurfaces.end();    
-							for (; iter < end; ++iter) 
-							{
-								EA::WebKit::FloatRect eaRect(iter->mRect.x(), iter->mRect.y(), iter->mRect.width(), iter->mRect.height());
-								EA::WebKit::TransformationMatrix identity;
-                                EA::WebKit::Filters filters;
-								d->mHardwareRenderer->RenderSurface(iter->mpSurface, eaRect, identity, 1.0f, EA::WebKit::CompositeSourceOver, EA::WebKit::ClampToEdge, filters);
-							}
-						}
-						else
-						{
-							NOTIFY_PROCESS_STATUS(kVProcessTypePaintOverlays, EA::WebKit::kVProcessStatusStarted, this);
-							PaintOverlays(); //Composite Overlays on top of the main drawing surface
-							NOTIFY_PROCESS_STATUS(kVProcessTypePaintOverlays, EA::WebKit::kVProcessStatusEnded, this);
-						}
-
-						if(d->mHardwareRenderer)
-							d->mHardwareRenderer->EndPainting();
-						else if (pClient) 
-						{
-							info.mStage = ViewUpdateInfo::End;
-
-							NOTIFY_PROCESS_STATUS(kVProcessTypeEndViewUpdate, EA::WebKit::kVProcessStatusStarted, this);
-							pClient->ViewUpdate(info);
-							NOTIFY_PROCESS_STATUS(kVProcessTypeEndViewUpdate, EA::WebKit::kVProcessStatusEnded, this);
-						}
-						d->mDirtyRegions.clear();
+						NOTIFY_PROCESS_STATUS(kVProcessTypeBeginViewUpdate, EA::WebKit::kVProcessStatusStarted, this);
+						pClient->ViewUpdate(info);
+						NOTIFY_PROCESS_STATUS(kVProcessTypeBeginViewUpdate, EA::WebKit::kVProcessStatusEnded, this);
 					}
+						
+						
+					NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusStarted, this);
+					//Actually render the content on the d->mDisplaySurface				
+					frame->renderNonTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mCairoGlSurface, d->mDirtyRegions);
+					NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusEnded, this);
+
+					
+					NOTIFY_PROCESS_STATUS(kVProcessTypePaintOverlays, EA::WebKit::kVProcessStatusStarted, this);
+					PaintOverlays(); //Composite Overlays on top of the main drawing surface
+					NOTIFY_PROCESS_STATUS(kVProcessTypePaintOverlays, EA::WebKit::kVProcessStatusEnded, this);
+
+					if (pClient) 
+					{
+						info.mStage = ViewUpdateInfo::End;
+
+						NOTIFY_PROCESS_STATUS(kVProcessTypeEndViewUpdate, EA::WebKit::kVProcessStatusStarted, this);
+						pClient->ViewUpdate(info);
+						NOTIFY_PROCESS_STATUS(kVProcessTypeEndViewUpdate, EA::WebKit::kVProcessStatusEnded, this);
+					}
+					d->mDirtyRegions.clear();
 				}
 			}
 		}

@@ -723,7 +723,6 @@ bool Init(AppCallbacks* appCallbacks, AppSystems* appSystems)
 		//MBG added
 		if(appSystems->mEAWebkitClient)
 			GLPipe_SetProcs((GLPipe_Procs*)appSystems->mEAWebkitClient->GetGLPipeProcs());
-		//g_cairoDevice = (cairo_device_t*)appSystems->mEAWebkitClient->GetCairoDevice();
 
 		//MBG ADDED:
 		//magic ritual that sets up contexts or devices or whatever in the way we need

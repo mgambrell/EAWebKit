@@ -767,9 +767,7 @@ public:
 	virtual ~EAWebKitClient() { }
 
 	//MBG - added
-	virtual void* GetCairoDevice() { return 0; }
 	virtual void* GetGLPipeProcs() { return 0; }
-	virtual void* GetEGLContext() { return 0; }
 
 	virtual void GetLocalizedString     (LocalizedStringInfo&)          {   }
 	virtual void LoadUpdate				(LoadInfo&)						{	}

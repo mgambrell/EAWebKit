@@ -1,4 +1,4 @@
-// offlineasm input hash: 94f23e4630190e03b831bc3a08fe5931eaaa1c02 a4842f43f041d00e43e2d770e81c2f560691fc4d 6f9ecea514e4a438568546ac6b0ac94546dca4d7
+// offlineasm input hash: 94f23e4630190e03b831bc3a08fe5931eaaa1c02 ca3fd26674ab6e9367e16fe0af1e887e2e2b90ea 5bc6efc62cb5384f3150bd09bc3aa6d67c312c6e
 #if !OFFLINE_ASM_X86 && !OFFLINE_ASM_X86_WIN && !OFFLINE_ASM_X86_64 && !OFFLINE_ASM_X86_64_WIN && !OFFLINE_ASM_ARM && !OFFLINE_ASM_ARMv7 && !OFFLINE_ASM_ARMv7_TRADITIONAL && !OFFLINE_ASM_ARM64 && !OFFLINE_ASM_MIPS && !OFFLINE_ASM_SH4 && OFFLINE_ASM_C_LOOP && !OFFLINE_ASM_ARMv7k && !OFFLINE_ASM_ARMv7s && OFFLINE_ASM_JSVALUE64 && !OFFLINE_ASM_BIG_ENDIAN && !OFFLINE_ASM_ASSERT_ENABLED && !OFFLINE_ASM_EXECUTION_TRACING && OFFLINE_ASM_GGC
 OFFLINE_ASM_BEGIN
 
@@ -8,16 +8,16 @@ OFFLINE_ASM_GLUE_LABEL(llint_vm_entry_to_javascript)
     cfr.i = sp.i;                                            // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:437
     sp.i = cfr.i - intptr_t(0x20);                           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:452
     *CAST<intptr_t*>(sp.i8p) = t1.i;                         // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:181
-    pc.i = *CAST<intptr_t*>(t1.i8p + 10000);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:182
+    pc.i = *CAST<intptr_t*>(t1.i8p + 9984);                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:182
     *CAST<intptr_t*>(sp.i8p + 8) = pc.i;                     // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:183
-    pc.i = *CAST<intptr_t*>(t1.i8p + 9992);                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:184
+    pc.i = *CAST<intptr_t*>(t1.i8p + 9976);                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:184
     *CAST<intptr_t*>(sp.i8p + 16) = pc.i;                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:185
-    *CAST<intptr_t*>(t1.i8p + 9992) = cfr.i;                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:186
+    *CAST<intptr_t*>(t1.i8p + 9976) = cfr.i;                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:186
     pc.u = *CAST<uint32_t*>(t2.i8p + 32);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:188
     pc.i = intptr_t(0x5) + pc.i;                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:189
     pc.i = pc.i << (intptr_t(0x3) & 0x1f);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:190
     t3.i = sp.i - pc.i;                                      // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:191
-    if (t3.u >= *CAST<uintptr_t*>(t1.i8p + 16808))           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:196
+    if (t3.u >= *CAST<uintptr_t*>(t1.i8p + 16784))           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:196
         goto _offlineasm_doVMEntry__stackHeightOK;
     pc.i = t0.i;                                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:199
     pcBase.i = t1.i;                                         // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:200
@@ -41,9 +41,9 @@ OFFLINE_ASM_GLUE_LABEL(llint_vm_entry_to_javascript)
     pc.i = cfr.i - intptr_t(0x20);                           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:452
     t1.i = *CAST<intptr_t*>(pc.i8p);                         // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:216
     pcBase.i = *CAST<intptr_t*>(pc.i8p + 8);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:217
-    *CAST<intptr_t*>(t1.i8p + 10000) = pcBase.i;             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:218
+    *CAST<intptr_t*>(t1.i8p + 9984) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:218
     pcBase.i = *CAST<intptr_t*>(pc.i8p + 16);                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:219
-    *CAST<intptr_t*>(t1.i8p + 9992) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:220
+    *CAST<intptr_t*>(t1.i8p + 9976) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:220
     sp.i = cfr.i - intptr_t(0x0);                            // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:222
     POP(cfr);                                                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:446
     POP(lr);                                                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:447
@@ -91,7 +91,7 @@ OFFLINE_ASM_GLUE_LABEL(llint_vm_entry_to_javascript)
     goto _offlineasm_doVMEntry__copyArgsLoop;                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:258
 
   OFFLINE_ASM_LOCAL_LABEL(_offlineasm_doVMEntry__copyArgsDone)
-    *CAST<intptr_t*>(t1.i8p + 10000) = sp.i;                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:265
+    *CAST<intptr_t*>(t1.i8p + 9984) = sp.i;                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:265
     tagTypeNumber.i = intptr_t(0xffff000000000000);          // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:268
     tagMask.i = intptr_t(0x2) + tagTypeNumber.i;             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:269
     sp.i = sp.i + intptr_t(0x10);                            // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:295
@@ -104,9 +104,9 @@ OFFLINE_ASM_GLUE_LABEL(llint_cloop_did_return_from_js_1)
     pc.i = cfr.i - intptr_t(0x20);                           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:452
     t1.i = *CAST<intptr_t*>(pc.i8p);                         // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:279
     pcBase.i = *CAST<intptr_t*>(pc.i8p + 8);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:280
-    *CAST<intptr_t*>(t1.i8p + 10000) = pcBase.i;             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:281
+    *CAST<intptr_t*>(t1.i8p + 9984) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:281
     pcBase.i = *CAST<intptr_t*>(pc.i8p + 16);                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:282
-    *CAST<intptr_t*>(t1.i8p + 9992) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:283
+    *CAST<intptr_t*>(t1.i8p + 9976) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:283
     sp.i = cfr.i - intptr_t(0x0);                            // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:285
     POP(cfr);                                                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:446
     POP(lr);                                                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:447
@@ -119,16 +119,16 @@ OFFLINE_ASM_GLUE_LABEL(llint_vm_entry_to_native)
     cfr.i = sp.i;                                            // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:437
     sp.i = cfr.i - intptr_t(0x20);                           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:452
     *CAST<intptr_t*>(sp.i8p) = t1.i;                         // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:181
-    pc.i = *CAST<intptr_t*>(t1.i8p + 10000);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:182
+    pc.i = *CAST<intptr_t*>(t1.i8p + 9984);                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:182
     *CAST<intptr_t*>(sp.i8p + 8) = pc.i;                     // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:183
-    pc.i = *CAST<intptr_t*>(t1.i8p + 9992);                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:184
+    pc.i = *CAST<intptr_t*>(t1.i8p + 9976);                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:184
     *CAST<intptr_t*>(sp.i8p + 16) = pc.i;                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:185
-    *CAST<intptr_t*>(t1.i8p + 9992) = cfr.i;                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:186
+    *CAST<intptr_t*>(t1.i8p + 9976) = cfr.i;                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:186
     pc.u = *CAST<uint32_t*>(t2.i8p + 32);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:188
     pc.i = intptr_t(0x5) + pc.i;                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:189
     pc.i = pc.i << (intptr_t(0x3) & 0x1f);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:190
     t3.i = sp.i - pc.i;                                      // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:191
-    if (t3.u >= *CAST<uintptr_t*>(t1.i8p + 16808))           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:196
+    if (t3.u >= *CAST<uintptr_t*>(t1.i8p + 16784))           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:196
         goto _offlineasm_0_doVMEntry__stackHeightOK;
     pc.i = t0.i;                                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:199
     pcBase.i = t1.i;                                         // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:200
@@ -152,9 +152,9 @@ OFFLINE_ASM_GLUE_LABEL(llint_vm_entry_to_native)
     pc.i = cfr.i - intptr_t(0x20);                           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:452
     t1.i = *CAST<intptr_t*>(pc.i8p);                         // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:216
     pcBase.i = *CAST<intptr_t*>(pc.i8p + 8);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:217
-    *CAST<intptr_t*>(t1.i8p + 10000) = pcBase.i;             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:218
+    *CAST<intptr_t*>(t1.i8p + 9984) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:218
     pcBase.i = *CAST<intptr_t*>(pc.i8p + 16);                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:219
-    *CAST<intptr_t*>(t1.i8p + 9992) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:220
+    *CAST<intptr_t*>(t1.i8p + 9976) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:220
     sp.i = cfr.i - intptr_t(0x0);                            // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:222
     POP(cfr);                                                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:446
     POP(lr);                                                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:447
@@ -202,7 +202,7 @@ OFFLINE_ASM_GLUE_LABEL(llint_vm_entry_to_native)
     goto _offlineasm_0_doVMEntry__copyArgsLoop;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:258
 
   OFFLINE_ASM_LOCAL_LABEL(_offlineasm_0_doVMEntry__copyArgsDone)
-    *CAST<intptr_t*>(t1.i8p + 10000) = sp.i;                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:265
+    *CAST<intptr_t*>(t1.i8p + 9984) = sp.i;                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:265
     tagTypeNumber.i = intptr_t(0xffff000000000000);          // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:268
     tagMask.i = intptr_t(0x2) + tagTypeNumber.i;             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:269
     t3.i = t0.i;                                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:306
@@ -220,9 +220,9 @@ OFFLINE_ASM_GLUE_LABEL(llint_vm_entry_to_native)
     pc.i = cfr.i - intptr_t(0x20);                           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:452
     t1.i = *CAST<intptr_t*>(pc.i8p);                         // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:279
     pcBase.i = *CAST<intptr_t*>(pc.i8p + 8);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:280
-    *CAST<intptr_t*>(t1.i8p + 10000) = pcBase.i;             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:281
+    *CAST<intptr_t*>(t1.i8p + 9984) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:281
     pcBase.i = *CAST<intptr_t*>(pc.i8p + 16);                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:282
-    *CAST<intptr_t*>(t1.i8p + 9992) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:283
+    *CAST<intptr_t*>(t1.i8p + 9976) = pcBase.i;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:283
     sp.i = cfr.i - intptr_t(0x0);                            // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:285
     POP(cfr);                                                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:446
     POP(lr);                                                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:447
@@ -244,7 +244,7 @@ OFFLINE_ASM_GLUE_LABEL(llint_program_prologue)
     t0.i = t0.i + intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:458
     t0.i = cfr.i - t0.i;                                     // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:631
     t2.i = *CAST<intptr_t*>(t1.i8p + 96);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:632
-    if (*CAST<uintptr_t*>(t2.i8p + 16808) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
+    if (*CAST<uintptr_t*>(t2.i8p + 16784) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
         goto _offlineasm_prologue__stackHeightOK;
     sp.i = sp.i - intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:636
     t5.i8p = pcBase.i8p + (t5.i << 3);                       // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:352
@@ -289,7 +289,7 @@ OFFLINE_ASM_GLUE_LABEL(llint_eval_prologue)
     t0.i = t0.i + intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:458
     t0.i = cfr.i - t0.i;                                     // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:631
     t2.i = *CAST<intptr_t*>(t1.i8p + 96);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:632
-    if (*CAST<uintptr_t*>(t2.i8p + 16808) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
+    if (*CAST<uintptr_t*>(t2.i8p + 16784) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
         goto _offlineasm_0_prologue__stackHeightOK;
     sp.i = sp.i - intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:636
     t5.i8p = pcBase.i8p + (t5.i << 3);                       // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:352
@@ -337,7 +337,7 @@ OFFLINE_ASM_GLUE_LABEL(llint_function_for_call_prologue)
     t0.i = t0.i + intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:458
     t0.i = cfr.i - t0.i;                                     // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:631
     t2.i = *CAST<intptr_t*>(t1.i8p + 96);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:632
-    if (*CAST<uintptr_t*>(t2.i8p + 16808) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
+    if (*CAST<uintptr_t*>(t2.i8p + 16784) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
         goto _offlineasm_1_prologue__stackHeightOK;
     sp.i = sp.i - intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:636
     t5.i8p = pcBase.i8p + (t5.i << 3);                       // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:352
@@ -408,7 +408,7 @@ OFFLINE_ASM_GLUE_LABEL(llint_function_for_construct_prologue)
     t0.i = t0.i + intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:458
     t0.i = cfr.i - t0.i;                                     // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:631
     t2.i = *CAST<intptr_t*>(t1.i8p + 96);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:632
-    if (*CAST<uintptr_t*>(t2.i8p + 16808) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
+    if (*CAST<uintptr_t*>(t2.i8p + 16784) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
         goto _offlineasm_2_prologue__stackHeightOK;
     sp.i = sp.i - intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:636
     t5.i8p = pcBase.i8p + (t5.i << 3);                       // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:352
@@ -479,7 +479,7 @@ OFFLINE_ASM_GLUE_LABEL(llint_function_for_call_arity_check)
     t0.i = t0.i + intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:458
     t0.i = cfr.i - t0.i;                                     // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:631
     t2.i = *CAST<intptr_t*>(t1.i8p + 96);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:632
-    if (*CAST<uintptr_t*>(t2.i8p + 16808) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
+    if (*CAST<uintptr_t*>(t2.i8p + 16784) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
         goto _offlineasm_3_prologue__stackHeightOK;
     sp.i = sp.i - intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:636
     t5.i8p = pcBase.i8p + (t5.i << 3);                       // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:352
@@ -621,7 +621,7 @@ OFFLINE_ASM_GLUE_LABEL(llint_function_for_construct_arity_check)
     t0.i = t0.i + intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:458
     t0.i = cfr.i - t0.i;                                     // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:631
     t2.i = *CAST<intptr_t*>(t1.i8p + 96);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:632
-    if (*CAST<uintptr_t*>(t2.i8p + 16808) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
+    if (*CAST<uintptr_t*>(t2.i8p + 16784) <= t0.u)           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:633
         goto _offlineasm_4_prologue__stackHeightOK;
     sp.i = sp.i - intptr_t(0x0);                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:636
     t5.i8p = pcBase.i8p + (t5.i << 3);                       // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:352
@@ -752,14 +752,14 @@ OFFLINE_ASM_GLUE_LABEL(handleUncaughtException)
     t3.i = *CAST<intptr_t*>(cfr.i8p + 24);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:330
     t3.i = t3.i & intptr_t(-16384);                          // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:331
     t3.i = *CAST<intptr_t*>(t3.i8p + 232);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:332
-    cfr.i = *CAST<intptr_t*>(t3.i8p + 16576);                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:333
+    cfr.i = *CAST<intptr_t*>(t3.i8p + 16560);                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:333
     cfr.i = *CAST<intptr_t*>(cfr.i8p);                       // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:335
     t2.i = cfr.i - intptr_t(0x20);                           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:452
     t3.i = *CAST<intptr_t*>(t2.i8p);                         // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:338
     t5.i = *CAST<intptr_t*>(t2.i8p + 8);                     // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:339
-    *CAST<intptr_t*>(t3.i8p + 10000) = t5.i;                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:340
+    *CAST<intptr_t*>(t3.i8p + 9984) = t5.i;                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:340
     t5.i = *CAST<intptr_t*>(t2.i8p + 16);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:341
-    *CAST<intptr_t*>(t3.i8p + 9992) = t5.i;                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:342
+    *CAST<intptr_t*>(t3.i8p + 9976) = t5.i;                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:342
     sp.i = cfr.i - intptr_t(0x0);                            // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:344
     POP(cfr);                                                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:446
     POP(lr);                                                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:447
@@ -4107,7 +4107,7 @@ OFFLINE_ASM_OPCODE_LABEL(op_catch)
     t3.i = *CAST<intptr_t*>(cfr.i8p + 24);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1794
     t3.i = t3.i & intptr_t(-16384);                          // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1795
     t3.i = *CAST<intptr_t*>(t3.i8p + 232);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1796
-    cfr.i = *CAST<intptr_t*>(t3.i8p + 16576);                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1797
+    cfr.i = *CAST<intptr_t*>(t3.i8p + 16560);                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1797
     t2.i = *CAST<intptr_t*>(cfr.i8p + 16);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:462
     pc.u = *CAST<uint32_t*>(t2.i8p + 56);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:456
     pc.i = pc.i << (intptr_t(0x3) & 0x1f);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:457
@@ -4115,11 +4115,11 @@ OFFLINE_ASM_OPCODE_LABEL(op_catch)
     sp.i = cfr.i - pc.i;                                     // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:468
     pcBase.i = *CAST<intptr_t*>(cfr.i8p + 16);               // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1800
     pcBase.i = *CAST<intptr_t*>(pcBase.i8p + 104);           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1801
-    t5.i = *CAST<intptr_t*>(t3.i8p + 16592);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1802
+    t5.i = *CAST<intptr_t*>(t3.i8p + 16576);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1802
     t5.i = t5.i - pcBase.i;                                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1803
     t5.i = t5.i >> (intptr_t(0x3) & 0x1f);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1804
-    t0.i64 = *CAST<int64_t*>(t3.i8p + 16824);                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1806
-    *CAST<int64_t*>(t3.i8p + 16824) = int64_t(0x0);          // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1807
+    t0.i64 = *CAST<int64_t*>(t3.i8p + 16800);                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1806
+    *CAST<int64_t*>(t3.i8p + 16800) = int64_t(0x0);          // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1807
     t2.i = *CAST<int32_t*>(pcBase.i8p + (t5.i << 3) + intptr_t(0x8)); // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:121
     *CAST<int64_t*>(cfr.i8p + (t2.i << 3)) = t0.i64;         // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1809
     t3.i64 = *CAST<int64_t*>(t0.i8p + 16);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1811
@@ -4171,7 +4171,7 @@ OFFLINE_ASM_GLUE_LABEL(llint_throw_from_slow_path_trampoline)
     t1.i = *CAST<intptr_t*>(cfr.i8p + 24);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1834
     t1.i = t1.i & intptr_t(-16384);                          // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1835
     t1.i = *CAST<intptr_t*>(t1.i8p + 232);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1836
-    opcode = *CAST<Opcode*>(t1.i8p + 16584);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1837
+    opcode = *CAST<Opcode*>(t1.i8p + 16568);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1837
     DISPATCH_OPCODE();
 
 OFFLINE_ASM_GLUE_LABEL(llint_throw_during_call_trampoline)
@@ -5068,7 +5068,7 @@ OFFLINE_ASM_OPCODE_LABEL(op_get_parent_scope)
 OFFLINE_ASM_OPCODE_LABEL(op_profile_type)
     t1.i = *CAST<intptr_t*>(cfr.i8p + 16);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:2190
     t1.i = *CAST<intptr_t*>(t1.i8p + 96);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:2191
-    t1.i = *CAST<intptr_t*>(t1.i8p + 16904);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:2193
+    t1.i = *CAST<intptr_t*>(t1.i8p + 16880);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:2193
     t2.i = *CAST<intptr_t*>(t1.i8p + 16);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:2195
     t3.i = *CAST<int32_t*>(pcBase.i8p + (t5.i << 3) + intptr_t(0x8)); // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:121
     if (t3.i >= intptr_t(0x40000000))                        // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:421
@@ -6307,7 +6307,7 @@ OFFLINE_ASM_OPCODE_LABEL(op_jngreatereq)
 OFFLINE_ASM_OPCODE_LABEL(op_loop_hint)
     t1.i = *CAST<intptr_t*>(cfr.i8p + 16);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1160
     t1.i = *CAST<intptr_t*>(t1.i8p + 96);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1161
-    t0.i = *CAST<intptr_t*>(t1.i8p + 10008);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1162
+    t0.i = *CAST<intptr_t*>(t1.i8p + 9992);                  // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1162
     if (t0.i != 0)                                           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1163
         goto _offlineasm_handleWatchdogTimer;
 
@@ -6583,7 +6583,7 @@ OFFLINE_ASM_OPCODE_LABEL(op_call_varargs)
     t3.i = *CAST<intptr_t*>(cfr.i8p + 24);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:581
     t3.i = t3.i & intptr_t(-16384);                          // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:582
     t3.i = *CAST<intptr_t*>(t3.i8p + 232);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:583
-    if (*CAST<int64_t*>(t3.i8p + 16824) == 0)                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:584
+    if (*CAST<int64_t*>(t3.i8p + 16800) == 0)                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:584
         goto _offlineasm_branchIfException__noException;
     goto llint_throw_from_slow_path_trampoline;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:585
 
@@ -6636,7 +6636,7 @@ OFFLINE_ASM_OPCODE_LABEL(op_construct_varargs)
     t3.i = *CAST<intptr_t*>(cfr.i8p + 24);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:581
     t3.i = t3.i & intptr_t(-16384);                          // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:582
     t3.i = *CAST<intptr_t*>(t3.i8p + 232);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:583
-    if (*CAST<int64_t*>(t3.i8p + 16824) == 0)                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:584
+    if (*CAST<int64_t*>(t3.i8p + 16800) == 0)                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:584
         goto _offlineasm_132_branchIfException__noException;
     goto llint_throw_from_slow_path_trampoline;              // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:585
 
@@ -6799,7 +6799,7 @@ OFFLINE_ASM_OPCODE_LABEL(op_throw_static_error)
 OFFLINE_ASM_OPCODE_LABEL(op_profile_will_call)
     t0.i = *CAST<intptr_t*>(cfr.i8p + 16);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1310
     t0.i = *CAST<intptr_t*>(t0.i8p + 96);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1311
-    t0.u = *CAST<uint32_t*>(t0.i8p + 16856);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1312
+    t0.u = *CAST<uint32_t*>(t0.i8p + 16832);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1312
     if (t0.i == 0)                                           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1313
         goto _offlineasm_opProfilerWillCallDone;
     t5.i8p = pcBase.i8p + (t5.i << 3);                       // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:352
@@ -6821,7 +6821,7 @@ OFFLINE_ASM_OPCODE_LABEL(op_profile_will_call)
 OFFLINE_ASM_OPCODE_LABEL(op_profile_did_call)
     t0.i = *CAST<intptr_t*>(cfr.i8p + 16);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1321
     t0.i = *CAST<intptr_t*>(t0.i8p + 96);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1322
-    t0.u = *CAST<uint32_t*>(t0.i8p + 16856);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1323
+    t0.u = *CAST<uint32_t*>(t0.i8p + 16832);                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1323
     if (t0.i == 0)                                           // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:1324
         goto _offlineasm_opProfilerDidCallDone;
     t5.i8p = pcBase.i8p + (t5.i << 3);                       // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:352
@@ -6869,7 +6869,7 @@ OFFLINE_ASM_GLUE_LABEL(llint_native_call_trampoline)
     t0.i = *CAST<intptr_t*>(cfr.i8p + 24);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1878
     t1.i = intptr_t(-16384) & t0.i;                          // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1879
     t1.i = *CAST<intptr_t*>(t1.i8p + 232);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1880
-    *CAST<intptr_t*>(t1.i8p + 10000) = cfr.i;                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1881
+    *CAST<intptr_t*>(t1.i8p + 9984) = cfr.i;                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1881
     t3.i = lr.i;                                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:409
     *CAST<intptr_t*>(cfr.i8p + 8) = t3.i;                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1883
     t0.i = cfr.i;                                            // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1884
@@ -6889,13 +6889,13 @@ OFFLINE_ASM_GLUE_LABEL(llint_native_call_trampoline)
     t3.i = *CAST<intptr_t*>(t3.i8p + 232);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1895
     POP(cfr);                                                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:446
     POP(lr);                                                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:447
-    if (*CAST<int64_t*>(t3.i8p + 16824) != 0)                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1902
+    if (*CAST<int64_t*>(t3.i8p + 16800) != 0)                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1902
         goto _offlineasm_nativeCallTrampoline__handleException;
     opcode = lr.opcode;                                      // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1903
     DISPATCH_OPCODE();
 
   OFFLINE_ASM_LOCAL_LABEL(_offlineasm_nativeCallTrampoline__handleException)
-    *CAST<intptr_t*>(t3.i8p + 10000) = cfr.i;                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1906
+    *CAST<intptr_t*>(t3.i8p + 9984) = cfr.i;                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1906
     t2.i = *CAST<intptr_t*>(cfr.i8p + 16);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:462
     pc.u = *CAST<uint32_t*>(t2.i8p + 56);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:456
     pc.i = pc.i << (intptr_t(0x3) & 0x1f);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:457
@@ -6911,7 +6911,7 @@ OFFLINE_ASM_GLUE_LABEL(llint_native_construct_trampoline)
     t0.i = *CAST<intptr_t*>(cfr.i8p + 24);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1878
     t1.i = intptr_t(-16384) & t0.i;                          // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1879
     t1.i = *CAST<intptr_t*>(t1.i8p + 232);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1880
-    *CAST<intptr_t*>(t1.i8p + 10000) = cfr.i;                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1881
+    *CAST<intptr_t*>(t1.i8p + 9984) = cfr.i;                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1881
     t3.i = lr.i;                                             // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:409
     *CAST<intptr_t*>(cfr.i8p + 8) = t3.i;                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1883
     t0.i = cfr.i;                                            // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1884
@@ -6931,13 +6931,13 @@ OFFLINE_ASM_GLUE_LABEL(llint_native_construct_trampoline)
     t3.i = *CAST<intptr_t*>(t3.i8p + 232);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1895
     POP(cfr);                                                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:446
     POP(lr);                                                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:447
-    if (*CAST<int64_t*>(t3.i8p + 16824) != 0)                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1902
+    if (*CAST<int64_t*>(t3.i8p + 16800) != 0)                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1902
         goto _offlineasm_134_nativeCallTrampoline__handleException;
     opcode = lr.opcode;                                      // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1903
     DISPATCH_OPCODE();
 
   OFFLINE_ASM_LOCAL_LABEL(_offlineasm_134_nativeCallTrampoline__handleException)
-    *CAST<intptr_t*>(t3.i8p + 10000) = cfr.i;                // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1906
+    *CAST<intptr_t*>(t3.i8p + 9984) = cfr.i;                 // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint/LowLevelInterpreter64.asm:1906
     t2.i = *CAST<intptr_t*>(cfr.i8p + 16);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:462
     pc.u = *CAST<uint32_t*>(t2.i8p + 56);                    // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:456
     pc.i = pc.i << (intptr_t(0x3) & 0x1f);                   // C:\rg\EAWebKitTester\EAWebKit\EAWebKitSupportPackages\JavaScriptCore\local\JavaScriptCore\llint\LowLevelInterpreter.asm:457

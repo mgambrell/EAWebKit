@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+h1 {
+  text-shadow: 2px 2px 5px red;
+}
+</style>
 </head>
-<body>
+<body background="pebbles.png">
 <style>
 @font-face {
   font-family: 'Roboto';
@@ -23,15 +28,36 @@
 </style>
 <script>
 
-alert("js booting!");
+var x = 0;
+function update(time){
+	x++;
+	var marge = document.getElementById("marge");
+	ctx=document.getElementById('ass').getContext('2d');
+	ctx.fillStyle = 'blue';
+	ctx.fillRect(0,0,300,300);
+	//ctx.drawImage(marge,30*Math.sin(x/10),0,100,100);
+	ctx.drawImage(marge,10*Math.sin(x/10),0);
+	ctx.fillStyle = 'green';
+ctx.fillRect(30*Math.sin(x/10)+40, 10, 40, 40);
+
+
+	requestAnimationFrame(update);
+}
+
+requestAnimationFrame(update);
+
+
+//alert("js booting!");
 </script>
+<canvas id="ass" width=300 height=300 style="box-shadow: 5px 10px #800000;">ass</canvas>
 <h1>CSS test</h1>
 <div style="margin:5px; border: 15px dashed red;width:80px;height:80px;animation: 1s animateBorder infinite;animation-direction: alternate-reverse"></div>
-<div style="margin:5px; border: 10px dashed green;width:80px;height:80px;border-radius:40px;"></div>
 <div style="margin:5px; border: 5px dashed blue;width:80px;height:80px;background: linear-gradient(red, yellow);"></div>
 
 <h1>Text test</h1>
-<b>Hello</b> world!
+<font color=blue><b>Hello</b></font>world!
+<table border=1><tr><td><img id=mumbles src="mumbles.png" width=28 height=25></td></tr></table>
+<img id=marge src="marge.png" width=1 height=1>
 
 
 <h1>SVG Test</h1>

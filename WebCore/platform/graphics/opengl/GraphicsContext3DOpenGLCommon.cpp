@@ -121,8 +121,8 @@ PassRefPtr<GraphicsContext3D> GraphicsContext3D::createForCurrentGLContext()
 {
     //MBG: this framework can't handle "RenderToCurrentGLContext" because the current context is constantly changing for unfathomably complex reasons
     //since we need to actually render offscreen anyway, this is no big deal
-    RefPtr<GraphicsContext3D> context = adoptRef(new GraphicsContext3D(Attributes(), 0, GraphicsContext3D::RenderToCurrentGLContext));
-    //RefPtr<GraphicsContext3D> context = adoptRef(new GraphicsContext3D(Attributes(), 0, GraphicsContext3D::RenderOffscreen));
+    //RefPtr<GraphicsContext3D> context = adoptRef(new GraphicsContext3D(Attributes(), 0, GraphicsContext3D::RenderToCurrentGLContext));
+    RefPtr<GraphicsContext3D> context = adoptRef(new GraphicsContext3D(Attributes(), 0, GraphicsContext3D::RenderOffscreen));
     return context->m_private ? context.release() : 0;
 }
 

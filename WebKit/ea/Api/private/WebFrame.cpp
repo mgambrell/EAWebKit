@@ -571,42 +571,224 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 	}
 	NOTIFY_PROCESS_STATUS(kVProcessTypeDirtyRectsRender, EA::WebKit::kVProcessStatusEnded, d->page->view());
 
-	//MBG NOTE - cairo is done, need to always restore GL context after that
-	WebCore::GLContext::sharingContext()->makeContextCurrent();
-	surface->Bind();
-
 	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusStarted, d->page->view());
+
+	//MBG HACK
+	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//glBindFramebuffer(GL_FRAMEBUFFER,fbid);
+	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//we must fully finish with cairo before going into the composition, since it uses raw GL
+	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//cairo_surface_flush(m_cairoGlSurface);
+	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
+
 	renderCompositedLayers(renderer, surface);
+
 	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusEnded, d->page->view());
 
 	drawHighlightedNodeFromInspector(surface);
+
+
+	//MBG HACK
+	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//glBindFramebuffer(GL_FRAMEBUFFER,fbid);
+	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//we must fully finish with cairo before going into the composition, since it uses raw GL
+	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//cairo_surface_flush(m_cairoGlSurface);
+	//cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
 }
 
-//MBG - reworked and tidied this substantially
+
+void WebFrame::renderTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface* surface, const eastl::vector<WebCore::IntRect> &dirtyRegions)
+{
+#if USE(COORDINATED_GRAPHICS)
+	EAW_ASSERT_MSG(d->page->view()->IsUsingTiledBackingStore(), "tiled rendering path called but not using tiled backing store");
+	
+	if(!d->page->view()->IsUsingTiledBackingStore())
+		return;
+
+	if(!d->page->view()->HardwareAccelerated())//Don't need to copy the tiled rects to main surface in GPU compositing path
+	{
+		for (unsigned i = 0; i < dirtyRegions.size(); ++i) 
+		{
+			ISurface::SurfaceDescriptor surfaceDescriptor = {0};
+
+			// Only lock the portion of the surface that is being rendered to.
+			IntRect eaRect(dirtyRegions[i]);
+			surface->Lock(&surfaceDescriptor, &eaRect);
+
+			RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_image_surface_create_for_data((unsigned char*)surfaceDescriptor.mData, CAIRO_FORMAT_ARGB32, eaRect.mSize.mWidth, eaRect.mSize.mHeight, surfaceDescriptor.mStride));    
+			RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
+
+			WebCore::GraphicsContext graphicsContext(cairoContext.get());
+			int scrollX = d->frame->view()->scrollX();
+			int scrollY = d->frame->view()->scrollY();
+
+			if (!graphicsContext.paintingDisabled() || graphicsContext.updatingControlTints()) 
+			{
+				const WebCore::IntRect& dirty = dirtyRegions[i];
+				graphicsContext.translate(-dirty.x(), -dirty.y());// Translate the context so the dirty region is the origin.
+				graphicsContext.translate(-scrollX, -scrollY); // This is simply written so due to the way TileCairo is implemented 
+
+				WebCore::IntRect dirtyRectContents(scrollX+dirty.x(), scrollY+dirty.y(), dirty.width(),dirty.height());
+				//EAWEBKITBUILDFIX - method no longer exists on object
+				//d->frame->tiledBackingStore()->paint(&graphicsContext, dirtyRectContents);
+
+				graphicsContext.translate(scrollX, scrollY); // Scroll bars stay at place so translate back the scroll offset
+				d->frame->view()->paintScrollbars(&graphicsContext, dirty); //scroll bars check if the dirty rect intersect them so we don't explicitly do it outside (well, at least on CPU path for now)
+			}
+
+			EAW_ASSERT_FORMATTED(cairo_status(cairoContext.get()) == CAIRO_STATUS_SUCCESS, "cairo failed to paint (for example, OOM) - %d",cairo_status(cairoContext.get()));
+			surface->Unlock();
+		}
+	}
+	renderCompositedLayers(renderer, surface);
+
+
+	if(d->page->view()->HardwareAccelerated())
+	{
+		NOTIFY_PROCESS_STATUS(kVProcessTypePaintScrollbars, EA::WebKit::kVProcessStatusStarted, d->page->view());
+		// Paint/render scrollbars.
+		renderScrollbar(d->horizontalScrollBar(), renderer, &d->mHorizontalScroll, dirtyRegions);
+		renderScrollbar(d->verticalScrollBar(), renderer, &d->mVerticalScroll, dirtyRegions);
+		renderScrollCorner(d->frame->view(), renderer, &d->mScrollCorner, dirtyRegions);
+		NOTIFY_PROCESS_STATUS(kVProcessTypePaintScrollbars, EA::WebKit::kVProcessStatusEnded, d->page->view());
+
+	}
+
+
+	drawHighlightedNodeFromInspector(surface);
+#endif
+}
+
 void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, ISurface* surface)
 {
+#if USE(ACCELERATED_COMPOSITING)
 	WebCore::Page* page = d->frame->page();
-
 	if (!page)
 		return;
+
+	// If using renderer, composite the main layer to GPU. For CPU path, the surface passed to this function already has the main layer and compositing
+	// happens on top of the graphics context created for this surface.
+	if(renderer)
+	{
+		if(d->page->view()->IsUsingTiledBackingStore())
+		{
+			NOTIFY_PROCESS_STATUS(kVProcessTypePaintTilesGPU, EA::WebKit::kVProcessStatusStarted, d->page->view());
+			int scrollX = d->frame->view()->scrollX();
+			int scrollY = d->frame->view()->scrollY();
+
+			WebCore::IntRect fullscreen(IntPoint(0, 0), WebCore::IntSize(d->page->view()->GetSize()));
+			WebCore::IntRect scrolledScreen(IntPoint(scrollX, scrollY), fullscreen.size());
+			EA::WebKit::TransformationMatrix identity;
+
+			// Render the tiled backing store.
+			EA::WebKit::FloatRect clipRectFloat(fullscreen.x(), fullscreen.y(), fullscreen.width(), fullscreen.height());
+			EA::WebKit::IntRect clipRectInt(fullscreen.x(), fullscreen.y(), fullscreen.width(), fullscreen.height());
+
+			//If you don't clip, tiles may overflow beyond the View bounds on scroll
+			if(renderer->UseCustomClip())
+				renderer->BeginClip(identity,clipRectFloat);
+			else
+				renderer->ScissorClip(clipRectInt); 
+			
+			RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_image_surface_create_for_data(NULL, CAIRO_FORMAT_ARGB32, 0, 0, 0)) ;
+			RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
+
+			WebCore::GraphicsContext graphicsContext(cairoContext.get());
+			graphicsContext.translate(-scrollX, -scrollY);
+			//EAWEBKITBUILDFIX - method no longer exists on object
+			//d->frame->tiledBackingStore()->paint(&graphicsContext/*context*/, scrolledScreen);
+			
+			if(renderer->UseCustomClip())
+				renderer->EndClip();
+
+			
+			NOTIFY_PROCESS_STATUS(kVProcessTypePaintTilesGPU, EA::WebKit::kVProcessStatusEnded, d->page->view());
+		}
+		else
+		{
+			EA::WebKit::TransformationMatrix identity;
+			EA::WebKit::FloatRect fullScreen(0.0f, 0.0f, d->page->view()->GetSize().mWidth, d->page->view()->GetSize().mHeight);
+            EA::WebKit::Filters filters;
+			renderer->RenderSurface(d->page->view()->GetDisplaySurface(), fullScreen, identity, 1.0f, EA::WebKit::CompositeSourceOver, EA::WebKit::ClampToEdge, filters);
+		}
+	}
 
 	// Composite the auxiliary layers if we have them
 	if (WebCore::TextureMapperLayerClientEA* client = static_cast<WebCore::ChromeClientEA&>(page->chrome().client()).m_textureMapperLayerClient.get())
 	{
 		WebCore::IntRect fullscreen(IntPoint(0, 0), WebCore::IntSize(d->page->view()->GetSize()));
-		
-		// GPU compositing
-		// Create a null context for the texture mapper
-		//TODO - is it even needed?
-		RefPtr<cairo_surface_t> cairoSurface =adoptRef(cairo_image_surface_create_for_data(NULL, CAIRO_FORMAT_ARGB32, 0, 0, 0));
-		RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
-		WebCore::GraphicsContext graphicsContext(cairoContext.get());
+		//MBG - always use gpu compositing
+		if(renderer || true)
+		{
+			// GPU compositing
+			// Create a null context for the texture mapper
+			RefPtr<cairo_surface_t> cairoSurface =adoptRef(cairo_image_surface_create_for_data(NULL, CAIRO_FORMAT_ARGB32, 0, 0, 0));
+			RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
 
-		surface->Bind();
+			//RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice,CAIRO_CONTENT_COLOR_ALPHA, texid, 1280, 720));
+			//RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
+			
+			//MBG - we need a gl context active
+			//auto cairo_egl = (cairo_egl_context_t*)EA::WebKit::g_cairoDevice;
+			//cairo_device_se
+			//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
 
-		client->syncLayers();
-		client->renderCompositedLayers(&graphicsContext, fullscreen);
+			//needs to be done too>?>>
+			//cairo_device_flush(WebCore::GLContext::sharingContext()->cairoDevice());
+
+			//WebCore::GLContext::sharingContext()->makeContextCurrent();
+			//NEEDED???
+			//whatever->makeContextCurrent();
+
+			//MBG - make a GraphicsContext based on m_cairoGlSurface (which is using g_cairoDevice)
+			//auto pRawCairoContext = cairo_create(m_cairoGlSurface);
+			//RefPtr<cairo_t> cairoContext = adoptRef(pRawCairoContext);
+			WebCore::GraphicsContext graphicsContext(cairoContext.get());
+
+			//MBG HACK!
+			//after this, the GraphicsContext3D* which the TMAP client (that is, the TMAP itself) uses for doing stuff has been made current
+			//therefore, we can bind the framebuffer we intend for it to draw to
+			client->syncLayers();
+
+			//so.. prepare it for drawing to that
+			//the alternative is for it to use the "current context" which requires this to be set up, as well...
+			//but it has the deficiency that there isn't enough wisdom in enough places to reset the context after cairo whacks it internally all the damn time
+			glBindFramebuffer(GL_FRAMEBUFFER,surface->GetGlFbId());
+			glViewport(0,0,1280,720);
+			glDisable(GL_SCISSOR_TEST);
+
+			client->renderCompositedLayers(&graphicsContext, fullscreen);
+
+			//cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+			//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
+		}
+		else
+		{
+			//CPU compositing
+			int width = 0;
+			int height = 0;
+			surface->GetContentDimensions(&width, &height);
+
+			ISurface::SurfaceDescriptor surfaceDescriptor = {0};
+			surface->Lock(&surfaceDescriptor);
+
+			RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_image_surface_create_for_data((unsigned char*)surfaceDescriptor.mData, CAIRO_FORMAT_ARGB32, width, height, surfaceDescriptor.mStride));    
+			RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
+
+			WebCore::GraphicsContext graphicsContext(cairoContext.get());
+
+			client->syncLayers();
+			client->renderCompositedLayers(&graphicsContext, fullscreen);
+
+			surface->Unlock();
+		}
 	}
+#endif
 }
 void WebFrame::renderScrollHelper(WebCore::Scrollbar *bar, WebCore::FrameView *view, IHardwareRenderer *renderer, ISurface **surface, const eastl::vector<WebCore::IntRect> &dirtyRegions)
 {

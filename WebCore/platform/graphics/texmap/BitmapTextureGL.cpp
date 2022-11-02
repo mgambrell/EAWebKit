@@ -81,8 +81,8 @@ BitmapTextureGL::BitmapTextureGL(PassRefPtr<GraphicsContext3D> context3D)
 void BitmapTextureGL::updateContents(TextureMapper* textureMapper, GraphicsLayer* sourceLayer, const IntRect& targetRect, const IntPoint& offset, UpdateContentsFlag updateContentsFlag)
 {
   //FOR REFERENCE: do whatever we did before
-  BitmapTexture::updateContents(textureMapper, sourceLayer, targetRect, offset, updateContentsFlag);
-  return;
+  //BitmapTexture::updateContents(textureMapper, sourceLayer, targetRect, offset, updateContentsFlag);
+  //return;
 
   //FOR OPTIMIZATION: paint directly to our managed ImageBuffer
 

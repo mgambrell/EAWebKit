@@ -219,8 +219,11 @@ bool EAWebKitLib::Init(AppCallbacks* appCallbacks /* = NULL */, AppSystems* appS
 	//LLIntOfflineAsmConfig.h is interesting. I don't understand its significance yet
 	EAWebKitOffsetsExtractor();
 
+	//MBG - added SetGLContext. I'm changing things so the whole webkit operates under this context so we may as well create it here and leave it set.
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);
-	return EA::WebKit::Init(appCallbacks,appSystems);
+	bool ret = EA::WebKit::Init(appCallbacks,appSystems);
+	SetGLContext();
+	return ret;
 }
 
 EAWebKitProcs EAWebKitLib::GetProcs()

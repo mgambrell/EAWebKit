@@ -571,34 +571,14 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 	}
 	NOTIFY_PROCESS_STATUS(kVProcessTypeDirtyRectsRender, EA::WebKit::kVProcessStatusEnded, d->page->view());
 
-	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusStarted, d->page->view());
-
-	//MBG HACK
-	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	//glBindFramebuffer(GL_FRAMEBUFFER,fbid);
-	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	//we must fully finish with cairo before going into the composition, since it uses raw GL
-	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	//cairo_surface_flush(m_cairoGlSurface);
+	//seems important?
 	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
 
+	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusStarted, d->page->view());
 	renderCompositedLayers(renderer, surface);
-
 	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusEnded, d->page->view());
 
 	drawHighlightedNodeFromInspector(surface);
-
-
-	//MBG HACK
-	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	//glBindFramebuffer(GL_FRAMEBUFFER,fbid);
-	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	//we must fully finish with cairo before going into the composition, since it uses raw GL
-	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	//cairo_surface_flush(m_cairoGlSurface);
-	//cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
 }
 
 

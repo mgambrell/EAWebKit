@@ -100,18 +100,18 @@ void TextureMapperLayerClientEA::setRootGraphicsLayer(GraphicsLayer* layer)
 
 void TextureMapperLayerClientEA::syncLayers()
 {
-  //MBG HACK - did this thing that always needs to happen at about this time. god, what a mess
-  auto gc3d = ((TextureMapperGL*)m_textureMapper.get())->graphicsContext3D();
-  gc3d->makeContextCurrent();
+	////MBG HACK - did this thing that always needs to happen at about this time. god, what a mess
+	//auto gc3d = ((TextureMapperGL*)m_textureMapper.get())->graphicsContext3D();
+	//gc3d->makeContextCurrent();
 
 
-    if(!m_needSync)
+	if(!m_needSync)
 		return;
 
-	if (m_rootGraphicsLayer)
-        syncRootLayer();
+	if(m_rootGraphicsLayer)
+		syncRootLayer();
 
-    m_frame->d->frame->view()->flushCompositingStateIncludingSubframes();
+	m_frame->d->frame->view()->flushCompositingStateIncludingSubframes();
 
 	if(m_rootGraphicsLayer)
 		m_needSync = rootLayer()->descendantsOrSelfHaveRunningAnimations();

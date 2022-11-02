@@ -391,6 +391,9 @@ public:
 	// EAWebKit that are not bound to a specific view.
 	virtual void Tick();
 
+	//MBG - added this so that we can order the library to set the main GL context it's going to use
+	virtual void SetGLContext();
+
 	// Accessors
 	virtual EAWebKitClient* GetEAWebKitClient(const View* pView = NULL);
 	virtual Allocator*		GetAllocator();

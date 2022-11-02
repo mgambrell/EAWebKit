@@ -63,6 +63,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "TextureMapperGL.h"
 #include "BitmapTextureGL.h"
 #include "EGL/GLContextEGL.h"
+#include "GLContext.h"
 
 #include "texmap/TextureMapper.h"
 #include "texmap/TextureMapperPlatformLayer.h"
@@ -319,48 +320,24 @@ void View::Paint()
 
 						EAWebKitClient *pClient = GetEAWebKitClient(this);
 						
-						if(d->mHardwareRenderer)
-							d->mHardwareRenderer->BeginPainting();
-						else if (pClient) 
+						if (pClient)
 						{
 							NOTIFY_PROCESS_STATUS(kVProcessTypeBeginViewUpdate, EA::WebKit::kVProcessStatusStarted, this);
 							pClient->ViewUpdate(info);
 							NOTIFY_PROCESS_STATUS(kVProcessTypeBeginViewUpdate, EA::WebKit::kVProcessStatusEnded, this);
 						}
 						
-						
 						NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusStarted, this);
-
-						if(IsUsingTiledBackingStore())
-							frame->renderTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mDirtyRegions); //Simply copy the tiles on the d->mDisplaySurface
-						else
-							frame->renderNonTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mCairoGlSurface, d->mDirtyRegions); //Actually render the content on the d->mDisplaySurface				
+						//Actually render the content on the d->mDisplaySurface
+						frame->renderNonTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mCairoGlSurface, d->mDirtyRegions); 
 						NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusEnded, this);
 
-						//MBG TODO - everything involving mHardwareRenderer needs to be checked again
-						if(d->mHardwareRenderer)
-						{
-							//Send down overlays each tick to the compositor
-							ViewPrivate::OverlaySurfaces::const_iterator iter = d->mOverlaySurfaces.begin();    
-							ViewPrivate::OverlaySurfaces::const_iterator end = d->mOverlaySurfaces.end();    
-							for (; iter < end; ++iter) 
-							{
-								EA::WebKit::FloatRect eaRect(iter->mRect.x(), iter->mRect.y(), iter->mRect.width(), iter->mRect.height());
-								EA::WebKit::TransformationMatrix identity;
-                                EA::WebKit::Filters filters;
-								d->mHardwareRenderer->RenderSurface(iter->mpSurface, eaRect, identity, 1.0f, EA::WebKit::CompositeSourceOver, EA::WebKit::ClampToEdge, filters);
-							}
-						}
-						else
-						{
-							NOTIFY_PROCESS_STATUS(kVProcessTypePaintOverlays, EA::WebKit::kVProcessStatusStarted, this);
-							PaintOverlays(); //Composite Overlays on top of the main drawing surface
-							NOTIFY_PROCESS_STATUS(kVProcessTypePaintOverlays, EA::WebKit::kVProcessStatusEnded, this);
-						}
-
-						if(d->mHardwareRenderer)
-							d->mHardwareRenderer->EndPainting();
-						else if (pClient) 
+						NOTIFY_PROCESS_STATUS(kVProcessTypePaintOverlays, EA::WebKit::kVProcessStatusStarted, this);
+						//Composite Overlays on top of the main drawing surface
+						PaintOverlays(); 
+						NOTIFY_PROCESS_STATUS(kVProcessTypePaintOverlays, EA::WebKit::kVProcessStatusEnded, this);
+						
+						if (pClient) 
 						{
 							info.mStage = ViewUpdateInfo::End;
 

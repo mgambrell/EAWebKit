@@ -239,7 +239,14 @@ void EAWebKitLib::Shutdown()
 void EAWebKitLib::Tick()
 {
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);
+	SetGLContext();
 	EA::WebKit::Tick();
+}
+
+void EAWebKitLib::SetGLContext()
+{
+	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);
+	WebCore::GLContext::sharingContext()->makeContextCurrent();
 }
 
 Allocator* EAWebKitLib::GetAllocator()

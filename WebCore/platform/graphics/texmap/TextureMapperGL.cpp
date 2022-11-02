@@ -245,8 +245,16 @@ void TextureMapperGLData::initializeStencil()
 TextureMapperGL::TextureMapperGL()
     : m_enableEdgeDistanceAntialiasing(false)
 {
-    m_context3D = GraphicsContext3D::createForCurrentGLContext();
-    m_data = new TextureMapperGLData(m_context3D.get());
+	//MBG - this is a big change... 
+	//"ToCurrentGLContext" no longer works because we're using cairo-gl to render content inside this TextureMapperGL
+	//While cairo knows how to repair its state before it renders something else (as does the GraphicsContext that wraps cairo), TextureMapperGL does not.
+	//Fortunately we have the mechanism of context-changing to keep the TextureMapperGL state separate.
+	//But we need to use this other type of GraphicsContext3D to get another context.
+	//so....
+	//m_context3D = GraphicsContext3D::createForCurrentGLContext();
+	m_context3D = GraphicsContext3D::create(GraphicsContext3D::Attributes(), nullptr, GraphicsContext3D::RenderOffscreen);
+
+  m_data = new TextureMapperGLData(m_context3D.get());
 #if USE(TEXTURE_MAPPER_GL)
     m_texturePool = std::make_unique<BitmapTexturePool>(m_context3D);
 #endif

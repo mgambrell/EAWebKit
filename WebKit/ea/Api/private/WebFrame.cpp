@@ -83,6 +83,7 @@
 #include "interpreter.h"
 #if USE(ACCELERATED_COMPOSITING)
 #include "texmap/TextureMapper.h"
+#include "texmap/TextureMapperGL.h"
 #include "texmap/TextureMapperPlatformLayer.h"
 #include "TextureMapperLayerClientEA.h"
 #endif
@@ -604,22 +605,20 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 		// Create a null context for the texture mapper
 		RefPtr<cairo_surface_t> cairoSurface =adoptRef(cairo_image_surface_create_for_data(NULL, CAIRO_FORMAT_ARGB32, 0, 0, 0));
 		RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
-
 		WebCore::GraphicsContext graphicsContext(cairoContext.get());
 
 		client->syncLayers();
 
+		//we need to set the mapper's context current so that next, when we bind the surface and set the viewport, it goes into the right context
+		WebCore::TextureMapperGL* mapperGL = (WebCore::TextureMapperGL*)client->GetTextureMapper();
+		mapperGL->graphicsContext3D()->makeContextCurrent();
+
 		//prepare for drawing to the surface
 		//the semantics of the TextureMapper apparatus is that it should use the currently-bound settings as gospel.. so...
 		surface->Bind();
-		int surfaceWidth, surfaceHeight;
-		surface->GetContentDimensions(&surfaceWidth, &surfaceHeight);
-		glViewport(0,0,surfaceWidth, surfaceHeight);
+		glViewport(0,0,fullscreen.width(), fullscreen.height());
 
 		client->renderCompositedLayers(&graphicsContext, fullscreen);
-
-		//cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
-		//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
 	}
 }
 void WebFrame::renderScrollHelper(WebCore::Scrollbar *bar, WebCore::FrameView *view, IHardwareRenderer *renderer, ISurface **surface, const eastl::vector<WebCore::IntRect> &dirtyRegions)

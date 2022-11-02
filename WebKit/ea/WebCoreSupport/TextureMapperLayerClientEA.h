@@ -54,6 +54,9 @@ public:
     void syncLayers();
 
     void renderCompositedLayers(GraphicsContext*, const IntRect& clip);
+
+    WebCore::TextureMapper* GetTextureMapper() { return m_textureMapper.get(); }
+
 private:
     EA::WebKit::WebFrame* m_frame;
     std::unique_ptr<GraphicsLayer> m_rootGraphicsLayer;

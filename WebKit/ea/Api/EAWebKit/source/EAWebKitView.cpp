@@ -243,10 +243,6 @@ void View::Paint()
 	EAWWBKIT_INIT_CHECK(); 
 	EAW_ASSERT_MSG(d->mInitialized, "View must be initialized!");
 
-	//MBG TEST
-	//whatever->makeContextCurrent();
-	//WebCore::GLContext::sharingContext()->makeContextCurrent();
-	
 	NOTIFY_PROCESS_STATUS(kVProcessTypePaint, EA::WebKit::kVProcessStatusStarted, this);
 
 	if(d->page)

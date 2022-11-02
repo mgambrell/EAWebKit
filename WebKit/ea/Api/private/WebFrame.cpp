@@ -608,6 +608,9 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 		//the semantics of the TextureMapper apparatus is that it should use the currently-bound settings as gospel.. so...
 		surface->Bind();
 		glViewport(0,0,fullscreen.width(), fullscreen.height());
+		//TEST - see what's getting composited. if it's red, it's not getting composited.
+		//glClearColor(1.0f,0.0f,0.0f,1.0f);
+		//glClear(GL_COLOR_BUFFER_BIT);
 
 		//I think there's some kinds of drawing configuration that can only be stored on the GraphicsContext, so we need to make one of those
 		WebCore::GraphicsContext graphicsContext((cairo_t*)nullptr);

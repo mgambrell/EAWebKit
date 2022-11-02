@@ -1164,9 +1164,15 @@ _cairo_gl_surface_map_to_image (void      *abstract_surface,
 		//so I had to add my own api.
 		//note the 2nd argument is a lock handle I added for future extensibility since it's a pain for me to change my apis later.
 		//if it's null then the lock is put on the texture as a current sole implicit lock
+		//(it's really lousy that cairo doesn't have read/write arguments on all this "surface acquiring" and "mapping" stuff. that makes the copying one/both ways always both ways, probably)
+		//1,1,0 is read, write, discard (it turns out we always use this for writing the full buffers all the time, great)
 		void* pixels;
 		GLint stride;
-		glMapTextureRATA(surface->tex,NULL,0,1,1,0,&pixels,&stride);
+		glMapTextureRATA(surface->tex,NULL,0,1,1,0,&pixels,&stride); 
+
+		//MBG - this isn't supported by my new code
+		if(extents->x !=0 || extents->y != 0 || surface->width != extents->width || surface->height != extents->height)
+			abort();
 
 		//MBG MODIFIED BELOW to use the above
     image = (cairo_image_surface_t*)

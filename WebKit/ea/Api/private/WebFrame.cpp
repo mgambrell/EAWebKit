@@ -594,7 +594,6 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 	if (!page)
 		return;
 
-	surface->Bind();
 
 	// Composite the auxiliary layers if we have them
 	if (WebCore::TextureMapperLayerClientEA* client = static_cast<WebCore::ChromeClientEA&>(page->chrome().client()).m_textureMapperLayerClient.get())
@@ -606,37 +605,16 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 		RefPtr<cairo_surface_t> cairoSurface =adoptRef(cairo_image_surface_create_for_data(NULL, CAIRO_FORMAT_ARGB32, 0, 0, 0));
 		RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
 
-		//RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice,CAIRO_CONTENT_COLOR_ALPHA, texid, 1280, 720));
-		//RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
-			
-		//MBG - we need a gl context active
-		//auto cairo_egl = (cairo_egl_context_t*)EA::WebKit::g_cairoDevice;
-		//cairo_device_se
-		//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
-
-		//needs to be done too>?>>
-		//cairo_device_flush(WebCore::GLContext::sharingContext()->cairoDevice());
-
-		//WebCore::GLContext::sharingContext()->makeContextCurrent();
-		//NEEDED???
-		//whatever->makeContextCurrent();
-
-		//MBG - make a GraphicsContext based on m_cairoGlSurface (which is using g_cairoDevice)
-		//auto pRawCairoContext = cairo_create(m_cairoGlSurface);
-		//RefPtr<cairo_t> cairoContext = adoptRef(pRawCairoContext);
 		WebCore::GraphicsContext graphicsContext(cairoContext.get());
 
-		//MBG HACK!
-		//after this, the GraphicsContext3D* which the TMAP client (that is, the TMAP itself) uses for doing stuff has been made current
-		//therefore, we can bind the framebuffer we intend for it to draw to
 		client->syncLayers();
 
-		//so.. prepare it for drawing to that
-		//the alternative is for it to use the "current context" which requires this to be set up, as well...
-		//but it has the deficiency that there isn't enough wisdom in enough places to reset the context after cairo whacks it internally all the damn time
-		glBindFramebuffer(GL_FRAMEBUFFER,surface->GetGlFbId());
-		glViewport(0,0,1280,720);
-		glDisable(GL_SCISSOR_TEST);
+		//prepare for drawing to the surface
+		//the semantics of the TextureMapper apparatus is that it should use the currently-bound settings as gospel.. so...
+		surface->Bind();
+		int surfaceWidth, surfaceHeight;
+		surface->GetContentDimensions(&surfaceWidth, &surfaceHeight);
+		glViewport(0,0,surfaceWidth, surfaceHeight);
 
 		client->renderCompositedLayers(&graphicsContext, fullscreen);
 

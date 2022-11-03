@@ -48,7 +48,7 @@ GraphicsLayerTextureMapper::GraphicsLayerTextureMapper(Type layerType, GraphicsL
     : GraphicsLayer(layerType, client)
     , m_compositedNativeImagePtr(0)
     , m_changeMask(NoChanges)
-    , m_needsDisplay(false)
+    , m_needsDisplay(true) //MBG - draw it initially, even if empty
     , m_fixedToViewport(false)
     , m_debugBorderWidth(0)
     , m_contentsLayer(0)
@@ -560,7 +560,19 @@ void GraphicsLayerTextureMapper::updateBackingStoreIfNeeded()
 
 bool GraphicsLayerTextureMapper::shouldHaveBackingStore() const
 {
-    return drawsContent() && contentsAreVisible() && !m_size.isEmpty();
+  //MBG - EVERYTHING should have a backing store.
+  //even if it's invisible. It may not be in a minute, but why not get it ready?
+  //OK, but first, here's what I'm really trying to fix, in pseudocode
+  //if(isEmptyButScrollableAndWeWantToAlwaysShowTheScrollBar)
+  //  return true;
+  
+  //ok now for my fix
+  //(well, despite what I just said, I kept it minimal: drawsContent() is the real problem)
+  //(there may be other ways to fix that, but this is an excellent starting point for studying that in case it becomes important)
+  return contentsAreVisible() && !m_size.isEmpty();
+
+  //MBG - how it used to be
+  //return drawsContent() && contentsAreVisible() && !m_size.isEmpty();
 }
 
 bool GraphicsLayerTextureMapper::addAnimation(const KeyframeValueList& valueList, const FloatSize& boxSize, const Animation* anim, const String& keyframesName, double timeOffset)

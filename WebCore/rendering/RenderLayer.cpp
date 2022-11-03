@@ -3171,6 +3171,9 @@ void RenderLayer::setHasVerticalScrollbar(bool hasScrollbar)
     if (renderer().document().hasAnnotatedRegions())
         renderer().document().setAnnotatedRegionsDirty(true);
 #endif
+
+    //MBG - ADDED. I have no proof that this is needed. But I want to get it here for the record.. it seems sensible.
+    updateNeedsCompositedScrolling();
 }
 
 ScrollableArea* RenderLayer::enclosingScrollableArea() const
@@ -3546,6 +3549,8 @@ bool RenderLayer::showsOverflowControls() const
 
 void RenderLayer::paintOverflowControls(GraphicsContext* context, const IntPoint& paintOffset, const IntRect& damageRect, bool paintingOverlayControls)
 {
+
+
     // Don't do anything if we have no overflow.
     if (!renderer().hasOverflowClip())
         return;
@@ -3590,6 +3595,7 @@ void RenderLayer::paintOverflowControls(GraphicsContext* context, const IntPoint
     // widgets can move without layout occurring (most notably when you scroll a document that
     // contains fixed positioned elements).
     positionOverflowControls(toIntSize(adjustedPaintOffset));
+
 
     // Now that we're sure the scrollbars are in the right place, paint them.
     if (m_hBar && !layerForHorizontalScrollbar())
@@ -4211,6 +4217,12 @@ void RenderLayer::paintFixedLayersInNamedFlows(GraphicsContext* context, const L
 
 void RenderLayer::paintLayerContents(GraphicsContext* context, const LayerPaintingInfo& paintingInfo, PaintLayerFlags paintFlags)
 {
+  if(this->m_layerSize.width() == 547 && this->m_layerSize.height() == 576)
+  {
+    int zzz=9;
+  }
+
+
     ASSERT(isSelfPaintingLayer() || hasSelfPaintingLayerDescendant());
 
     PaintLayerFlags localPaintFlags = paintFlags & ~(PaintLayerAppliedTransform);
@@ -6895,9 +6907,7 @@ void RenderLayer::updateOrRemoveFilterEffectRenderer()
     if (!filterInfo.renderer()) {
         RefPtr<FilterEffectRenderer> filterRenderer = FilterEffectRenderer::create();
         filterRenderer->setFilterScale(renderer().frame().page()->deviceScaleFactor());
-        //MBG TEST
         RenderingMode renderingMode = renderer().frame().settings().acceleratedFiltersEnabled() ? Accelerated : Unaccelerated;
-        //RenderingMode renderingMode = Accelerated;
         filterRenderer->setRenderingMode(renderingMode);
         filterInfo.setRenderer(WTF::move(filterRenderer));
         

@@ -702,7 +702,11 @@ private:
 
     // Non-auto z-index always implies stacking context here, because StyleResolver::adjustRenderStyle already adjusts z-index
     // based on positioning and other criteria.
-    bool isStackingContext(const RenderStyle* style) const { return !style->hasAutoZIndex() || isRootLayer() || m_forcedStackingContext; }
+    bool isStackingContext(const RenderStyle* style) const { return !style->hasAutoZIndex() || isRootLayer() || m_forcedStackingContext
+      //MBG DIRTY HACK: I find this is needed to get scrollbars to render sometimes.
+      || hasHorizontalScrollbar()
+      || hasVerticalScrollbar()
+      ; }
 
     bool isDirtyStackingContainer() const { return m_zOrderListsDirty && isStackingContainer(); }
 

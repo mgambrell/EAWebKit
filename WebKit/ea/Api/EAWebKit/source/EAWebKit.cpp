@@ -149,8 +149,6 @@ const char8_t* kDefaultPageGroupName = "default"; // Any name would suffice here
 
 //MBG ADDED
 void* g_cairoDevice = nullptr;
-void *g_eglContext = nullptr;
-WebCore::GLContextEGL* whatever;
 
 static WebKitStatus					sWebKitStatus = kWebKitStatusInactive;
 static EAWebKitClient*				spEAWebKitClient = NULL;
@@ -725,22 +723,11 @@ bool Init(AppCallbacks* appCallbacks, AppSystems* appSystems)
 			GLPipe_SetProcs((GLPipe_Procs*)appSystems->mEAWebkitClient->GetGLPipeProcs());
 
 		//MBG ADDED:
-		//magic ritual that sets up contexts or devices or whatever in the way we need
+		//set a global cairo device. since I added this for cairo-gl, it's not shuttled around to any of the needed plaes
+		//rather than make a mess, I'm just making it global.
+		//we need this set up early and there's no reason to do it differently, so it's done now here
 		auto context = WebCore::GLContext::sharingContext();
 		g_cairoDevice = context->cairoDevice();
-
-		//LAME - we should create the cairo device ourselves from this default egl context
-		//g_eglContext = appSystems->mEAWebkitClient->GetEGLContext();
-		g_eglContext = context->platformContext();
-
-		//we're going to need a GLContext done well in advance
-		//GLContext
-		//GraphicsContext3D::platformGraphicsContext3D();
-		//WebCore::GLContext::sharingContext()
-		//WebCore::GLContext::createContextForWindow(
-		//GLContext::makeCurrent()
-		//whatever = new WebCore::GLContextEGL(g_eglContext, 0, WebCore::GLContextEGL::EGLSurfaceType::WindowSurface);
-		//whatever->makeContextCurrent();
 	}
 
 	// Force the creation of allocator if one was not passed. This allows us to use the pointer directly instead of having to call GetAllocator all the time. 

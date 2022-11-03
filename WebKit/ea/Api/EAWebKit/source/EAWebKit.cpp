@@ -242,8 +242,8 @@ void EAWebKitLib::Shutdown()
 void EAWebKitLib::Tick()
 {
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);
-	SetGLContext();
 	EA::WebKit::Tick();
+	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
 }
 
 void EAWebKitLib::SetGLContext()

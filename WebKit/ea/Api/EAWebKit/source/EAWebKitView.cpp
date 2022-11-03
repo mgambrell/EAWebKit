@@ -126,7 +126,7 @@ public:
 	: view(view)
 	, page(0)
 	, mDisplaySurface(NULL)
-	, mCairoGlSurface(NULL)
+	, mCairoGlMainLayerSurface(NULL)
 	, mpUserData(NULL)
 	, mEAWebKitClient(NULL)
     , mHardwareRenderer(NULL)
@@ -170,7 +170,7 @@ public:
 	FixedString16_128 mTitle;
 
     ISurface *mDisplaySurface;
-		cairo_surface_t* mCairoGlSurface;
+		cairo_surface_t* mCairoGlMainLayerSurface;
 	void *mpUserData;
 	EAWebKitClient* mEAWebKitClient;
     IHardwareRenderer *mHardwareRenderer;
@@ -299,7 +299,7 @@ void View::Paint()
 						
 					NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusStarted, this);
 					//Actually render the content on the d->mDisplaySurface				
-					frame->renderNonTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mCairoGlSurface, d->mDirtyRegions);
+					frame->renderNonTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mCairoGlMainLayerSurface, d->mDirtyRegions);
 					NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusEnded, this);
 
 					
@@ -730,9 +730,10 @@ void View::SetSize(IntSize size)
     {
         d->mDisplaySurface->SetContentDimensions(size.mWidth, size.mHeight);
 
-				//MBG - we can't have a proper cairo surface until we have a size.
-				cairo_surface_destroy(d->mCairoGlSurface);
-				d->mCairoGlSurface = cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice,CAIRO_CONTENT_COLOR_ALPHA,d->mDisplaySurface->GetGlTexId(),size.mWidth, size.mHeight);
+				//MBG - now that we have a size, we can make a cairo surface for the main layer
+				if(d->mCairoGlMainLayerSurface)
+					cairo_surface_destroy(d->mCairoGlMainLayerSurface);
+				d->mCairoGlMainLayerSurface = cairo_gl_surface_create((cairo_device_t*)EA::WebKit::g_cairoDevice,CAIRO_CONTENT_COLOR_ALPHA,size.mWidth, size.mHeight);
 
 		// Clear any old dirty regions since the resize could have invalidated them.
         d->mDirtyRegions.clear();

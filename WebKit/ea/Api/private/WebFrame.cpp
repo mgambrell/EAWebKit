@@ -517,7 +517,7 @@ void WebFrame::ClearDisplay(const WebCore::Color &color)
     d->mClearDisplayColor = color;
 }
 
-void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface *surface, cairo_surface_t* cairoSurface, const eastl::vector<WebCore::IntRect> &dirtyRegions) 
+void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface *surface, cairo_surface_t* cairoMainLayerSurface, const eastl::vector<WebCore::IntRect> &dirtyRegions) 
 {
 	WebCore::GLContext::sharingContext()->makeContextCurrent();
 
@@ -538,44 +538,61 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 	{
 		const auto& dirty = dirtyRegions[i];
 
-		RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface));
-		WebCore::GraphicsContext graphicsContext(cairoContext.get());
+		RefPtr<cairo_t> cairoMainLayerContext = adoptRef(cairo_create(cairoMainLayerSurface));
+		WebCore::GraphicsContext mainLayerGC(cairoMainLayerContext.get());
 
 		//superstitious: this makes sure the device doesn't depend on any prior state
 		//this is not the correct time for this (it should be called when we're DONE with it)
 		//but it works better here... for now..
-		cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+		//cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
 		//apparently nobody knows to do this...
 		//cairo_device_flush(WebCore::GLContext::sharingContext()->cairoDevice());
 
 		//clip to this dirty rect
 		double cx = dirty.x(),cy = dirty.y(),cw = dirty.width(),ch = dirty.height();
-		cairo_rectangle(cairoContext.get(),cx,cy,cw,ch);
-		cairo_clip(cairoContext.get());
+		cairo_rectangle(cairoMainLayerContext.get(),cx,cy,cw,ch);
+		cairo_clip(cairoMainLayerContext.get());
 		
 		//MBG - removed stuff about paintingDisabled and updatingControlTints because the context is fresh, how could these ever be wrong
-		view->paint(&graphicsContext, dirty);// Paint contents and scroll bars. Some ports call paintContents and then painScrollbars separately.
+		view->paint(&mainLayerGC, dirty);// Paint contents and scroll bars. Some ports call paintContents and then painScrollbars separately.
 
-		EAW_ASSERT_FORMATTED(cairo_status(cairoContext.get()) == CAIRO_STATUS_SUCCESS, "cairo failed to paint (for example, OOM) - %d",cairo_status(cairoContext.get()));
+		EAW_ASSERT_FORMATTED(cairo_status(cairoMainLayerContext.get()) == CAIRO_STATUS_SUCCESS, "cairo failed to paint (for example, OOM) - %d",cairo_status(cairoMainLayerContext.get()));
 
 		if(d->page->view()->ShouldDrawDebugVisuals())
 		{
 			NOTIFY_PROCESS_STATUS(kVProcessTypeDrawDebug, EA::WebKit::kVProcessStatusStarted, d->page->view());
-			graphicsContext.save();
+			mainLayerGC.save();
 
-			graphicsContext.setStrokeStyle(WebCore::SolidStroke);
-			graphicsContext.setStrokeColor(WebCore::Color(1.0f, 0.0f, 0.0f, 1.0f), WebCore::ColorSpaceDeviceRGB);
-			graphicsContext.strokeRect(WebCore::FloatRect(dirty.x(), dirty.y(), dirty.width(), dirty.height()), 2.0f);
+			mainLayerGC.setStrokeStyle(WebCore::SolidStroke);
+			mainLayerGC.setStrokeColor(WebCore::Color(1.0f, 0.0f, 0.0f, 1.0f), WebCore::ColorSpaceDeviceRGB);
+			mainLayerGC.strokeRect(WebCore::FloatRect(dirty.x(), dirty.y(), dirty.width(), dirty.height()), 2.0f);
 
-			graphicsContext.restore();
+			mainLayerGC.restore();
 			NOTIFY_PROCESS_STATUS(kVProcessTypeDrawDebug, EA::WebKit::kVProcessStatusEnded, d->page->view());
 		}
 
-		surface->Unlock();
+		cairo_surface_flush(cairoMainLayerSurface);
+		cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
 	}
+
+	cairo_surface_flush(cairoMainLayerSurface);
+	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+
 	NOTIFY_PROCESS_STATUS(kVProcessTypeDirtyRectsRender, EA::WebKit::kVProcessStatusEnded, d->page->view());
 
+	//...............
+	//make a temporary cairo surface to wrap the target ISurface so we can use cairo to draw the main layer surface onto it
+	int fullViewWidth = d->page->view()->GetSize().mWidth;
+	int fullViewHeight = d->page->view()->GetSize().mHeight;
+	cairo_surface_t *targetCairoSurface = cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA,surface->GetGlTexId(),fullViewWidth,fullViewHeight);
+	RefPtr<cairo_t> targetSurfaceCairoContext = adoptRef(cairo_create(targetCairoSurface));
+	cairo_set_source_surface(targetSurfaceCairoContext.get(),cairoMainLayerSurface,0,0);
+	cairo_set_operator (targetSurfaceCairoContext.get(), CAIRO_OPERATOR_SOURCE);
+	cairo_paint(targetSurfaceCairoContext.get());
+	//...............
+
 	//seems important?
+	cairo_surface_flush(targetCairoSurface);
 	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
 	WebCore::GLContext::sharingContext()->makeContextCurrent();
 
@@ -584,8 +601,8 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 	renderCompositedLayers(renderer, surface);
 	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusEnded, d->page->view());
 
-	drawHighlightedNodeFromInspector(surface);
-
+	//MBG - cant work right now
+	//drawHighlightedNodeFromInspector(surface);
 }
 
 
@@ -594,6 +611,8 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 	WebCore::Page* page = d->frame->page();
 	if (!page)
 		return;
+
+	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
 
 	// Composite the auxiliary layers if we have them
 	if (WebCore::TextureMapperLayerClientEA* client = static_cast<WebCore::ChromeClientEA&>(page->chrome().client()).m_textureMapperLayerClient.get())
@@ -618,6 +637,8 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 		//finally, get the job done
 		client->syncLayers();
 		client->renderCompositedLayers(&graphicsContext, fullscreen);
+
+		cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
 	}
 }
 void WebFrame::renderScrollHelper(WebCore::Scrollbar *bar, WebCore::FrameView *view, IHardwareRenderer *renderer, ISurface **surface, const eastl::vector<WebCore::IntRect> &dirtyRegions)

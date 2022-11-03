@@ -245,6 +245,9 @@ void View::Paint()
 
 	NOTIFY_PROCESS_STATUS(kVProcessTypePaint, EA::WebKit::kVProcessStatusStarted, this);
 
+	//MBG: in case we've missed flushing in any other place, this will take care of it hopefully
+	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+
 	if(d->page)
 	{
 		WebFrame* frame = d->page->mainFrame();

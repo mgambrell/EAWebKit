@@ -856,16 +856,6 @@ extern cairo_surface_t* m_cairoGlSurface;
 
 void Tick()
 {
-	//MBG - ticking can draw.. so.. prepare for it
-	//DIRTY HACKS IGNORE ME NOW
-	//cairo_device_acquire((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	//glBindFramebuffer(GL_FRAMEBUFFER,fbid);
-	//glViewport(0,0,1280,720);
-	//glDisable(GL_SCISSOR_TEST);
-	//cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	//cairo_device_release((cairo_device_t*)EA::WebKit::g_cairoDevice);
-
-
 	NOTIFY_PROCESS_STATUS(EA::WebKit::kVProcessTypeLibTick, EA::WebKit::kVProcessStatusStarted, 0);
 
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);   

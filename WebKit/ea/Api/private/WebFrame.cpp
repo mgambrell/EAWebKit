@@ -517,10 +517,10 @@ void WebFrame::ClearDisplay(const WebCore::Color &color)
     d->mClearDisplayColor = color;
 }
 
+//MBG - almost totally reworked this to use GL rendering
 void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface *surface, cairo_surface_t* cairoMainLayerSurface, const eastl::vector<WebCore::IntRect> &dirtyRegions) 
 {
 	WebCore::GLContext::sharingContext()->makeContextCurrent();
-
 
 	if(d->mClearDisplaySurface)
 	{
@@ -530,7 +530,9 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 		NOTIFY_PROCESS_STATUS(kVProcessTypeClearSurface, EA::WebKit::kVProcessStatusEnded, d->page->view());
 	}
 
-	//MBG - considerably modified to use GL rendering
+	RefPtr<cairo_t> cairoMainLayerContext = adoptRef(cairo_create(cairoMainLayerSurface));
+	WebCore::GraphicsContext mainLayerGC(cairoMainLayerContext.get());
+
 	WebCore::FrameView *view = d->frame->view();
 	NOTIFY_PROCESS_STATUS(kVProcessTypeDirtyRectsRender, EA::WebKit::kVProcessStatusStarted, d->page->view());
 	unsigned nDirtyRegionsToDraw = dirtyRegions.size();
@@ -538,23 +540,13 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 	{
 		const auto& dirty = dirtyRegions[i];
 
-		RefPtr<cairo_t> cairoMainLayerContext = adoptRef(cairo_create(cairoMainLayerSurface));
-		WebCore::GraphicsContext mainLayerGC(cairoMainLayerContext.get());
-
-		//superstitious: this makes sure the device doesn't depend on any prior state
-		//this is not the correct time for this (it should be called when we're DONE with it)
-		//but it works better here... for now..
-		//cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
-		//apparently nobody knows to do this...
-		//cairo_device_flush(WebCore::GLContext::sharingContext()->cairoDevice());
-
 		//clip to this dirty rect
 		double cx = dirty.x(),cy = dirty.y(),cw = dirty.width(),ch = dirty.height();
 		cairo_rectangle(cairoMainLayerContext.get(),cx,cy,cw,ch);
 		cairo_clip(cairoMainLayerContext.get());
 		
-		//MBG - removed stuff about paintingDisabled and updatingControlTints because the context is fresh, how could these ever be wrong
-		view->paint(&mainLayerGC, dirty);// Paint contents and scroll bars. Some ports call paintContents and then painScrollbars separately.
+		// Paint contents and scroll bars.
+		view->paint(&mainLayerGC, dirty);
 
 		EAW_ASSERT_FORMATTED(cairo_status(cairoMainLayerContext.get()) == CAIRO_STATUS_SUCCESS, "cairo failed to paint (for example, OOM) - %d",cairo_status(cairoMainLayerContext.get()));
 
@@ -571,14 +563,14 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 			NOTIFY_PROCESS_STATUS(kVProcessTypeDrawDebug, EA::WebKit::kVProcessStatusEnded, d->page->view());
 		}
 
-		cairo_surface_flush(cairoMainLayerSurface);
-		cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
 	}
 
-	cairo_surface_flush(cairoMainLayerSurface);
-	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
-
 	NOTIFY_PROCESS_STATUS(kVProcessTypeDirtyRectsRender, EA::WebKit::kVProcessStatusEnded, d->page->view());
+
+	//---------------------------------
+	//BEGIN COMPOSITING
+
+	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusStarted, d->page->view());
 
 	//...............
 	//make a temporary cairo surface to wrap the target ISurface so we can use cairo to draw the main layer surface onto it
@@ -591,15 +583,16 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 	cairo_paint(targetSurfaceCairoContext.get());
 	//...............
 
-	//seems important?
-	cairo_surface_flush(targetCairoSurface);
+	//after this we're going to hand things off to the TextureMapper
+	//because of that and since we've just finished with some direct cairo stuff.. it's probably a good time to flush it
 	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
-	WebCore::GLContext::sharingContext()->makeContextCurrent();
 
-
-	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusStarted, d->page->view());
 	renderCompositedLayers(renderer, surface);
+
 	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusEnded, d->page->view());
+
+	//END COMPOSITING
+	//---------------------------------
 
 	//MBG - cant work right now
 	//drawHighlightedNodeFromInspector(surface);
@@ -612,7 +605,8 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 	if (!page)
 		return;
 
-	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
+	//I think there's some kinds of drawing configuration that can only be stored on the GraphicsContext, so we need to make one of those
+	WebCore::GraphicsContext graphicsContext((cairo_t*)nullptr);
 
 	// Composite the auxiliary layers if we have them
 	if (WebCore::TextureMapperLayerClientEA* client = static_cast<WebCore::ChromeClientEA&>(page->chrome().client()).m_textureMapperLayerClient.get())
@@ -625,14 +619,9 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 
 		//prepare for drawing to the surface
 		//the semantics of the TextureMapper apparatus is that it should use the currently-bound settings as gospel.. so...
+		//(these are used in TextureMapper's beginPainting ,ethod)
 		surface->Bind();
 		glViewport(0,0,fullscreen.width(), fullscreen.height());
-		//TEST - see what's getting composited. if it's red, it's not getting composited.
-		//glClearColor(1.0f,0.0f,0.0f,1.0f);
-		//glClear(GL_COLOR_BUFFER_BIT);
-
-		//I think there's some kinds of drawing configuration that can only be stored on the GraphicsContext, so we need to make one of those
-		WebCore::GraphicsContext graphicsContext((cairo_t*)nullptr);
 
 		//finally, get the job done
 		client->syncLayers();

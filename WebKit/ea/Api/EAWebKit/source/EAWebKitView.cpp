@@ -466,9 +466,17 @@ bool View::InitView(const ViewParameters& vp)
 	//MBG ADDED - not sure how we're supposed to set these properly from the EAWebKit API right now...
 	auto & settings = d->page->handle()->page->settings();
 	settings.setAccelerated2dCanvasEnabled(true);
-	settings.setAcceleratedCompositingEnabled(true);
 	settings.setMinimumAccelerated2dCanvasSize(1); //I will really want to finetune this per game and platform, i guess
 	//settings.setAcceleratedFiltersEnabled(true); //hmm it seems only open CL acceleration is supported. this isn't worth fighting for now
+	
+	//seems we should enable all the accelerated compositing
+	settings.setAcceleratedCompositingEnabled(true);
+	settings.setAcceleratedCompositingForOverflowScrollEnabled(true);
+	settings.setAcceleratedCompositingForFixedPositionEnabled(true);
+	settings.setAcceleratedCompositedAnimationsEnabled(true);
+
+	//why not?
+	settings.setAcceleratedDrawingEnabled(true);
 
 	d->mInitialized = true;
 	

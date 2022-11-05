@@ -398,6 +398,15 @@ void StorageAreaSync::blockUntilImportComplete()
 
 void StorageAreaSync::sync(bool clearItems, const HashMap<String, String>& items)
 {
+  //MBG - added this to make sure the database is always saved after a sync
+  //very likely not the best way to do it, but it does work.
+  _sync(clearItems, items);
+  if (m_database.isOpen())
+    m_database.close();
+}
+
+void StorageAreaSync::_sync(bool clearItems, const HashMap<String, String>& items)
+{
     ASSERT(!isMainThread());
 
     if (items.isEmpty() && !clearItems && !m_syncCloseDatabase)

@@ -88,6 +88,9 @@ private:
     void syncTimerFired();
     void openDatabase(OpenDatabaseParamType openingStrategy);
     void sync(bool clearItems, const HashMap<String, String>& items);
+    
+    //MBG: added, to close the database every time it's opened
+    void _sync(bool clearItems, const HashMap<String, String>& items);
 
     const String m_databaseIdentifier;
 

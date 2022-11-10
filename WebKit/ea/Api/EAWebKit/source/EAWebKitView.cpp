@@ -125,7 +125,6 @@ public:
 	ViewPrivate(View *view)
 	: view(view)
 	, page(0)
-	, mDisplaySurface(NULL)
 	, mCairoGlMainLayerSurface(NULL)
 	, mpUserData(NULL)
 	, mEAWebKitClient(NULL)
@@ -169,7 +168,6 @@ public:
 	FixedString16_128 mURL;
 	FixedString16_128 mTitle;
 
-    ISurface *mDisplaySurface;
 		cairo_surface_t* mCairoGlMainLayerSurface;
 	void *mpUserData;
 	EAWebKitClient* mEAWebKitClient;
@@ -235,7 +233,7 @@ bool View::HardwareAccelerated(void)
     return d->mHardwareRenderer != NULL;
 }
 
-void View::Paint() 
+void View::Paint(ISurface* targetSurface)
 {
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);   
 	SET_AUTO_COLLECTOR_STACK_BASE();  
@@ -302,7 +300,7 @@ void View::Paint()
 						
 					NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusStarted, this);
 					//Actually render the content on the d->mDisplaySurface				
-					frame->renderNonTiled(d->mHardwareRenderer, d->mDisplaySurface, d->mCairoGlMainLayerSurface, d->mDirtyRegions);
+					frame->renderNonTiled(d->mHardwareRenderer, targetSurface, d->mCairoGlMainLayerSurface, d->mDirtyRegions);
 					NOTIFY_PROCESS_STATUS(kVProcessTypeFrameRender, EA::WebKit::kVProcessStatusEnded, this);
 
 					
@@ -335,49 +333,51 @@ void View::PaintOverlays(void)
         return;
     }
 
-    ISurface::SurfaceDescriptor surfaceDescriptor = {0};
-    d->mDisplaySurface->Lock(&surfaceDescriptor);    
+		//MBG - OVERLAYS NOT SUPORTED NOW
 
-    int surfaceW = 0;
-    int surfaceH = 0;
-    d->mDisplaySurface->GetContentDimensions(&surfaceW, &surfaceH);
+ //   ISurface::SurfaceDescriptor surfaceDescriptor = {0};
+ //   d->mDisplaySurface->Lock(&surfaceDescriptor);    
 
-    RefPtr<cairo_surface_t> mainCairoSurface = adoptRef(cairo_image_surface_create_for_data((unsigned char*)surfaceDescriptor.mData, CAIRO_FORMAT_ARGB32, surfaceW, surfaceH, surfaceDescriptor.mStride));    
-	RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(mainCairoSurface.get()));
-	WebCore::GraphicsContext graphicsContext(cairoContext.get());
- 
-	ViewPrivate::OverlaySurfaces::const_iterator iter = d->mOverlaySurfaces.begin();    
-    ViewPrivate::OverlaySurfaces::const_iterator end = d->mOverlaySurfaces.end();    
-    for (; iter < end; ++iter) 
-	{
-        for (unsigned i = 0; i < d->mDirtyRegions.size(); ++i) 
-		{
-            if (iter->mRect.intersects(d->mDirtyRegions[i]))
-            {
-                // Just blit over the full surface so we don't have to do this multiple times if intersecting with many dirty rects 
-                ISurface::SurfaceDescriptor overlayDescriptor = {0};
-                ISurface* pOverlaySurface = iter->mpSurface;
-                
-                pOverlaySurface->Lock(&overlayDescriptor);    
-				cairo_save(cairoContext.get());  
-                
-                int overlayW = 0;
-                int overlayH = 0;
-                pOverlaySurface->GetContentDimensions(&overlayW, &overlayH);
+ //   int surfaceW = 0;
+ //   int surfaceH = 0;
+ //   d->mDisplaySurface->GetContentDimensions(&surfaceW, &surfaceH);
 
-                RefPtr<cairo_surface_t> overlayCairoSurface = adoptRef(cairo_image_surface_create_for_data((unsigned char*)overlayDescriptor.mData, CAIRO_FORMAT_ARGB32, overlayW, overlayH, overlayDescriptor.mStride));    
-				cairo_set_source_surface(cairoContext.get(), overlayCairoSurface.get(), iter->mRect.x(), iter->mRect.y());
-				cairo_paint(cairoContext.get());    
-                
-				cairo_restore(cairoContext.get());
-                pOverlaySurface->Unlock();  
-                break;
-            }
-        }
-    }
+ //   RefPtr<cairo_surface_t> mainCairoSurface = adoptRef(cairo_image_surface_create_for_data((unsigned char*)surfaceDescriptor.mData, CAIRO_FORMAT_ARGB32, surfaceW, surfaceH, surfaceDescriptor.mStride));    
+	//RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(mainCairoSurface.get()));
+	//WebCore::GraphicsContext graphicsContext(cairoContext.get());
+ //
+	//ViewPrivate::OverlaySurfaces::const_iterator iter = d->mOverlaySurfaces.begin();    
+ //   ViewPrivate::OverlaySurfaces::const_iterator end = d->mOverlaySurfaces.end();    
+ //   for (; iter < end; ++iter) 
+	//{
+ //       for (unsigned i = 0; i < d->mDirtyRegions.size(); ++i) 
+	//	{
+ //           if (iter->mRect.intersects(d->mDirtyRegions[i]))
+ //           {
+ //               // Just blit over the full surface so we don't have to do this multiple times if intersecting with many dirty rects 
+ //               ISurface::SurfaceDescriptor overlayDescriptor = {0};
+ //               ISurface* pOverlaySurface = iter->mpSurface;
+ //               
+ //               pOverlaySurface->Lock(&overlayDescriptor);    
+	//			cairo_save(cairoContext.get());  
+ //               
+ //               int overlayW = 0;
+ //               int overlayH = 0;
+ //               pOverlaySurface->GetContentDimensions(&overlayW, &overlayH);
 
-	cairo_surface_flush(mainCairoSurface.get());
-    d->mDisplaySurface->Unlock();
+ //               RefPtr<cairo_surface_t> overlayCairoSurface = adoptRef(cairo_image_surface_create_for_data((unsigned char*)overlayDescriptor.mData, CAIRO_FORMAT_ARGB32, overlayW, overlayH, overlayDescriptor.mStride));    
+	//			cairo_set_source_surface(cairoContext.get(), overlayCairoSurface.get(), iter->mRect.x(), iter->mRect.y());
+	//			cairo_paint(cairoContext.get());    
+ //               
+	//			cairo_restore(cairoContext.get());
+ //               pOverlaySurface->Unlock();  
+ //               break;
+ //           }
+ //       }
+ //   }
+
+	//cairo_surface_flush(mainCairoSurface.get());
+ //   d->mDisplaySurface->Unlock();
 }
 
 View::View(void)
@@ -417,49 +417,10 @@ bool View::InitView(const ViewParameters& vp)
         d->mDisableCaretOnConsole = vp.mDisableCaretOnConsole;
 
 		d->mUsingTiledBackingStore = vp.mUseTiledBackingStore && vp.mHardwareRenderer;
-		
-		ISurface *displaySurface = vp.mDisplaySurface;
-		if(d->mUsingTiledBackingStore)
-		{
-			EAW_ASSERT_MSG(!displaySurface, "Don't pass a display surface if using tiled backing storage. Backing tiles will be created by EAWebKit.");
-			d->mTileSize = vp.mTileSize;
-			d->mRemoveNonVisibleTiles = vp.mRemoveNonVisibleTiles;
-		}
-		
-		if(!displaySurface) //user did not pass a display surface
-		{
-			if(!d->mUsingTiledBackingStore) //user is not interested in tiled backing store either so we have to create a backing surface
-			{
-				if(vp.mHardwareRenderer)
-				{
-					displaySurface = vp.mHardwareRenderer->CreateSurface(EA::WebKit::SurfaceTypeMain);
-				}
-				else
-				{
-					displaySurface = new SoftwareSurface();
-				}
-			}
-		}
-
-		EAW_ASSERT_MSG((displaySurface || vp.mUseTiledBackingStore), "No backing storage for the view");
-		d->mDisplaySurface	= displaySurface;
-		d->mHardwareRenderer = vp.mHardwareRenderer;
 
 		EAW_ASSERT_MSG(!d->page, "Page for this view already exists !");
 		d->page = new WebPage(this);
 
-#if USE(COORDINATED_GRAPHICS)
-		if(d->mUsingTiledBackingStore)
-		{
-			//EAWEBKITBUILDFIX - commented out methods no longer exist
-			//Page()->handle()->page->settings().setTiledBackingStoreEnabled(true);
-			//Page()->handle()->page->mainFrame().tiledBackingStore()->setTileSize(WebCore::IntSize(d->mTileSize,d->mTileSize));
-		}
-		else
-		{
-			//Page()->handle()->page->settings().setTiledBackingStoreEnabled(false);
-		}
-#endif
 		SetSize(IntSize(vp.mWidth, vp.mHeight));
 	}
 
@@ -501,12 +462,6 @@ void View::ShutdownView(void)
 			//	d->page->handle()->page->settings().setTiledBackingStoreEnabled(false);
 		}
 
-		if(d->mDisplaySurface)
-		{
-			d->mDisplaySurface->SetContentDimensions(0, 0);
-			d->mDisplaySurface->Release();
-			d->mDisplaySurface = NULL;
-		}
 		delete d->page;
 		d->page = NULL;
 
@@ -725,31 +680,27 @@ void View::Refresh(void)
 
 void View::SetSize(IntSize size)
 {
-	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);   
-    EAWEBKIT_THREAD_CHECK();
-    EAWWBKIT_INIT_CHECK(); 
+	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);
+	EAWEBKIT_THREAD_CHECK();
+	EAWWBKIT_INIT_CHECK();
 
-    d->OverlayChangeNotify();
+	d->OverlayChangeNotify();
 
-	if (d->page)
-    {
+	if(d->page)
+	{
 		d->page->setViewportSize(size);
-    }
+	}
 
 	EAW_ASSERT_MSG(d->mDisplaySurface || d->mUsingTiledBackingStore, "Main display Surface should be allocated before setting the dimensions if not using tiled backing storage");
-	if (d->mDisplaySurface) 
-    {
-        d->mDisplaySurface->SetContentDimensions(size.mWidth, size.mHeight);
 
-				//MBG - now that we have a size, we can make a cairo surface for the main layer
-				if(d->mCairoGlMainLayerSurface)
-					cairo_surface_destroy(d->mCairoGlMainLayerSurface);
-				d->mCairoGlMainLayerSurface = cairo_gl_surface_create((cairo_device_t*)EA::WebKit::g_cairoDevice,CAIRO_CONTENT_COLOR_ALPHA,size.mWidth, size.mHeight);
+	//MBG - now that we have a size, we can make a cairo surface for the main layer
+	if(d->mCairoGlMainLayerSurface)
+		cairo_surface_destroy(d->mCairoGlMainLayerSurface);
+	d->mCairoGlMainLayerSurface = cairo_gl_surface_create((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA, size.mWidth, size.mHeight);
 
 		// Clear any old dirty regions since the resize could have invalidated them.
-        d->mDirtyRegions.clear();
-    }
-	
+	d->mDirtyRegions.clear();
+
 	ForceInvalidateFullView();
 }
 
@@ -815,8 +766,9 @@ void View::SaveSurfacePNG(const char8_t *filepath)
 
 	WebCore::makeAllDirectories(WebCore::directoryName(filepath));
 
-	if(d->mDisplaySurface)
-		SaveSurfacePNGHelper(filepath,d->mDisplaySurface);
+	//MBG - can't work right now
+	//if(d->mDisplaySurface)
+	//	SaveSurfacePNGHelper(filepath,d->mDisplaySurface);
 
 	// Turn the file path into a directory since we are going to save multiple surfaces. We can add
 	// another API but this would work fine since it is a debug API.
@@ -1272,30 +1224,15 @@ bool View::ShouldDrawDebugVisuals() const
 
 void View::ForceInvalidateFullView()
 {
-    SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);
-    EAWEBKIT_THREAD_CHECK();
-    EAWWBKIT_INIT_CHECK(); 
-    
-    if(d->mDisplaySurface)
-	{
-		IntRect fullSurfaceRect(IntPoint(0,0), GetSize());
-		AddDirtyRegion(fullSurfaceRect);
-	}
+	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);
+	EAWEBKIT_THREAD_CHECK();
+	EAWWBKIT_INIT_CHECK();
 
-#if USE(COORDINATED_GRAPHICS)
-	if (d->mUsingTiledBackingStore)
-	{
-		//EAWEBKITBUILDFIX
-		//tiledBackingStore no longer exists
-		//if (WebCore::TiledBackingStore *backingStore = WebFramePrivate::core(d->page->mainFrame())->tiledBackingStore())
-		//{
-		//	// Force the entire backing store to update by using a very large size.
-		//	const IntRect largeRect(IntPoint(0,0), IntSize(100000,100000));           
-		//	backingStore->invalidate(largeRect);
-		//}
-	}
-#endif
+	//MBG - simplified
+	IntRect fullSurfaceRect(IntPoint(0, 0), GetSize());
+	AddDirtyRegion(fullSurfaceRect);
 }
+
 // Constructors for the metrics callback system
 ViewProcessInfo::ViewProcessInfo(void)
 : mpView(0),
@@ -1506,12 +1443,6 @@ RestartMerge:
 
     // The region didn't intersect with anything, add it as a new region.
     dirtyRegions.push_back(wcRegion);
-}
-
-ISurface* View::GetDisplaySurface(void) 
-{
-    EAWWBKIT_INIT_CHECK(); 
-	return d->mDisplaySurface;
 }
 
 IHardwareRenderer* View::GetHardwareRenderer(void) 

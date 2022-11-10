@@ -62,7 +62,6 @@ class WebFrame;
 //
 struct ViewParameters
 {
-	ISurface*			mDisplaySurface;        // Defaults to NULL. If no surface is provided, a default display surface will be created(if not using tiled backing storage). If a display surface is provided along with a hardware renderer, they should be compatible.
 	IHardwareRenderer*	mHardwareRenderer;		// Defaults to NULL. If provided, this renderer will enable hardware rendering for this view.
 	void*				mpUserData;				// Defaults to NULL. This will be passed back to the user along with the View* when applicable.
 	EAWebKitClient*		mEAWebKitClient;		// Defaults to NULL. If provided, the notification callback will use this client instead of the global EAWebKitClient to notify the app about View specific events. It is this client's responsibility to forward the notification to the application specific client if it does NOT handle a notification.
@@ -81,7 +80,7 @@ struct ViewParameters
 };
 
 inline ViewParameters::ViewParameters(void)
-: mDisplaySurface(NULL), mHardwareRenderer(NULL), mpUserData(NULL), mEAWebKitClient(NULL) 
+: mHardwareRenderer(NULL), mpUserData(NULL), mEAWebKitClient(NULL) 
 , mWidth(kViewWidthDefault), mHeight(kViewHeightDefault), mBackgroundColor(0xffffffff) 
 , mTileSize(512), mUseTiledBackingStore(false), mRemoveNonVisibleTiles(false)
 , mbTabKeyFocusCycle(true), mAllowJSTextInputStateNotificationOnConsole(true), mDisableCaretOnConsole(false)
@@ -105,7 +104,7 @@ public:
     //
 	// Runtime
 	//
-	virtual void Paint();
+	virtual void Paint(ISurface* targetSurface);
 
     //
     // URI Navigation
@@ -175,7 +174,6 @@ public:
     // Miscellaneous
     //
 	virtual void* GetUserData(void) const;
-    virtual ISurface *GetDisplaySurface(void);
     virtual bool HardwareAccelerated(void);
     virtual const char16_t* Title(void) const;
     virtual IntSize GetSize(void) const;

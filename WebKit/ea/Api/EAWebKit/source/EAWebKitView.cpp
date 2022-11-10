@@ -691,8 +691,6 @@ void View::SetSize(IntSize size)
 		d->page->setViewportSize(size);
 	}
 
-	EAW_ASSERT_MSG(d->mDisplaySurface || d->mUsingTiledBackingStore, "Main display Surface should be allocated before setting the dimensions if not using tiled backing storage");
-
 	//MBG - now that we have a size, we can make a cairo surface for the main layer
 	if(d->mCairoGlMainLayerSurface)
 		cairo_surface_destroy(d->mCairoGlMainLayerSurface);

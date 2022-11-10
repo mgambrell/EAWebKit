@@ -64,7 +64,6 @@ public:
     //MBG - ADDED
     void Clear(int red, int green, int blue, int alpha) {}
     virtual unsigned int GetGlTexId() { return 0; }
-    virtual unsigned int GetGlFbId() { return 0; }
     virtual void Bind() {}
 
     virtual ~ISurface(void) {}

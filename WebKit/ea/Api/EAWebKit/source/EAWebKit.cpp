@@ -1615,30 +1615,8 @@ void ClearSurfaceToColor(ISurface *surface, WebCore::Color color)
 {
 	//MBG CUSTOMIZED
 	surface->Clear(color.red(), color.green(), color.blue(), color.alpha());
-	return;
-
-	int width = 0;
-	int height = 0;
-	surface->GetContentDimensions(&width, &height);
-
-	ISurface::SurfaceDescriptor surfaceDescriptor = {0};
-	surface->Lock(&surfaceDescriptor);
-
-	RefPtr<cairo_surface_t> cairoSurface = adoptRef(cairo_image_surface_create_for_data((unsigned char*)surfaceDescriptor.mData, CAIRO_FORMAT_ARGB32, width, height, surfaceDescriptor.mStride));    
-	RefPtr<cairo_t> cairoContext = adoptRef(cairo_create(cairoSurface.get()));
-
-	WebCore::Color clearColor = color;
-	cairo_save(cairoContext.get());
-
-	cairo_set_source_rgba(cairoContext.get(), clearColor.red(), clearColor.green(), clearColor.blue(), clearColor.alpha());
-	cairo_rectangle(cairoContext.get(), 0, 0, width, height);
-	cairo_set_operator(cairoContext.get(), CAIRO_OPERATOR_SOURCE);
-	cairo_fill(cairoContext.get());
-
-	cairo_restore(cairoContext.get());
-
-	surface->Unlock();
 }
+
 } // WebKit
 } // EA
 

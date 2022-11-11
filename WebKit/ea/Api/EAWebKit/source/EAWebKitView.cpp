@@ -246,6 +246,21 @@ void View::Paint(ISurface* targetSurface)
 	//MBG: in case we've missed flushing in any other place, this will take care of it hopefully
 	cairo_device_flush((cairo_device_t*)EA::WebKit::g_cairoDevice);
 
+	//MBG - now that we have a size (and we're presumably scoped within a scene), we can make a cairo surface for the main layer
+	if(d->mCairoGlMainLayerSurface)
+	{
+		if(mCairoSurfaceSize.mWidth != mSize.mWidth || mCairoSurfaceSize.mHeight != mSize.mHeight)
+		{
+			cairo_surface_destroy(d->mCairoGlMainLayerSurface);
+			d->mCairoGlMainLayerSurface = nullptr;
+		}
+	}
+	if(!d->mCairoGlMainLayerSurface)
+	{
+		d->mCairoGlMainLayerSurface = cairo_gl_surface_create((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA, mSize.mWidth, mSize.mHeight);
+		mCairoSurfaceSize = mSize;
+	}
+
 	if(d->page)
 	{
 		WebFrame* frame = d->page->mainFrame();
@@ -684,17 +699,14 @@ void View::SetSize(IntSize size)
 	EAWEBKIT_THREAD_CHECK();
 	EAWWBKIT_INIT_CHECK();
 
+	mSize = size;
+
 	d->OverlayChangeNotify();
 
 	if(d->page)
 	{
 		d->page->setViewportSize(size);
 	}
-
-	//MBG - now that we have a size, we can make a cairo surface for the main layer
-	if(d->mCairoGlMainLayerSurface)
-		cairo_surface_destroy(d->mCairoGlMainLayerSurface);
-	d->mCairoGlMainLayerSurface = cairo_gl_surface_create((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA, size.mWidth, size.mHeight);
 
 		// Clear any old dirty regions since the resize could have invalidated them.
 	d->mDirtyRegions.clear();

@@ -241,7 +241,10 @@ private:
 	friend class WebPage;
 	friend class ViewNavigationDelegate;
 
-    struct ViewPrivate* d;
+	struct ViewPrivate* d;
+
+	IntSize mSize = {-1,-1};
+	IntSize mCairoSurfaceSize = {-1,-1};
 };
 
 }}

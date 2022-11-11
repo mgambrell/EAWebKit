@@ -1334,7 +1334,8 @@ _cairo_gl_surface_release_source_image (void		      *abstract_surface,
 	//MBG - this seems like it was missing....
 	_cairo_gl_surface_unmap_image(abstract_surface, image);
 
-	cairo_surface_destroy (&image->base);
+	//MBG - THIS is what it did before. but I don't think we need it now. 
+	//cairo_surface_destroy (&image->base);
 }
 
 static cairo_bool_t

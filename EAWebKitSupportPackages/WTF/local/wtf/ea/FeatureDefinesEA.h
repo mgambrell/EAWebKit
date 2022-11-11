@@ -40,6 +40,12 @@ Use this file to define ENABLE() macros only. Do not use this file to define USE
 
 */
 
+//MBG MODIFICATIONS
+#define ENABLE_JIT 0
+#define ENABLE_DFG_JIT 0
+#define ENABLE_LLINT_C_LOOP 1
+#define ENABLE_ACCELERATED_2D_CANVAS 1
+
 /* The list below is not comprehensive (meaning it does not include all the webcore/wtf/javascriptcore defines) but we can build over time as needed. */
 
 #if !defined(ENABLE_PROMISES)
@@ -284,16 +290,5 @@ Use this file to define ENABLE() macros only. Do not use this file to define USE
 
 /* JIT off for now in x86_64 + MSVC */
 
-//MBG MODIFICATIONS
-#if defined(EA_PLATFORM_CONSOLE)
-#define ENABLE_JIT 0
-#define ENABLE_DFG_JIT 0
-#define ENABLE_LLINT_C_LOOP 1
-#define ENABLE_ACCELERATED_2D_CANVAS 1
-#else
-#define ENABLE_LLINT_C_LOOP 0
-#define ENABLE_JIT 1
-#define ENABLE_DFG_JIT 1
-#endif
 
 #endif

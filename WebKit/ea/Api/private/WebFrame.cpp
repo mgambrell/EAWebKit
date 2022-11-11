@@ -577,10 +577,12 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 	int fullViewWidth = d->page->view()->GetSize().mWidth;
 	int fullViewHeight = d->page->view()->GetSize().mHeight;
 	cairo_surface_t *targetCairoSurface = cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA,surface->GetGlTexId(),fullViewWidth,fullViewHeight);
-	RefPtr<cairo_t> targetSurfaceCairoContext = adoptRef(cairo_create(targetCairoSurface));
-	cairo_set_source_surface(targetSurfaceCairoContext.get(),cairoMainLayerSurface,0,0);
-	cairo_set_operator (targetSurfaceCairoContext.get(), CAIRO_OPERATOR_SOURCE);
-	cairo_paint(targetSurfaceCairoContext.get());
+	cairo_t *targetSurfaceCairoContext = cairo_create(targetCairoSurface);
+	cairo_set_source_surface(targetSurfaceCairoContext,cairoMainLayerSurface,0,0);
+	cairo_set_operator (targetSurfaceCairoContext, CAIRO_OPERATOR_SOURCE);
+	cairo_paint(targetSurfaceCairoContext);
+	cairo_destroy(targetSurfaceCairoContext);
+	cairo_surface_destroy(targetCairoSurface);
 	//...............
 
 	//after this we're going to hand things off to the TextureMapper

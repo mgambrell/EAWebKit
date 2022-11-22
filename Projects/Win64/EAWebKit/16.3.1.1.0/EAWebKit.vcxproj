@@ -5104,10 +5104,6 @@
     <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitTextWrapper.cpp" />
     <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitThreadSystem.cpp" />
     <ClCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\internal\source\EAWebKitViewNavigationDelegate.cpp" />
-    <ResourceCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\win32\EAWebKit.rc">
-      <ResourceOutputFileName Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-debug|x64' ">pc64-vc-dev-debug\build\EAWebKit\EAWebKit.res</ResourceOutputFileName>
-      <ResourceOutputFileName Condition=" '$(Configuration)|$(Platform)' == 'pc64-vc-dev-opt|x64' ">pc64-vc-dev-opt\build\EAWebKit\EAWebKit.res</ResourceOutputFileName>
-    </ResourceCompile>
     <ClInclude Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\win32\resource.h" />
     <ClCompile Include="..\..\..\..\WebKit\ea\Api\private\WebFrame.cpp" />
     <ClInclude Include="..\..\..\..\WebKit\ea\Api\private\WebFrame.h" />

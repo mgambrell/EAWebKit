@@ -13504,9 +13504,4 @@
       <Filter>WebCore\platform\graphics\texmap\coordinated</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\..\..\..\WebKit\ea\Api\EAWebKit\source\win32\EAWebKit.rc">
-      <Filter>WebKit\ea\Api\EAWebKit\source\win32</Filter>
-    </ResourceCompile>
-  </ItemGroup>
 </Project>

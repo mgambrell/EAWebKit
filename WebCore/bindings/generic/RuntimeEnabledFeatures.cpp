@@ -97,7 +97,8 @@ RuntimeEnabledFeatures::RuntimeEnabledFeatures()
     , m_isFontLoadEventsEnabled(true)
 #endif
 #if ENABLE(GAMEPAD)
-    , m_areGamepadsEnabled(false)
+  //MBG CHANGED - I have no idea how to enable this, let's just default it to enabled
+    , m_areGamepadsEnabled(true)
 #endif
 #if ENABLE(CSS_ANIMATIONS_LEVEL_2)
     , m_areAnimationTriggersEnabled(false)

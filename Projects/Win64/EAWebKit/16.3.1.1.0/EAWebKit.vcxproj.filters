@@ -13503,5 +13503,32 @@
     <ClCompile Include="..\..\..\..\WebCore\platform\graphics\texmap\BitmapTexture.cpp">
       <Filter>WebCore\platform\graphics\texmap\coordinated</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\DerivedSources\JSGamepad.cpp">
+      <Filter>WebCore\DerivedSources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\DerivedSources\JSGamepadButton.cpp">
+      <Filter>WebCore\DerivedSources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\DerivedSources\JSGamepadEvent.cpp">
+      <Filter>WebCore\DerivedSources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\Modules\gamepad\Gamepad.cpp">
+      <Filter>WebCore\Modules\gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\Modules\gamepad\GamepadButton.cpp">
+      <Filter>WebCore\Modules\gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\Modules\gamepad\GamepadEvent.cpp">
+      <Filter>WebCore\Modules\gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\Modules\gamepad\GamepadManager.cpp">
+      <Filter>WebCore\Modules\gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\Modules\gamepad\NavigatorGamepad.cpp">
+      <Filter>WebCore\Modules\gamepad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\WebCore\platform\ea\GamepadProviderEA.cpp">
+      <Filter>WebCore\platform\ea</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

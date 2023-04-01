@@ -40,6 +40,9 @@ Gamepad::Gamepad(const PlatformGamepad& platformGamepad)
     , m_connected(true)
     , m_timestamp(platformGamepad.lastUpdateTime())
 {
+  //MBG HACK - I have no idea how this is ever supposed to be set...
+  m_mapping = "standard";
+
     m_axes.resize(platformGamepad.axisValues().size());
     unsigned buttonCount = platformGamepad.buttonValues().size();
     for (unsigned i = 0; i < buttonCount; ++i)

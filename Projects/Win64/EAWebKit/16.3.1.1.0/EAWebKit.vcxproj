@@ -1197,6 +1197,9 @@
     <ClInclude Include="..\..\..\..\WebCore\DerivedSources\JSNonElementParentNode.h" />
     <ClInclude Include="..\..\..\..\WebCore\DerivedSources\JSNotification.h" />
     <ClInclude Include="..\..\..\..\WebCore\DerivedSources\JSNotificationCenter.h" />
+    <ClCompile Include="..\..\..\..\WebCore\DerivedSources\JSGamepad.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\DerivedSources\JSGamepadButton.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\DerivedSources\JSGamepadEvent.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\DerivedSources\JSNotificationPermissionCallback.cpp">
     </ClCompile>
     <ClInclude Include="..\..\..\..\WebCore\DerivedSources\JSNotificationPermissionCallback.h" />
@@ -2863,6 +2866,11 @@
     <ClInclude Include="..\..\..\..\WebCore\Modules\geolocation\PositionError.h" />
     <ClInclude Include="..\..\..\..\WebCore\Modules\geolocation\PositionErrorCallback.h" />
     <ClInclude Include="..\..\..\..\WebCore\Modules\geolocation\PositionOptions.h" />
+    <ClCompile Include="..\..\..\..\WebCore\Modules\gamepad\Gamepad.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\Modules\gamepad\GamepadButton.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\Modules\gamepad\GamepadEvent.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\Modules\gamepad\GamepadManager.cpp" />
+    <ClCompile Include="..\..\..\..\WebCore\Modules\gamepad\NavigatorGamepad.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\Modules\indexeddb\DOMWindowIndexedDatabase.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\Modules\indexeddb\DOMWindowIndexedDatabase.h" />
     <ClCompile Include="..\..\..\..\WebCore\Modules\indexeddb\IDBAny.cpp" />
@@ -3440,6 +3448,7 @@
     <ClCompile Include="..\..\..\..\WebCore\platform\DragImage.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\DragImage.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\EventLoop.h" />
+    <ClCompile Include="..\..\..\..\WebCore\platform\ea\GamepadProviderEA.cpp" />
     <ClCompile Include="..\..\..\..\WebCore\platform\FileChooser.cpp" />
     <ClInclude Include="..\..\..\..\WebCore\platform\FileChooser.h" />
     <ClInclude Include="..\..\..\..\WebCore\platform\FileMetadata.h" />

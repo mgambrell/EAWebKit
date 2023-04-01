@@ -40,6 +40,15 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <EAWebKit/EAWebkitSTLWrapper.h>
 #include <EAWebKit/EAWebkitSystem.h>
 
+#include <string>
+#include <vector>
+
+//MBG - ADDED
+namespace WebCore
+{
+	class PlatformGamepad;
+}
+
 namespace EA
 {
 namespace WebKit
@@ -759,6 +768,31 @@ struct WatchDogNotificationInfo
 	}
 };
 
+//MBG addition
+class EAWebKitClientGamepadThunk;
+class EAWebKitClientGamepad
+{
+public:
+	virtual ~EAWebKitClientGamepad() { }
+
+	EAWebKitClientGamepadThunk* thunk = nullptr;
+
+	void init(int numButtons, int numAxes)
+	{
+		m_numButtons = numButtons;
+		m_numAxes = numAxes;
+	}
+
+
+	int getNumButtons() { return m_numButtons; }
+	int getNumAxes() { return m_numAxes; }
+	void setButtonsStorage(double* p) { m_pButtons = p; }
+	void setAxesStorage(double* p) { m_pAxes = p; }
+	int m_numButtons, m_numAxes;
+	double* m_pButtons = nullptr;
+	double *m_pAxes = nullptr;
+};
+
 // The user can provide an instance of this interface to the EAWebKit library. You can think of this instance as a delegate to which EAWebKit
 // refers when it needs to interact with the application.
 class EAWebKitClient
@@ -768,6 +802,7 @@ public:
 
 	//MBG - added
 	virtual void* GetGLPipeProcs() { return 0; }
+	virtual void GetGamepads(EAWebKitClientGamepad** ppGamepads, int *nGamepads) { }
 
 	virtual void GetLocalizedString     (LocalizedStringInfo&)          {   }
 	virtual void LoadUpdate				(LoadInfo&)						{	}

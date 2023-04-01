@@ -387,6 +387,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	#define EA_COMPILER_HAS_C99_FORMAT_MACROS 
 #endif
 
+//MBG HACK
+#define EA_COMPILER_HAS_C99_FORMAT_MACROS
+
 #ifndef EA_COMPILER_HAS_C99_FORMAT_MACROS 
 	// ------------------------------------------------------------------------
 	// sized printf and scanf format specifiers

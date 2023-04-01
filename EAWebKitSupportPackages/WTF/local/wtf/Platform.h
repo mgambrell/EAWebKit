@@ -672,17 +672,18 @@
 
 #endif /* OS(DARWIN) */
 
-//+EAWebKitChange
-//2/28/2014
-#if OS(WINDOWS) && !PLATFORM(EA)
-//-EAWebKitChange
-#define HAVE_SYS_TIMEB_H 1
-#define HAVE_ALIGNED_MALLOC 1
-#define HAVE_ISDEBUGGERPRESENT 1
-
-#include <WTF/WTFHeaderDetection.h>
-
-#endif
+//MBG - removed
+////+EAWebKitChange
+////2/28/2014
+//#if OS(WINDOWS) && !PLATFORM(EA)
+////-EAWebKitChange
+//#define HAVE_SYS_TIMEB_H 1
+//#define HAVE_ALIGNED_MALLOC 1
+//#define HAVE_ISDEBUGGERPRESENT 1
+//
+//#include <WTF/WTFHeaderDetection.h>
+//
+//#endif
 
 //+EAWebKitChange
 //2/28/2014

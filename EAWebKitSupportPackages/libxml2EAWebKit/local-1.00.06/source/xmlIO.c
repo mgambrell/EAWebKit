@@ -723,16 +723,19 @@ static xmlWrapGzOpenFunc xmlWrapGzOpen = gzopen;
 #endif
 
 
+//MBG: this is for video games, not desktops
+#if 0
 #if   defined(WINAPI_FAMILY) 
-    #include <winapifamily.h>
+#include <winapifamily.h>
 
-    #if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
-        #define LIBXML2_WINDOWS_DESKTOP 1
-    #else
-        #define LIBXML2_WINDOWS_DESKTOP 0
-    #endif
+#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+#define LIBXML2_WINDOWS_DESKTOP 1
 #else
-    #define LIBXML2_WINDOWS_DESKTOP 1
+#define LIBXML2_WINDOWS_DESKTOP 0
+#endif
+#else
+#define LIBXML2_WINDOWS_DESKTOP 1
+#endif
 #endif
 
 /**

@@ -3085,18 +3085,24 @@ xmlCatalogIsEmpty(xmlCatalogPtr catal) {
  * preferably be done once at startup
  */
 
-//+EAWebKitChange
-//3/13/2014
+ //MBG CUSTOMIZED
+#if 0
+ //+EAWebKitChange
+ //3/13/2014
 extern char* getenv(const char*);
 //-EAWebKitChange
+#endif
 
 static void
 xmlInitializeCatalogData(void) {
-    if (xmlCatalogInitialized != 0)
-	return;
+	if (xmlCatalogInitialized != 0)
+		return;
 
-    if (getenv("XML_DEBUG_CATALOG")) 
-	xmlDebugCatalogs = 1;
+	//MBG CUSTOMIZED
+	#if 0
+	if (getenv("XML_DEBUG_CATALOG")) 
+		xmlDebugCatalogs = 1;
+	#endif
     xmlCatalogMutex = xmlNewRMutex();
 
     xmlCatalogInitialized = 1;

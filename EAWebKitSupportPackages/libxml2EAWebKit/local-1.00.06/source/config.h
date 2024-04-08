@@ -166,12 +166,8 @@
 /* Define to 1 if you have the <stdarg.h> header file. */
 #define HAVE_STDARG_H 1
 
-/* Define to 1 if you have the <stdint.h> header file. */
-#if defined(_MSC_VER)
-    #undef HAVE_STDINT_H
-#else
-    #define HAVE_STDINT_H 1
-#endif
+//MBG: forced this on
+#define HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H

@@ -158,7 +158,10 @@
 
 #if CAIRO_NO_MUTEX
 
+//doesn't seem important...
+#if 0
 #pragma message ("OH NO!!! WARNING!!! I MAY HAVE TO DO THIS!!!! ISNT THERE AN ABSTRACTED MUTEX SOMEWHERE IN EA'S LIBS? MAYBE I CAN USE STD::MUTEX")
+#endif
 
 /* No mutexes */
 

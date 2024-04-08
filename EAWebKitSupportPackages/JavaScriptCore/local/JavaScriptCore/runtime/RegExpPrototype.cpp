@@ -141,7 +141,7 @@ typedef std::array<char, 3 + 1> FlagsString; // 3 different flags and a null cha
 
 static inline FlagsString flagsString(ExecState* exec, JSObject* regexp)
 {
-    FlagsString string;
+    FlagsString string = {0};
 
     JSValue globalValue = regexp->get(exec, exec->propertyNames().global);
     if (exec->hadException())

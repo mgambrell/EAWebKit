@@ -1945,10 +1945,10 @@ void EffectsProcessor::AdjustFontMetrics(FontMetrics& fontMetrics)
     {
         char filePath[64];
 
-        sprintf(filePath, "C:\\temp\\glyph\\SrcImage_%u.ppm", mEffectsState.mpCurrentInstruction - mEffectsState.mInstructionList);
+        sprintf(filePath, "C:\\temp\\glyph\\SrcImage_%llu.ppm", mEffectsState.mpCurrentInstruction - mEffectsState.mInstructionList);
         mEffectsState.mEffectsBitmaps.mFloatImage.WritePPMFile(filePath, 0x00);
 
-        sprintf(filePath, "C:\\temp\\glyph\\DestImage_%u.ppm", mEffectsState.mpCurrentInstruction - mEffectsState.mInstructionList);
+        sprintf(filePath, "C:\\temp\\glyph\\DestImage_%llu.ppm", mEffectsState.mpCurrentInstruction - mEffectsState.mInstructionList);
         mEffectsState.mEffectsBitmaps.mBaseImage.WritePPMFile(filePath, 0xff000000);
     }
 #endif

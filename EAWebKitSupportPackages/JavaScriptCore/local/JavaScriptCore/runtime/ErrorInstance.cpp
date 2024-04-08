@@ -139,7 +139,7 @@ static bool addErrorInfoAndGetBytecodeOffset(ExecState* exec, VM& vm, JSObject* 
 
         ASSERT(exec == vm.topCallFrame || exec == exec->lexicalGlobalObject()->globalExec() || exec == exec->vmEntryGlobalObject()->globalExec());
 
-        StackFrame* stackFrame;
+        StackFrame* stackFrame = nullptr;
         for (unsigned i = 0 ; i < stackTrace.size(); ++i) {
             stackFrame = &stackTrace.at(i);
             if (stackFrame->bytecodeOffset)

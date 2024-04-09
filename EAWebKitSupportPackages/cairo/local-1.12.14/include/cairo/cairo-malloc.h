@@ -1,5 +1,5 @@
 /*
- * Copyright © 2011 Electronic Arts, Inc.
+ * Copyright (c) 2011 Electronic Arts, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it either under the terms of the GNU Lesser General Public

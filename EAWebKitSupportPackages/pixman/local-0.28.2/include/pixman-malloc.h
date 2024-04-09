@@ -1,5 +1,5 @@
 /*
- * Copyright © 2011, 2012 Electronic Arts, Inc.
+ * Copyright (c) 2011, 2012 Electronic Arts, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that

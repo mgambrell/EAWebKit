@@ -89,7 +89,7 @@ namespace JSC {
 void EAWebKitOffsetsExtractor()
 {
   volatile const unsigned* dummy = JSC::LLIntOffsetsExtractor::dummy();
-  printf("%x\n",dummy);
+  printf("%llx\n",(uintptr_t)dummy);
 }
 
 

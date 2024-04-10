@@ -226,7 +226,7 @@ namespace EA
         /// successive calls to GetNextCharBreak. In this example, the '`' char 
         /// is assumed to be a Unicode combining diacritical and not the standalone 
         /// ascii '`' char.
-        ///    "Hello` Wòrld"
+        ///    "Hello` World"
         ///     ^^^^^ ^^^^^^^
         ///
         /// Example usage:

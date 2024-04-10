@@ -1150,7 +1150,7 @@ double RenderThemeEA::caretBlinkInterval() const
 
 #if ENABLE(VIDEO)
 // To modify the slider location. 
-LayoutPoint RenderThemeEA::volumeSliderOffsetFromMuteButton(const RenderBox& muteButtonBox, const LayoutSize& size) const const
+LayoutPoint RenderThemeEA::volumeSliderOffsetFromMuteButton(const RenderBox& muteButtonBox, const LayoutSize& size) const
 {
     int y = -size.height();
     FloatPoint absPoint = muteButtonBox.localToAbsolute(FloatPoint(muteButtonBox.offsetLeft(), y), IsFixed | UseTransforms);

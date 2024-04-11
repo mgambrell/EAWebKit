@@ -262,7 +262,8 @@ const std::string &ShGetInfoLog(const ShHandle handle)
 
   //  TInfoSink &infoSink = compiler->getInfoSink();
 //    return infoSink.info.str();
-  return "";
+  static const std::string empty;
+  return empty;
 }
 
 //"Return any object code"

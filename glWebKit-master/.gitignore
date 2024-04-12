@@ -1,9 +1,0 @@
-*.user
-build/.vs
-build/x64
-build/glWebKit/obj
-build/glWebKitExample/obj
-bin64/EAWebKit*.dll
-bin64/*.ilk
-bin64/*.exe
-bin64/*.pdb

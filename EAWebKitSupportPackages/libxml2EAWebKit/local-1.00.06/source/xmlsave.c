@@ -1691,6 +1691,8 @@ xhtmlNodeDumpOutput(xmlSaveCtxtPtr ctxt, xmlNodePtr cur) {
  *									*
  ************************************************************************/
 
+#if 0
+
 /**
  * xmlSaveToFd:
  * @fd:  a file descriptor number
@@ -1716,6 +1718,8 @@ xmlSaveToFd(int fd, const char *encoding, int options)
     }
     return(ret);
 }
+
+#endif
 
 /**
  * xmlSaveToFilename:

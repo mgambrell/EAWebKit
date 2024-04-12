@@ -5267,6 +5267,8 @@ xmlReaderForMemory(const char *buffer, int size, const char *URL,
     return (reader);
 }
 
+#if 0
+
 /**
  * xmlReaderForFd:
  * @fd:  an open file descriptor
@@ -5303,6 +5305,8 @@ xmlReaderForFd(int fd, const char *URL, const char *encoding, int options)
     xmlTextReaderSetup(reader, NULL, URL, encoding, options);
     return (reader);
 }
+
+#endif
 
 /**
  * xmlReaderForIO:
@@ -5484,6 +5488,8 @@ xmlReaderNewMemory(xmlTextReaderPtr reader, const char *buffer, int size,
     return (xmlTextReaderSetup(reader, input, URL, encoding, options));
 }
 
+#if 0
+
 /**
  * xmlReaderNewFd:
  * @reader:  an XML reader
@@ -5517,6 +5523,8 @@ xmlReaderNewFd(xmlTextReaderPtr reader, int fd,
     input->closecallback = NULL;
     return (xmlTextReaderSetup(reader, input, URL, encoding, options));
 }
+
+#endif
 
 /**
  * xmlReaderNewIO:

@@ -824,6 +824,7 @@ xmlNop(void) {
     return(0);
 }
 
+#if 0
 /**
  * xmlFdRead:
  * @context:  the I/O context
@@ -881,6 +882,8 @@ xmlFdClose (void * context) {
     if (ret < 0) xmlIOErr(0, "close()");
     return(ret);
 }
+
+#endif
 
 /**
  * xmlFileMatch:
@@ -2831,6 +2834,8 @@ xmlOutputBufferCreateBuffer(xmlBufferPtr buffer,
 
 #endif /* LIBXML_OUTPUT_ENABLED */
 
+#if 0
+
 /**
  * xmlParserInputBufferCreateFd:
  * @fd:  a file descriptor number
@@ -2856,6 +2861,8 @@ xmlParserInputBufferCreateFd(int fd, xmlCharEncoding enc) {
 
     return(ret);
 }
+
+#endif
 
 /**
  * xmlParserInputBufferCreateMem:
@@ -2936,6 +2943,8 @@ xmlParserInputBufferCreateStatic(const char *mem, int size,
     return(ret);
 }
 
+#if 0
+
 #ifdef LIBXML_OUTPUT_ENABLED
 /**
  * xmlOutputBufferCreateFd:
@@ -2963,6 +2972,8 @@ xmlOutputBufferCreateFd(int fd, xmlCharEncodingHandlerPtr encoder) {
     return(ret);
 }
 #endif /* LIBXML_OUTPUT_ENABLED */
+
+#endif
 
 /**
  * xmlParserInputBufferCreateIO:

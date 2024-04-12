@@ -564,7 +564,7 @@ void TextureMapperGL::drawSolidColor(const FloatRect& rect, const Transformation
     if (a < 1)
         flags |= ShouldBlend;
 
-    draw(rect, matrix, program.get(), GraphicsContext3D::TRIANGLE_FAN, flags);
+    draw(rect, matrix, program.get(), GraphicsContext3D::TRIANGLE_STRIP, flags);
 }
 
 void TextureMapperGL::drawEdgeTriangles(TextureMapperShaderProgram* program)
@@ -599,7 +599,7 @@ void TextureMapperGL::drawEdgeTriangles(TextureMapperShaderProgram* program)
 
 void TextureMapperGL::drawUnitRect(TextureMapperShaderProgram* program, GC3Denum drawingMode)
 {
-    static const GC3Dfloat unitRect[] = { 0, 0, 1, 0, 1, 1, 0, 1 };
+    static const GC3Dfloat unitRect[] = {0, 0, 1, 0, 0, 1, 1, 1};;
     Platform3DObject vbo = data().getStaticVBO(GraphicsContext3D::ARRAY_BUFFER, sizeof(GC3Dfloat) * 8, unitRect);
     m_context3D->bindBuffer(GraphicsContext3D::ARRAY_BUFFER, vbo);
     m_context3D->vertexAttribPointer(program->vertexLocation(), 2, GraphicsContext3D::FLOAT, false, 0, 0);
@@ -663,7 +663,7 @@ void TextureMapperGL::drawTexturedQuadWithProgram(TextureMapperShaderProgram* pr
     if (opacity < 1)
         flags |= ShouldBlend;
 
-    draw(rect, modelViewMatrix, program, GraphicsContext3D::TRIANGLE_FAN, flags);
+    draw(rect, modelViewMatrix, program, GraphicsContext3D::TRIANGLE_STRIP, flags);
     m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_WRAP_S, GraphicsContext3D::CLAMP_TO_EDGE);
     m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_WRAP_T, GraphicsContext3D::CLAMP_TO_EDGE);
 }
@@ -756,7 +756,7 @@ void TextureMapperGL::beginClip(const TransformationMatrix& modelViewMatrix, con
 
     m_context3D->useProgram(program->programID());
     m_context3D->enableVertexAttribArray(program->vertexLocation());
-    const GC3Dfloat unitRect[] = {0, 0, 1, 0, 1, 1, 0, 1};
+    const GC3Dfloat unitRect[] = {0, 0, 1, 0, 0, 1, 1, 1};;
     m_context3D->vertexAttribPointer(program->vertexLocation(), 2, GraphicsContext3D::FLOAT, false, 0, GC3Dintptr(unitRect));
 
     TransformationMatrix matrix = TransformationMatrix(modelViewMatrix)
@@ -778,13 +778,13 @@ void TextureMapperGL::beginClip(const TransformationMatrix& modelViewMatrix, con
     program->setMatrix(program->projectionMatrixLocation(), fullProjectionMatrix);
     program->setMatrix(program->modelViewMatrixLocation(), TransformationMatrix());
     m_context3D->stencilOp(GraphicsContext3D::ZERO, GraphicsContext3D::ZERO, GraphicsContext3D::ZERO);
-    m_context3D->drawArrays(GraphicsContext3D::TRIANGLE_FAN, 0, 4);
+    m_context3D->drawArrays(GraphicsContext3D::TRIANGLE_STRIP, 0, 4);
 
     // Now apply the current index to the new quad.
     m_context3D->stencilOp(GraphicsContext3D::REPLACE, GraphicsContext3D::REPLACE, GraphicsContext3D::REPLACE);
     program->setMatrix(program->projectionMatrixLocation(), data().projectionMatrix);
     program->setMatrix(program->modelViewMatrixLocation(), matrix);
-    m_context3D->drawArrays(GraphicsContext3D::TRIANGLE_FAN, 0, 4);
+    m_context3D->drawArrays(GraphicsContext3D::TRIANGLE_STRIP, 0, 4);
 
     // Clear the state.
     m_context3D->disableVertexAttribArray(program->vertexLocation());

@@ -6,7 +6,7 @@ http://irrlicht.sourceforge.net/
 
 The Irrlicht Engine License
 
-Copyright © 2002-2005 Nikolaus Gebhardt
+Copyright (c) 2002-2005 Nikolaus Gebhardt
 
 This software is provided 'as-is', without any 
 express or implied warranty. In no event will the 

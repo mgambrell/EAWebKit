@@ -116,7 +116,7 @@
 #undef HAVE_MALLOC_H
 
 /* Define to 1 if you have the <math.h> header file. */
-#undef HAVE_MATH_H
+#define HAVE_MATH_H 1
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
@@ -284,8 +284,10 @@
 #undef XML_SOCKLEN_T
 
 /* Using the Win32 Socket implementation */
+#if 0
 #if defined(_MSC_VER)
     #define _WINSOCKAPI_ 1
+#endif
 #endif
 
 /* Define like PROTOTYPES; this can be used by system headers. */

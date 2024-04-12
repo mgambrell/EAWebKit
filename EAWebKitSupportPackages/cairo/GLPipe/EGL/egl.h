@@ -183,7 +183,7 @@ extern PFNEGLTERMINATEPROC _egl_eglTerminate;
 EGLAPI EGLBoolean EGLAPIENTRY eglWaitGL (void);
 
 extern PFNEGLWAITNATIVEPROC _egl_eglWaitNative;
-#define eglWaitNative _egl_eglWaitNative;
+#define eglWaitNative _egl_eglWaitNative
 
 
 #endif

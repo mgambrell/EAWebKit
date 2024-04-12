@@ -2,7 +2,7 @@
 //I will end up having to make my own function pointer typedefs
 //for example.. typedef _GLES2_PFNGLGETERRORPROC
 //Then again, maybe the point of these old statically linked apis is that they're always the same... well, I guess we'll find out
-//if I everp ut more than one API in here
+//if I ever put more than one API in here
 
 #include "GLPipe.h"
 

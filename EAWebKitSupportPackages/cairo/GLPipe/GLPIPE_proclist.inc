@@ -22,6 +22,7 @@ GLPIPE_PROCENT(_egl_,PFNEGLQUERYSTRINGPROC,eglQueryString, const char *, (EGLDis
 GLPIPE_PROCENT(_egl_,PFNEGLQUERYSURFACEPROC,eglQuerySurface, EGLBoolean, (EGLDisplay dpy, EGLSurface surface, EGLint attribute, EGLint *value))
 GLPIPE_PROCENT(_egl_,PFNEGLSWAPBUFFERSPROC,eglSwapBuffers, EGLBoolean, (EGLDisplay dpy, EGLSurface surface))
 GLPIPE_PROCENT(_egl_,PFNEGLTERMINATEPROC,eglTerminate, EGLBoolean, (EGLDisplay dpy))
+GLPIPE_PROCENT(_egl_,PFNEGLWAITNATIVEPROC,eglWaitNative, EGLBoolean, (EGLint engine))
 
 GLPIPE_PROCENT(_egl_,PFNEGLCREATEWINDOWSURFACEPROC,eglCreateWindowSurface, EGLSurface, (EGLDisplay dpy, EGLConfig config, EGLNativeWindowType win, const EGLint *attrib_list))
 GLPIPE_PROCENT(_egl_,PFNEGLDESTROYCONTEXTPROC, eglDestroyContext, EGLBoolean , (EGLDisplay dpy, EGLContext ctx))

@@ -71,7 +71,7 @@ static uint8_t _CryptMD2_aPiSubst[256] =
      49,  68,  80, 180, 143, 237,  31,  26, 219, 153, 141,  51, 159,  17, 131,  20
 };
 
-static uint8_t *_CryptMD2_aPadding[] =
+static const char*_CryptMD2_aPadding[] =
 {
     "",
     "\001",
@@ -189,5 +189,5 @@ void CryptMD2Final(CryptMD2T *pContext, void *_pBuffer, int32_t iLength)
     
     memcpy(pBuffer, pContext->aState, MD2_BINARY_OUT);
     
-    memset(pContext, 0, sizeof(pContext));
+    memset(pContext, 0, sizeof(*pContext));
 }

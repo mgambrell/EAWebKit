@@ -102,7 +102,16 @@
 	#define EA_PLATFORM_DESKTOP 1
 #endif
 
-#if defined(EA_PLATFORM_PS4) || defined(__ORBIS__) || defined(EA_PLATFORM_KETTLE)
+//MBG - ADDED NX
+#if defined(NN_NINTENDO_SDK)
+#define EA_PLATFORM_NAME "NX64"
+#define EA_SYSTEM_LITTLE_ENDIAN 1
+#define EA_PLATFORM_DESCRIPTION "nx64"
+#define EA_PLATFORM_CONSOLE 1
+#define EA_PLATFORM_NO_GETPID 1
+//#define EA_PLATFORM_POSIX 1
+#define EA_PLATFORM_NX
+#elif   defined(EA_PLATFORM_PS4) || defined(__ORBIS__) || defined(EA_PLATFORM_KETTLE)
 	// PlayStation 4
 	// Orbis was Sony's code-name for the platform, which is now obsolete.
 	// Kettle was an EA-specific code-name for the platform, which is now obsolete.
@@ -838,6 +847,10 @@
 	#endif
 #endif
 
+//MBG - modifications
+#undef EA_PLATFORM_DESKTOP
+#undef EA_PLATFORM_CONSOLE
+#define EA_PLATFORM_CONSOLE 1
 
 #endif // INCLUDED_eaplatform_H
 

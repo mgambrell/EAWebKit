@@ -374,6 +374,11 @@
 	#define EA_COMPILER_HAS_C99_FORMAT_MACROS 
 #endif
 
+//MBG HACK (not sure why I needed this)
+#if !defined(EA_COMPILER_HAS_C99_FORMAT_MACROS)
+#define EA_COMPILER_HAS_C99_FORMAT_MACROS
+#endif
+
 #ifndef EA_COMPILER_HAS_C99_FORMAT_MACROS 
 	// ------------------------------------------------------------------------
 	// sized printf and scanf format specifiers

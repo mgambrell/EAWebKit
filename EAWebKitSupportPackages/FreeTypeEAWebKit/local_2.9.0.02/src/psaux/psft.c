@@ -767,10 +767,6 @@
   cf2_freeT1SeacComponent( PS_Decoder*  decoder,
                            CF2_Buffer   buf )
   {
-    T1_Face  face;
-    FT_Data  data;
-
-
     FT_ASSERT( decoder );
 
 #ifdef FT_CONFIG_OPTION_INCREMENTAL

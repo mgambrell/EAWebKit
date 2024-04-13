@@ -30,9 +30,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // // Maintained by EAWebKit Team 
 ///////////////////////////////////////////////////////////////////////////////
 
+//MBG - added
+#include <stdint.h>
+
 namespace WebCore {
 
-extern const char mediaControlsUserAgentStyleSheetEA[613] = {
+	//MBG - changed to uint8_t
+extern const uint8_t mediaControlsUserAgentStyleSheetEA[613] = {
 	97, 117, 100, 105, 111, 58, 58, 45, 119, 101, 98, 107, 105, 116, 45, 109,
 	101, 100, 105, 97, 45, 99, 111, 110, 116, 114, 111, 108, 115, 45, 115, 101,
 	101, 107, 45, 98, 97, 99, 107, 45, 98, 117, 116, 116, 111, 110, 44, 32,
@@ -74,7 +78,8 @@ extern const char mediaControlsUserAgentStyleSheetEA[613] = {
 	110, 101, 59, 32, 125
 };
 
-extern const char mediaControlsJavascriptApple[51360] = {
+//MBG - changed to uint8_t
+extern const uint8_t mediaControlsJavascriptApple[51360] = {
 	102, 117, 110, 99, 116, 105, 111, 110, 32, 99, 114, 101, 97, 116, 101, 67,
 	111, 110, 116, 114, 111, 108, 115, 40, 114, 111, 111, 116, 44, 32, 118, 105,
 	100, 101, 111, 44, 32, 104, 111, 115, 116, 41, 10, 123, 10, 32, 32, 32,
@@ -3287,7 +3292,8 @@ extern const char mediaControlsJavascriptApple[51360] = {
 	97, 121, 41, 59, 10, 32, 32, 32, 32, 125, 44, 10, 125, 59, 10, 10
 };
 
-extern const char mediaControlsStyleSheetApple[32701] = {
+//MBG - changed to uint8_t
+extern const uint8_t mediaControlsStyleSheetApple[32701] = {
 	47, 42, 10, 32, 42, 32, 67, 111, 112, 121, 114, 105, 103, 104, 116, 32,
 	40, 67, 41, 32, 50, 48, 49, 51, 44, 32, 50, 48, 49, 52, 32, 65,
 	112, 112, 108, 101, 32, 73, 110, 99, 46, 32, 32, 65, 108, 108, 32, 114,
@@ -5334,7 +5340,8 @@ extern const char mediaControlsStyleSheetApple[32701] = {
 	97, 121, 58, 32, 110, 111, 110, 101, 59, 10, 125, 10, 10
 };
 
-extern const char mediaControlsLocalizedStringsJavaScript[1288] = {
+//MBG - changed to uint8_t
+extern const uint8_t mediaControlsLocalizedStringsJavaScript[1288] = {
 	118, 97, 114, 32, 85, 73, 83, 116, 114, 105, 110, 103, 84, 97, 98, 108,
 	101, 32, 61, 32, 123, 10, 32, 32, 32, 32, 39, 35, 35, 87, 73, 82,
 	69, 76, 69, 83, 83, 95, 80, 76, 65, 89, 66, 65, 67, 75, 95, 68,

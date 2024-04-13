@@ -31,8 +31,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace WebCore {
-extern const char mediaControlsUserAgentStyleSheetEA[613];
-extern const char mediaControlsJavascriptApple[51360];
-extern const char mediaControlsStyleSheetApple[32701];
-extern const char mediaControlsLocalizedStringsJavaScript[1288];
+	//MBG - changed to uint8_t
+extern const uint8_t mediaControlsUserAgentStyleSheetEA[613];
+extern const uint8_t mediaControlsJavascriptApple[51360];
+extern const uint8_t mediaControlsStyleSheetApple[32701];
+extern const uint8_t mediaControlsLocalizedStringsJavaScript[1288];
 }

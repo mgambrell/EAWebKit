@@ -547,8 +547,8 @@ void ChromeClientEA::reachedApplicationCacheOriginQuota(WebCore::SecurityOrigin*
 {
     notImplemented();
 	// abaldeva: This should not be really fired since the quota is set to ApplicationCacheStorage::noQuota() by default.
-    //MBG NOTE - this is a portability problem due to 4byte wchar_t
-	EAW_ASSERT_FORMATTED(false, "Max App Cache Size for %S origin reached. Need a way to handle this.",origin->host().charactersWithNullTermination().data());
+    //MBG NOTE - this is a portability problem due to 4byte wchar_t. UPDATE: so, I removed it
+	//EAW_ASSERT_FORMATTED(false, "Max App Cache Size for %S origin reached. Need a way to handle this.",origin->host().charactersWithNullTermination().data());
 }
 
 

@@ -353,7 +353,7 @@ static int32_t _ProtoHttpFormatRequest(ProtoHttpRefT *pState, const char *pUrl, 
 static void _ProtoHttpSendRequest(ProtoHttpRefT *pState)
 {
     int32_t iResult;
-    uint8_t uTest;
+    char uTest;
 
     if (pState->bNewConnection == FALSE)
     {

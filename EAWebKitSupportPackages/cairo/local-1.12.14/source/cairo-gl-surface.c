@@ -952,10 +952,10 @@ _cairo_gl_surface_draw_image (cairo_gl_surface_t *dst,
 	 * b. the row stride cannot be handled by GL itself using a 4 byte
 	 *     alignment constraint
 	 */
-	if (src->stride < 0 ||
+	if ((src->stride < 0 ||
 	    (ctx->gl_flavor == CAIRO_GL_FLAVOR_ES &&
 	     (src->width * cpp < src->stride - 3 ||
-	      width != src->width))
+	      width != src->width)))
 		&& 0 //MBG - modified to use GL_UNPACK_ROW_LENGTH
 		)
 	{

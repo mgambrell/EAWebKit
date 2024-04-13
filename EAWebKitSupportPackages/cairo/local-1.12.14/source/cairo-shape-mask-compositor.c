@@ -115,7 +115,7 @@ _cairo_shape_mask_compositor_stroke (const cairo_compositor_t *_compositor,
 				      &_cairo_pattern_white.base,
 				      &pattern.base,
 				      clip);
-	if ((status == CAIRO_INT_STATUS_SUCCESS)) {
+	if (status == CAIRO_INT_STATUS_SUCCESS) {
 	    status = _cairo_surface_mask (extents->surface,
 					  CAIRO_OPERATOR_ADD,
 					  &extents->source_pattern.base,
@@ -208,7 +208,7 @@ _cairo_shape_mask_compositor_fill (const cairo_compositor_t *_compositor,
 				      &_cairo_pattern_white.base,
 				      &pattern.base,
 				      clip);
-	if ((status == CAIRO_INT_STATUS_SUCCESS)) {
+	if (status == CAIRO_INT_STATUS_SUCCESS) {
 	    status = _cairo_surface_mask (extents->surface,
 					  CAIRO_OPERATOR_ADD,
 					  &extents->source_pattern.base,
@@ -300,7 +300,7 @@ _cairo_shape_mask_compositor_glyphs (const cairo_compositor_t *_compositor,
 				      &_cairo_pattern_white.base,
 				      &pattern.base,
 				      clip);
-	if ((status == CAIRO_INT_STATUS_SUCCESS)) {
+	if (status == CAIRO_INT_STATUS_SUCCESS) {
 	    status = _cairo_surface_mask (extents->surface,
 					  CAIRO_OPERATOR_ADD,
 					  &extents->source_pattern.base,

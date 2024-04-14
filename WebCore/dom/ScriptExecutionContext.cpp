@@ -57,7 +57,8 @@ namespace EA
 	namespace WebKit
 	{
         bool CanDoJSCallstack();
-        void ReportJSCallstack(char8_t * message, uint32_t depth, char8_t **nameArray, char8_t **urlArray, uint32_t *lineArray, uint32_t *columnArray);
+        //MBG - made mesage const
+        void ReportJSCallstack(const char8_t * message, uint32_t depth, char8_t **nameArray, char8_t **urlArray, uint32_t *lineArray, uint32_t *columnArray);
 	}
 }
 //-EAWebKitChange

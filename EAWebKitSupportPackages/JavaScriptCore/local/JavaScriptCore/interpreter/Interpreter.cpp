@@ -96,7 +96,8 @@ namespace EA
 	namespace WebKit
 	{
 		bool CanDoJSCallstack();
-		void ReportJSCallstack(char8_t * message, uint32_t depth, char8_t **nameArray, char8_t **urlArray, uint32_t *lineArray, uint32_t *columnArray);
+		//MBG - made mesage const
+		void ReportJSCallstack(const char8_t * message, uint32_t depth, char8_t **nameArray, char8_t **urlArray, uint32_t *lineArray, uint32_t *columnArray);
 	}
 }
 //-EAWebKitChange
@@ -636,7 +637,7 @@ void Interpreter::reportAssertToEAWebkit(ExecState* exec)
                 stackTrace[i].createStackFameData(exec, &nameArray[i], &urlArray[i], lineArray[i], columnArray[i]);
             }
 
-            EA::WebKit::ReportJSCallstack((const char8_t*)"EAWebKitAssert", stackTrace.size(), nameArray, urlArray, lineArray, columnArray);
+            EA::WebKit::ReportJSCallstack("EAWebKitAssert", stackTrace.size(), nameArray, urlArray, lineArray, columnArray);
 
             // delete all the allocated function name, and url strings
             for (uint32_t i = 0; i < stackTrace.size(); i++)

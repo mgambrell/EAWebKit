@@ -86,6 +86,10 @@
 #include <EAWebKit/EAWebKitInput.h>
 #include <internal/include/EAWebKitAssert.h>
 
+//MBG ADDED TO PRINT CHAR16_T
+#include <codecvt>
+#include <locale>
+
 // Note by Arpit Baldeva - 
 // The frame load events in WebCore are pretty complex, some times non-intuitive. A discussion about some of them can be read
 // at http://old.nabble.com/FrameLoaderClient-notifications-tt16025970.html
@@ -890,7 +894,15 @@ void FrameLoaderClientEA::dispatchWillSendRequest(WebCore::DocumentLoader*, unsi
             GetFixedString(loadInfo.mResourceURL)->assign(StringView(urlFrom).upconvertedCharacters(), urlFrom.length());
             GetFixedString(loadInfo.mRedirectedURL)->assign(StringView(urlTo).upconvertedCharacters(), urlTo.length());
 
-			EAW_LOG(3, "Event %s : The server has a redirection request to %ls from %ls", EVENT_TYPE_STR(kLETRedirectionReceived) , GetFixedString(loadInfo.mRedirectedURL)->c_str(), GetFixedString(loadInfo.mResourceURL)->c_str() );
+			//MBG - no way to format char16_t; %ls is wchar_t. shouldn't the assert lib be using trio or something internally? I assume trio can handle it. or why are we using this awful type instead of utf-8 internally anyway?
+			std::u16string u16str(GetFixedString(loadInfo.mRedirectedURL)->c_str());
+			std::locale utf16_locale(std::locale(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::codecvt_mode::little_endian>());
+			std::wstring_convert<std::codecvt_utf16<wchar_t, 0x10ffff, std::codecvt_mode::little_endian>, wchar_t> convertor;
+			std::wstring wstr = convertor.from_bytes(reinterpret_cast<const char*>(u16str.c_str()), reinterpret_cast<const char*>(u16str.c_str() + u16str.size() + 1));
+			std::u16string u16str2(GetFixedString(loadInfo.mResourceURL)->c_str());
+			std::wstring wstr2 = convertor.from_bytes(reinterpret_cast<const char*>(u16str2.c_str()), reinterpret_cast<const char*>(u16str2.c_str() + u16str2.size() + 1));
+			
+			EAW_LOG(3, "Event %s : The server has a redirection request to %ls from %ls", EVENT_TYPE_STR(kLETRedirectionReceived) , wstr.c_str(), wstr2.c_str() );
 			pClient->LoadUpdate(loadInfo);
 		}
 
@@ -984,7 +996,13 @@ void FrameLoaderClientEA::dispatchDidReceiveResponse(WebCore::DocumentLoader*, u
 		if(resourceURL.length())
             GetFixedString(loadInfo.mResourceURL)->assign(StringView(resourceURL).upconvertedCharacters(), resourceURL.length());
 
-		EAW_LOG(3, "Event %s : The server has responded to a resource request URL - %ls with status = %ld", EVENT_TYPE_STR(kLETResourceResponseReceived) , GetFixedString(loadInfo.mResourceURL)->c_str() , loadInfo.mStatusCode );
+		//MBG - no way to format char16_t; %ls is wchar_t. shouldn't the assert lib be using trio or something internally? I assume trio can handle it. or why are we using this awful type instead of utf-8 internally anyway?
+		std::u16string u16str(GetFixedString(loadInfo.mResourceURL)->c_str());
+		std::locale utf16_locale(std::locale(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::codecvt_mode::little_endian>());
+		std::wstring_convert<std::codecvt_utf16<wchar_t, 0x10ffff, std::codecvt_mode::little_endian>, wchar_t> convertor;
+		std::wstring wstr = convertor.from_bytes(reinterpret_cast<const char*>(u16str.c_str()), reinterpret_cast<const char*>(u16str.c_str() + u16str.size() + 1));
+
+		EAW_LOG(3, "Event %s : The server has responded to a resource request URL - %ls with status = %ld", EVENT_TYPE_STR(kLETResourceResponseReceived) , wstr.c_str() , loadInfo.mStatusCode );
 		pClient->LoadUpdate(loadInfo);
 	}
 }
@@ -1011,7 +1029,13 @@ void FrameLoaderClientEA::dispatchDidFailLoading(WebCore::DocumentLoader* loader
 		if(failingURL.length())
             GetFixedString(loadInfo.mResourceURL)->assign(StringView(failingURL).upconvertedCharacters(), failingURL.length());
 
-		EAW_LOG(3, "Event %s : Error = %d while loading resource - %ls", EVENT_TYPE_STR(kLETResourceLoadError), loadInfo.mLoadErrorType , GetFixedString(loadInfo.mResourceURL)->c_str() );
+		//MBG - no way to format char16_t; %ls is wchar_t. shouldn't the assert lib be using trio or something internally? I assume trio can handle it. or why are we using this awful type instead of utf-8 internally anyway?
+		std::u16string u16str(GetFixedString(loadInfo.mResourceURL)->c_str());
+		std::locale utf16_locale(std::locale(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::codecvt_mode::little_endian>());
+		std::wstring_convert<std::codecvt_utf16<wchar_t, 0x10ffff, std::codecvt_mode::little_endian>, wchar_t> convertor;
+		std::wstring wstr = convertor.from_bytes(reinterpret_cast<const char*>(u16str.c_str()), reinterpret_cast<const char*>(u16str.c_str() + u16str.size() + 1));
+
+		EAW_LOG(3, "Event %s : Error = %d while loading resource - %ls", EVENT_TYPE_STR(kLETResourceLoadError), loadInfo.mLoadErrorType , wstr.c_str() );
 		pClient->LoadUpdate(loadInfo);
 	}
 }

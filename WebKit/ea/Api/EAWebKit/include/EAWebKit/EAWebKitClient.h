@@ -635,7 +635,7 @@ struct ReportJSCallstackInfo
     
     int mDepth;         // Depth of the callstack, there's one entry per level in the below arrays.
     // Don't hold onto these.
-    char8_t *mMessage;  // Error message that comes with this callstack
+    const char8_t *mMessage;  // Error message that comes with this callstack //MBG - made mesage const
     char8_t **mNames;   // Array of function names.
     char8_t **mUrls;    // Array of source urls for the functions.
     uint32_t *mLines;   // Array of line numbers.

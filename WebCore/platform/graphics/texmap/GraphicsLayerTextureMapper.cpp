@@ -48,7 +48,7 @@ GraphicsLayerTextureMapper::GraphicsLayerTextureMapper(Type layerType, GraphicsL
     : GraphicsLayer(layerType, client)
     , m_compositedNativeImagePtr(0)
     , m_changeMask(NoChanges)
-    , m_needsDisplay(true) //MBG - draw it initially, even if empty
+    , m_needsDisplay(false)
     , m_fixedToViewport(false)
     , m_debugBorderWidth(0)
     , m_contentsLayer(0)
@@ -560,6 +560,9 @@ void GraphicsLayerTextureMapper::updateBackingStoreIfNeeded()
 
 bool GraphicsLayerTextureMapper::shouldHaveBackingStore() const
 {
+  //MBG UPDATE 2024: well, it seems my modification causes a bunch of pointless draws of big empty backing stores
+  //I can no longer prove I need this, so I'm removing it
+  #if 0
   //MBG - EVERYTHING should have a backing store.
   //even if it's invisible. It may not be in a minute, but why not get it ready?
   //OK, but first, here's what I'm really trying to fix, in pseudocode
@@ -573,6 +576,9 @@ bool GraphicsLayerTextureMapper::shouldHaveBackingStore() const
 
   //MBG - how it used to be
   //return drawsContent() && contentsAreVisible() && !m_size.isEmpty();
+  #endif
+
+  return drawsContent() && contentsAreVisible() && !m_size.isEmpty();
 }
 
 bool GraphicsLayerTextureMapper::addAnimation(const KeyframeValueList& valueList, const FloatSize& boxSize, const Animation* anim, const String& keyframesName, double timeOffset)

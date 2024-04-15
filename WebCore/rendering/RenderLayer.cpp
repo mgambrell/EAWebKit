@@ -4217,12 +4217,6 @@ void RenderLayer::paintFixedLayersInNamedFlows(GraphicsContext* context, const L
 
 void RenderLayer::paintLayerContents(GraphicsContext* context, const LayerPaintingInfo& paintingInfo, PaintLayerFlags paintFlags)
 {
-  if(this->m_layerSize.width() == 547 && this->m_layerSize.height() == 576)
-  {
-    int zzz=9;
-  }
-
-
     ASSERT(isSelfPaintingLayer() || hasSelfPaintingLayerDescendant());
 
     PaintLayerFlags localPaintFlags = paintFlags & ~(PaintLayerAppliedTransform);

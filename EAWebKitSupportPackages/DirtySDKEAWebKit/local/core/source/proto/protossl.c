@@ -563,7 +563,7 @@ static int32_t _SendPacket(ProtoSSLRefT *pState, uint8_t uType, const void *pHea
             CryptSha1Init(&SHAContext);
             CryptSha1Update(&SHAContext, pSecure->pClientMAC, 20);
             CryptSha1Update(&SHAContext, _SSL3_Pad1, 40);
-            CryptSha1Update(&SHAContext, (char *)&MacData, sizeof(MacData));
+            CryptSha1Update(&SHAContext, (const uint8_t *)&MacData, sizeof(MacData));
             CryptSha1Update(&SHAContext, pSend, iSize);
             CryptSha1Final(&SHAContext, MacTemp, 20);
 
@@ -716,7 +716,7 @@ static int32_t _RecvPacket(ProtoSSLRefT *pState)
             CryptSha1Init(&SHAContext);
             CryptSha1Update(&SHAContext, pSecure->pServerMAC, 20);
             CryptSha1Update(&SHAContext, _SSL3_Pad1, 40);
-            CryptSha1Update(&SHAContext, (char *)&MacData, sizeof(MacData));
+            CryptSha1Update(&SHAContext, (const uint8_t*)&MacData, sizeof(MacData));
             CryptSha1Update(&SHAContext, pSecure->RecvData+pSecure->iRecvBase, pSecure->iRecvSize-pSecure->iRecvBase);
             CryptSha1Final(&SHAContext, MacTemp, 20);
 
@@ -817,7 +817,7 @@ static const uint8_t *_FindPEMSignature(const uint8_t *pCertData, int32_t iCertS
     {
         if ((pCertData[iCertIdx] == *pSigText) && ((iCertSize - iCertIdx) >= iSigLen))
         {
-            if (!strncmp(pCertData+iCertIdx, pSigText, iSigLen))
+            if (!strncmp((const char*)pCertData+iCertIdx, pSigText, iSigLen))
             {
                 return(pCertData+iCertIdx);
             }
@@ -1904,7 +1904,7 @@ static int32_t _ProtoSSLUpdateSendClientFinish(ProtoSSLRefT *pState)
     #endif
 
     memcpy(&SHAContext, &pSecure->HandshakeSHA, sizeof(SHAContext));
-    CryptSha1Update(&SHAContext, "CLNT", 4);
+    CryptSha1Update(&SHAContext, (const uint8_t*)"CLNT", 4);
     CryptSha1Update(&SHAContext, pSecure->MasterKey, sizeof(pSecure->MasterKey));
     CryptSha1Update(&SHAContext, _SSL3_Pad1, 40);
     CryptSha1Final(&SHAContext, MacTemp, 20);
@@ -1956,7 +1956,7 @@ static int32_t _ProtoSSLUpdateRecvServerFinish(ProtoSSLRefT *pState, const uint8
     #endif
 
     memcpy(&MD5Context, &pSecure->HandshakeMD5, sizeof(MD5Context));
-    CryptMD5Update(&MD5Context, "SRVR", 4);
+    CryptMD5Update(&MD5Context, (const uint8_t*)"SRVR", 4);
     CryptMD5Update(&MD5Context, pSecure->MasterKey, sizeof(pSecure->MasterKey));
     CryptMD5Update(&MD5Context, _SSL3_Pad1, 48);
     CryptMD5Final(&MD5Context, MacTemp, 16);
@@ -1968,7 +1968,7 @@ static int32_t _ProtoSSLUpdateRecvServerFinish(ProtoSSLRefT *pState, const uint8
     CryptMD5Final(&MD5Context, strMD5, 16);
 
     memcpy(&SHAContext, &pSecure->HandshakeSHA, sizeof(SHAContext));
-    CryptSha1Update(&SHAContext, "SRVR", 4);
+    CryptSha1Update(&SHAContext, (const uint8_t*)"SRVR", 4);
     CryptSha1Update(&SHAContext, pSecure->MasterKey, sizeof(pSecure->MasterKey));
     CryptSha1Update(&SHAContext, _SSL3_Pad1, 40);
     CryptSha1Final(&SHAContext, MacTemp, 20);
@@ -2080,7 +2080,7 @@ void ProtoSSLUpdate(ProtoSSLRefT *pState)
 
         if (pSecure->iSendProg < pSecure->iSendSize)
         {
-            iResult = SocketSend(pState->pSock, pSecure->SendData+pSecure->iSendProg, pSecure->iSendSize-pSecure->iSendProg, 0);
+            iResult = SocketSend(pState->pSock, (const char*)pSecure->SendData+pSecure->iSendProg, pSecure->iSendSize-pSecure->iSendProg, 0);
             if (iResult > 0)
             {
                 pSecure->iSendProg += iResult;
@@ -2094,7 +2094,7 @@ void ProtoSSLUpdate(ProtoSSLRefT *pState)
 
         if (pSecure->iRecvSize < SSL_MIN_PACKET)
         {
-            iResult = SocketRecv(pState->pSock, pSecure->RecvData+pSecure->iRecvSize, SSL_MIN_PACKET-pSecure->iRecvSize, 0);
+            iResult = SocketRecv(pState->pSock, (char*)pSecure->RecvData+pSecure->iRecvSize, SSL_MIN_PACKET-pSecure->iRecvSize, 0);
             if (iResult > 0)
             {
                 pSecure->iRecvSize += iResult;
@@ -2129,7 +2129,7 @@ void ProtoSSLUpdate(ProtoSSLRefT *pState)
 
         if (pSecure->iRecvProg < pSecure->iRecvSize)
         {
-            iResult = SocketRecv(pState->pSock, pSecure->RecvData+pSecure->iRecvProg, pSecure->iRecvSize-pSecure->iRecvProg, 0);
+            iResult = SocketRecv(pState->pSock, (char*)pSecure->RecvData+pSecure->iRecvProg, pSecure->iRecvSize-pSecure->iRecvProg, 0);
             if (iResult > 0)
             {
                 pSecure->iRecvProg += iResult;
@@ -2389,7 +2389,7 @@ int32_t ProtoSSLSetCACert(const uint8_t *pCertData, int32_t iCertSize)
 
     DirtyMemGroupQuery(&iMemGroup, &pMemGroupUserData);
 
-    if ((iResult = LobbyBase64Decode(pCertEnd-pCertBeg, pCertBeg, NULL)) > 0)
+    if ((iResult = LobbyBase64Decode(pCertEnd-pCertBeg, (const char*)pCertBeg, NULL)) > 0)
     {
         if (iResult > _iMaxCertSize)
         {
@@ -2399,7 +2399,7 @@ int32_t ProtoSSLSetCACert(const uint8_t *pCertData, int32_t iCertSize)
         {
             return(-112);
         }
-        LobbyBase64Decode(pCertEnd-pCertBeg, pCertBeg, pCertBuffer);
+        LobbyBase64Decode(pCertEnd-pCertBeg, (const char*)pCertBeg, (char*)pCertBuffer);
         pCertBeg = pCertBuffer;
         pCertEnd = pCertBeg+iResult;
     }
@@ -2418,11 +2418,11 @@ int32_t ProtoSSLSetCACert(const uint8_t *pCertData, int32_t iCertSize)
         iCertSize -=  pCertEnd-pCertData;
         pCertData = pCertEnd;
 
-        if (((iResult = LobbyBase64Decode(pCertEnd-pCertBeg, pCertBeg, NULL)) <= 0) || (iResult > _iMaxCertSize))
+        if (((iResult = LobbyBase64Decode((const char*)pCertEnd-(const char*)pCertBeg, (const char*)pCertBeg, NULL)) <= 0) || (iResult > _iMaxCertSize))
         {
             break;
         }
-        LobbyBase64Decode(pCertEnd-pCertBeg, pCertBeg, pCertBuffer);
+        LobbyBase64Decode(pCertEnd-pCertBeg, (const char*)pCertBeg, (char*)pCertBuffer);
 
         if ((iResult = _ParseCertificate(&Cert, pCertBuffer, iResult)) < 0)
         {

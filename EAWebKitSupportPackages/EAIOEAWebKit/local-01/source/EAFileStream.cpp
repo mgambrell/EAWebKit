@@ -34,6 +34,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 #include <EAIO/internal/Config.h>
+
+//MBG - CHANGED THIS
+#include "Dummy/EAFileStreamDummy.cpp"
+#if 0
 #ifndef INCLUDED_eabase_H
    #include "EABase/eabase.h"
 #endif
@@ -41,9 +45,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #if defined(EA_PLATFORM_WINDOWS)
    #include "Win32/EAFileStreamWin32.cpp"
 #else
-//MBG - modified
-   //#include "StdC/EAFileStreamStdC.cpp"
    #include "Dummy/EAFileStreamDummy.cpp"
+#endif
 #endif
 
 

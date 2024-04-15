@@ -50,8 +50,10 @@ namespace EA
 
 			void init()
 			{
-				axes.resize(eagp->getNumAxes());
-				buttons.resize(eagp->getNumButtons());
+				for(int i=0;i<eagp->getNumAxes();i++)
+					axes.append(0);
+				for(int i=0;i<eagp->getNumButtons();i++)
+					buttons.append(0);
 				eagp->setAxesStorage(axes.data());
 				eagp->setButtonsStorage(buttons.data());
 			}

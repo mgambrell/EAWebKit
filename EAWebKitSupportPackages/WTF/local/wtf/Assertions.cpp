@@ -417,7 +417,8 @@ void WTFCrash()
 	//1/17/2014
 #if PLATFORM(EA)
 	//We don't want to crash in any situation especially when ASSERT macro also tries to crash.
-	return;
+  //MBG - why not crash? this is causing a lot of warning noise about noreturn.
+	//return;
 #endif
 	//-EAWebKitChange
 
@@ -440,7 +441,8 @@ void WTFCrashWithSecurityImplication()
 	//1/27/2016
 #if PLATFORM(EA)
 	//We don't want to crash in any situation especially when ASSERT macro also tries to crash.
-	return;
+  //MBG - why not crash? this is causing a lot of warning noise about noreturn.
+	//return;
 #endif
 	//-EAWebKitChange
     

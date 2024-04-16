@@ -291,7 +291,8 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Whether Debugging module is configured in
  */
-#if 1
+ //MBG: disabled
+#if 0
 #define LIBXML_DEBUG_ENABLED
 #endif
 
@@ -300,7 +301,8 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Whether the memory debugging is configured in
  */
-#if 1
+ //MBG: disabled
+#if 0
 #define DEBUG_MEMORY_LOCATION
 #endif
 
@@ -309,7 +311,8 @@ XMLPUBFUN void XMLCALL xmlCheckVersion(int version);
  *
  * Whether the runtime debugging is configured in
  */
-#if 1
+//MBG: disabled
+#if 0
 #define LIBXML_DEBUG_RUNTIME
 #endif
 

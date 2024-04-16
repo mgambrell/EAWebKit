@@ -3477,6 +3477,8 @@ TRIO_ARGS2((self, output),
     }
 }
 
+#ifndef BUILDING_EA__
+
 /*************************************************************************
  * TrioOutStreamFileDescriptor
  */
@@ -3503,6 +3505,8 @@ TRIO_ARGS2((self, output),
       self->committed++;
     }
 }
+
+#endif
 
 /*************************************************************************
  * TrioOutStreamCustom
@@ -3756,6 +3760,8 @@ TRIO_ARGS3((file, format, args),
   return TrioFormat(file, 0, TrioOutStreamFile, format, NULL, args);
 }
 
+#ifndef BUILDING_EA__
+
 /*************************************************************************
  * dprintf
  */
@@ -3825,6 +3831,8 @@ TRIO_ARGS3((fd, format, args),
   
   return TrioFormat(&fd, 0, TrioOutStreamFileDescriptor, format, NULL, args);
 }
+
+#endif
 
 /*************************************************************************
  * cprintf
@@ -6446,6 +6454,8 @@ TRIO_ARGS2((self, intPointer),
     }
 }
 
+#ifndef BUILDING_EA__
+
 /*************************************************************************
  * TrioInStreamFileDescriptor
  */
@@ -6482,6 +6492,8 @@ TRIO_ARGS2((self, intPointer),
       *intPointer = self->current;
     }
 }
+
+#endif
 
 /*************************************************************************
  * TrioInStreamCustom
@@ -6675,6 +6687,8 @@ TRIO_ARGS3((file, format, args),
 		  format, NULL, args);
 }
 
+#ifndef BUILDING_EA__
+
 /*************************************************************************
  * dscanf
  */
@@ -6725,6 +6739,8 @@ TRIO_ARGS3((fd, format, args),
 		  TrioInStreamFileDescriptor,
 		  format, NULL, args);
 }
+
+#endif
 
 /*************************************************************************
  * cscanf

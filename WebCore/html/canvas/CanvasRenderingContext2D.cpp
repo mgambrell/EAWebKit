@@ -2551,4 +2551,16 @@ void CanvasRenderingContext2D::setImageSmoothingEnabled(bool enabled)
         c->setImageInterpolationQuality(enabled ? DefaultInterpolationQuality : InterpolationNone);
 }
 
+void CanvasRenderingContext2D::rataResolve()
+{
+  GraphicsContext* c = drawingContext();
+  c->rataResolve();
+}
+
+void CanvasRenderingContext2D::rataClear()
+{
+  GraphicsContext* c = drawingContext();
+  c->rataClear();
+}
+
 } // namespace WebCore

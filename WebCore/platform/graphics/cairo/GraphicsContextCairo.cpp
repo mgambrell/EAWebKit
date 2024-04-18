@@ -1121,6 +1121,22 @@ void GraphicsContext::set3DTransform(const TransformationMatrix& transform)
 }
 #endif // ENABLE(3D_TRANSFORMS) && USE(TEXTURE_MAPPER)
 
+void GraphicsContext::rataResolve()
+{
+  auto* ctx = platformContext();
+  cairo_t* cr = ctx->cr();
+  auto *surf = cairo_get_target(cr);
+  cairo_surface_resolve(surf);
+}
+
+void GraphicsContext::rataClear()
+{
+  auto* ctx = platformContext();
+  cairo_t* cr = ctx->cr();
+  auto *surf = cairo_get_target(cr);
+  cairo_surface_resolve(surf);
+}
+
 } // namespace WebCore
 
 #endif // USE(CAIRO)

@@ -190,5 +190,6 @@ GLPIPE_PROCENT(_gles2_,PFNGLCLEARTEXSUBIMAGE,glClearTexSubImage, void, (GLuint t
 
 GLPIPE_PROCENT(_gles2_,PFNGLMAPTEXTURERATA,glMapTextureRATA, void, (GLuint texture, void** pLockHandle, GLint level, int read, int write, int discard, void **pixels, GLint *strideBytes) );
 GLPIPE_PROCENT(_gles2_,PFNGLUNMAPTEXTURERATA,glUnmapTextureRATA, void, (GLuint texture, void* lockHandle));
+GLPIPE_PROCENT(_gles2_,PFNGLRESOLVETEXTURERATA,glResolveTextureRATA, void, (GLuint texture));
 
 #endif

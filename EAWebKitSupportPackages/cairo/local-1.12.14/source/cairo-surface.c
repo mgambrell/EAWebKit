@@ -2295,6 +2295,20 @@ cairo_surface_copy_page (cairo_surface_t *surface)
 }
 slim_hidden_def (cairo_surface_copy_page);
 
+cairo_public void
+cairo_surface_resolve(cairo_surface_t *surface)
+{
+  cairo_surface_flush(surface);
+  surface->backend->resolve(surface);
+}
+
+cairo_public void
+cairo_surface_clear(cairo_surface_t *surface)
+{
+  cairo_surface_flush(surface);
+  surface->backend->clear(surface);
+}
+
 /**
  * cairo_surface_show_page:
  * @surface: a #cairo_Surface_t

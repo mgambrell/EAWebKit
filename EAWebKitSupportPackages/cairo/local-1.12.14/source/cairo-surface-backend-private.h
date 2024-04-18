@@ -200,6 +200,9 @@ struct _cairo_surface_backend {
 
     const char **
     (*get_supported_mime_types)	(void			    *surface);
+
+		void (*resolve)();
+		void (*clear)();
 };
 
 cairo_private cairo_status_t

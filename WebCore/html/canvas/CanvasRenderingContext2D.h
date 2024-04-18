@@ -62,6 +62,10 @@ public:
     CanvasRenderingContext2D(HTMLCanvasElement*, bool usesCSSCompatibilityParseMode, bool usesDashboardCompatibilityMode);
     virtual ~CanvasRenderingContext2D();
 
+    //MBG HACKS
+    void rataResolve();
+    void rataClear();
+
     const CanvasStyle& strokeStyle() const { return state().m_strokeStyle; }
     void setStrokeStyle(CanvasStyle);
 

@@ -2478,6 +2478,10 @@ cairo_surface_get_fallback_resolution (cairo_surface_t	*surface,
 cairo_public void
 cairo_surface_copy_page (cairo_surface_t *surface);
 
+//MBG:
+cairo_public void
+cairo_surface_resolve(cairo_surface_t *surface);
+
 cairo_public void
 cairo_surface_show_page (cairo_surface_t *surface);
 

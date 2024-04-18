@@ -1464,6 +1464,33 @@ _cairo_gl_surface_glyphs (void			*surface,
 				     clip);
 }
 
+static void _cairo_gl_surface_rataResolve(void *abstract_surface)
+{
+	cairo_gl_surface_t *surface = abstract_surface;
+
+	if(!surface->fb)
+		return;
+
+	//I know it's odd to check the fb and then pass the tex. but there's nothing to resolve unless there's an FB, and this API takes a texture ID
+	glResolveTextureRATA(surface->tex);
+}
+
+static void _cairo_gl_surface_rataClear(void *abstract_surface)
+{
+	cairo_gl_surface_t *surface = abstract_surface;
+
+	//I don't know what to pass here and I don't want to figure it out
+	GLenum format = 0;
+	GLenum type = 0;
+	GLenum level = 0;
+	uint32_t data = 0;
+
+	if(!surface->fb)
+		return;
+
+	glClearTexImage(surface->tex, level, format, type, &data);
+}
+
 static const cairo_surface_backend_t _cairo_gl_surface_backend = {
     CAIRO_SURFACE_TYPE_GL,
     _cairo_gl_surface_finish,
@@ -1494,4 +1521,8 @@ static const cairo_surface_backend_t _cairo_gl_surface_backend = {
     _cairo_gl_surface_fill,
     NULL, /* fill/stroke */
     _cairo_gl_surface_glyphs,
+		NULL, //has_show_text_glyphs
+		NULL, //show_text_glyphs
+		NULL, //get_supported_mime_types
+		_cairo_gl_surface_rataResolve
 };

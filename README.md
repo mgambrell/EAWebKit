@@ -8,6 +8,8 @@ Sorry, the project files aren't here yet. Well, we haven't shipped yet. Stay tun
 
 This version supports Win64, GDK (XBONE/XSX), Switch, and PS4/5 platforms.
 
+All commits in this repository besides those forked from EAWebKit upstream are licensed under the zlib license, yet the combined whole is necessarily remaining licensed under the LGPL (see license.txt and licenses/ directory)
+
 # EA WebKit 
 
 This is an unofficial mirror of EAWebKit.

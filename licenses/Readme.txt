@@ -17,3 +17,6 @@ EAWebKit has dependencies on additonal third party libraries: Cairo, FreeType, l
 * License SQLite.txt -- License for SQL database.
 * License YCoCg.txt -- License for image compression algorithms.
 * License ZLib.txt -- License for compression.
+
+xor_mgambrell_0's EAWebKit fork incorporates further modifications, with licensing covered by the following document:
+* Donna Dweeble And The Electric Taper Caper.txt

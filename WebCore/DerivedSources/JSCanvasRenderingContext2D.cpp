@@ -2160,7 +2160,7 @@ EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionFillText
     return JSValue::encode(jsUndefined());
 }
 
-static EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataResolve(ExecState* exec)
+EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataResolve(ExecState* exec)
 {
   JSValue thisValue = exec->thisValue();
   JSCanvasRenderingContext2D* castedThis = jsDynamicCast<JSCanvasRenderingContext2D*>(thisValue);
@@ -2172,7 +2172,7 @@ static EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionR
   return JSValue::encode(jsUndefined());
 }
 
-static EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataClear(ExecState* exec)
+EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataClear(ExecState* exec)
 {
   JSValue thisValue = exec->thisValue();
   JSCanvasRenderingContext2D* castedThis = jsDynamicCast<JSCanvasRenderingContext2D*>(thisValue);

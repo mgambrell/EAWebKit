@@ -1120,6 +1120,8 @@ JavascriptValue *CreateJavascriptValueArray(View *view, size_t count)
     }
 
     return array;
+
+		WebCore::JSDOMWindow::commonVM().stringCache.clear();
 }
 
 void DestroyJavascriptValueArray(JavascriptValue *array)

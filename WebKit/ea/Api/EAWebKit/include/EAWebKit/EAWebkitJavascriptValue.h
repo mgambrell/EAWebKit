@@ -250,6 +250,9 @@ public:
     virtual void SetStringValue(const char16_t *v);
     virtual const char16_t *GetStringValue(size_t *pLengthOut) const;
 
+    //MBG ADDITION: 
+    virtual void SetStringValueUTF8(const char *v);
+
     // Arrays
     virtual void SetArrayType(size_t arraySize = 0);
     virtual void SetArrayValue(size_t index, const JavascriptValue &v);

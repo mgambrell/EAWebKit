@@ -208,6 +208,20 @@ bool JavascriptValue::GetBooleanValue(void) const
 	return  GetImpl()->asBoolean();
 }
 
+//MBG ADDITION:
+void JavascriptValue::SetStringValueUTF8(const char *v)
+{
+  SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);
+  EAWEBKIT_THREAD_CHECK();
+  EAWWBKIT_INIT_CHECK(); 
+
+  EAW_ASSERT_MSG(v && v[0], "String is NULL.");
+
+  WTF::String s = WTF::String::fromUTF8(v);
+  JSC::JSValue jsVal = JSC::jsString(mExecState, s);
+  Assign(&jsVal);
+}
+
 void JavascriptValue::SetStringValue(const char16_t *v) 
 {
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);

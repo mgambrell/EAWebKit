@@ -1,3 +1,13 @@
+# xor_mgambrell_0's EAWebKit fork
+
+This is an unofficial fork of the unofficial mirror of EAWebKit (at: https://github.com/ychin/EAWebKit )
+
+Ignore the following sections including the build instructions; instead, just open the slns / vcxproj
+
+Sorry, the project files aren't here yet. Well, we haven't shipped yet. Stay tuned.
+
+This version supports Win64, GDK (XBONE/XSX), Switch, and PS4/5 platforms.
+
 # EA WebKit 
 
 This is an unofficial mirror of EAWebKit.

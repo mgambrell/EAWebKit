@@ -235,7 +235,7 @@ void BitmapTextureGL::didReset()
 
   //MBG - REMINDER - IS THIS IMPORTANT? MAYBE, FOR THE FILTERING... BUT...
   //THIS IS ONLY USED FOR COMPOSITING AND COMPOSITING SHOULD RUN AT 1X, SO...?
-  //check createCairoGLSurface() to see what it does by default.
+  //UPDATE, NOPE: IT'S USED FOR INTERMEDIATE CSS ANIMATION WORK OR SOMETHING LIKE THAT
   //m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_MIN_FILTER, GraphicsContext3D::LINEAR);
   //m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_MAG_FILTER, GraphicsContext3D::LINEAR);
   //m_context3D->texParameteri(GraphicsContext3D::TEXTURE_2D, GraphicsContext3D::TEXTURE_WRAP_S, GraphicsContext3D::CLAMP_TO_EDGE);

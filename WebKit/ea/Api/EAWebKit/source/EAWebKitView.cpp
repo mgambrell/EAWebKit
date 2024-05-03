@@ -454,6 +454,9 @@ bool View::InitView(const ViewParameters& vp)
 	//why not?
 	settings.setAcceleratedDrawingEnabled(true);
 
+	//seems browsers usually do this and games count on it
+	settings.setImageSubsamplingEnabled(true);
+
 	d->mInitialized = true;
 	
 	return true;

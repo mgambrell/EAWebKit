@@ -1134,7 +1134,7 @@ void GraphicsContext::rataClear()
   auto* ctx = platformContext();
   cairo_t* cr = ctx->cr();
   auto *surf = cairo_get_target(cr);
-  cairo_surface_resolve(surf);
+  cairo_surface_clear(surf);
 }
 
 } // namespace WebCore

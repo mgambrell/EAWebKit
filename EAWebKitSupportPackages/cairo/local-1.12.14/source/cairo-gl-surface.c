@@ -1524,5 +1524,6 @@ static const cairo_surface_backend_t _cairo_gl_surface_backend = {
 		NULL, //has_show_text_glyphs
 		NULL, //show_text_glyphs
 		NULL, //get_supported_mime_types
-		_cairo_gl_surface_rataResolve
+		_cairo_gl_surface_rataResolve,
+		_cairo_gl_surface_rataClear,
 };

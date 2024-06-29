@@ -40,7 +40,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stddef.h> //for size_t
 
 #include "dirtyplatform.h"
-#if defined(EA_PLATFORM_KETTLE) 
+#if defined(EA_PLATFORM_KETTLE)  && false //MBG - do not want
 	#include <sys/socket.h> //for socklen_t
 	//typedef unsigned int socklen_t;
 	typedef size_t platform_ssize_t;
@@ -76,6 +76,12 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifdef NN_NINTENDO_SDK
 typedef int socklen_t;
 typedef int platform_ssize_t;
+#endif
+
+//MBG ADDED
+#if defined(EA_PLATFORM_PS4) || defined(EA_PLATFORM_PS5)
+typedef unsigned int socklen_t;
+typedef size_t platform_ssize_t;
 #endif
 
 struct sockaddr;

@@ -115,6 +115,7 @@
 	// PlayStation 4
 	// Orbis was Sony's code-name for the platform, which is now obsolete.
 	// Kettle was an EA-specific code-name for the platform, which is now obsolete.
+#define EA_PLATFORM_NO_GETPID 1
 	#if defined(EA_PLATFORM_PS4)
 		#undef  EA_PLATFORM_PS4
 	#endif

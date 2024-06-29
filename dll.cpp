@@ -1,4 +1,5 @@
 #include "WebKit/ea/Api/EAWebKit/include/EAWebKit/DLLInterface.h"
+#include "EABase/eabase.h"
 
 namespace EA::WebKit
 {

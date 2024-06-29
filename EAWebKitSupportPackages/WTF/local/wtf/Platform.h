@@ -879,6 +879,11 @@
 #define HAVE_COMPUTED_GOTO 1
 #endif
 
+//MBG - old PS4 compilers just nondeterministically blow up when confronted with computed gotos
+#ifdef __ORBIS__
+#undef HAVE_COMPUTED_GOTO
+#endif
+
 /* Determine if we need to enable Computed Goto Opcodes or not: */
 #if HAVE(COMPUTED_GOTO) || ENABLE(JIT)
 #define ENABLE_COMPUTED_GOTO_OPCODES 1

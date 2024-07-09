@@ -109,6 +109,10 @@ static int errno;
 #include <errno.h>
 #endif
 
+//MBG HACK - isascii is now poison
+#define isascii _isascii_nope
+int _isascii_nope(int c) { return c >= 0 && c < 128; }
+
 #ifndef NULL
 # define NULL 0
 #endif

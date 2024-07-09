@@ -46,6 +46,10 @@
 #define MAX_DELEGATE	50
 #define MAX_CATAL_DEPTH	50
 
+ //MBG HACK - stop portable libraries from using getenv on systems which don't have them
+#define getenv _getenv_nope_libxml
+char *_getenv_nope_libxml(const char *name) { return 0; }
+
 #ifdef _WIN32
 # define PATH_SEAPARATOR ';'
 #else

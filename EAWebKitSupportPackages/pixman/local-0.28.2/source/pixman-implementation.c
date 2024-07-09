@@ -28,6 +28,10 @@
 #include <stdlib.h>
 #include "pixman-private.h"
 
+//MBG HACK - stop portable libraries from using getenv on systems which don't have them
+#define getenv _getenv_nope_pixman
+char *_getenv_nope_pixman(const char *name) { return 0; }
+
 pixman_implementation_t *
 _pixman_implementation_create (pixman_implementation_t *fallback,
 			       const pixman_fast_path_t *fast_paths)

@@ -115,7 +115,7 @@ public:
     virtual void endPainting() override;
     virtual void endClip() override;
     virtual IntRect clipBounds() override;
-    virtual IntSize maxTextureSize() const override { return IntSize(2000, 2000); }
+    virtual IntSize maxTextureSize() const override { return IntSize(8192, 8192); }
     virtual PassRefPtr<BitmapTexture> createTexture() override; //MBG MODIFIED
     inline GraphicsContext3D* graphicsContext3D() const { return m_context3D.get(); }
 

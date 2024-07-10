@@ -44,6 +44,9 @@
 #include <cairo-gl.h>
 #endif
 
+//MBG HACK
+#include <EAWebKit/EAWebKit.h>
+
 namespace WebCore {
 
 void copyContextProperties(cairo_t* srcCr, cairo_t* dstCr)
@@ -225,8 +228,9 @@ PassRefPtr<cairo_surface_t> copyCairoImageSurface(cairo_surface_t* originalSurfa
     //MBG - this function is called "copy cairo IMAGE SURFACE", so actually return an image surface
     //RefPtr<cairo_surface_t> newSurface = adoptRef(cairo_surface_create_similar(originalSurface,
         //cairo_surface_get_content(originalSurface), size.width(), size.height()));
-    RefPtr<cairo_surface_t> newSurface = adoptRef(cairo_surface_create_similar_image(originalSurface,
-      CAIRO_FORMAT_ARGB32, size.width(), size.height()));
+
+    //MBG - I think this is only used in one place (BitmapTextureGL) so it should be safe to create a GL surface
+    RefPtr<cairo_surface_t> newSurface = adoptRef(cairo_gl_surface_create((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA, size.width(), size.height()));
 
     RefPtr<cairo_t> cr = adoptRef(cairo_create(newSurface.get()));
     cairo_set_source_surface(cr.get(), originalSurface, 0, 0);

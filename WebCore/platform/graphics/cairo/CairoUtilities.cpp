@@ -193,7 +193,9 @@ void drawPatternToCairoContext(cairo_t* cr, cairo_surface_t* image, const IntSiz
     RefPtr<cairo_surface_t> clippedImageSurface = 0;
     if (tileRect.size() != imageSize) {
         IntRect imageRect = enclosingIntRect(tileRect);
-        clippedImageSurface = adoptRef(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, imageRect.width(), imageRect.height()));
+        //MBG - why create an image surface?? there's no point
+        //clippedImageSurface = adoptRef(cairo_image_surface_create(CAIRO_FORMAT_ARGB32, imageRect.width(), imageRect.height()));
+        clippedImageSurface = adoptRef(cairo_gl_surface_create((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA, imageRect.width(), imageRect.height()));
         RefPtr<cairo_t> clippedImageContext = adoptRef(cairo_create(clippedImageSurface.get()));
         cairo_set_source_surface(clippedImageContext.get(), image, -tileRect.x(), -tileRect.y());
         cairo_paint(clippedImageContext.get());

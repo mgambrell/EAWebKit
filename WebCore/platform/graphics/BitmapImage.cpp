@@ -381,6 +381,10 @@ bool BitmapImage::isSizeAvailable()
     m_sizeAvailable = m_source.isSizeAvailable();
     didDecodeProperties();
 
+    //MBG - as soon as we have the size, go ahead and create the texture
+    if(m_sizeAvailable)
+      ensureFrameIsCached(0);
+
     return m_sizeAvailable;
 }
 

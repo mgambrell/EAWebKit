@@ -250,8 +250,9 @@ public:
     virtual void SetStringValue(const char16_t *v);
     virtual const char16_t *GetStringValue(size_t *pLengthOut) const;
 
-    //MBG ADDITION: 
+    //MBG ADDITIONS: 
     virtual void SetStringValueUTF8(const char *v);
+    virtual void SetStringValueUTF8(const char *v, size_t len);
 
     // Arrays
     virtual void SetArrayType(size_t arraySize = 0);

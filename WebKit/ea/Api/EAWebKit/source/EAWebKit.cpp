@@ -855,7 +855,8 @@ void Tick()
 	NOTIFY_PROCESS_STATUS(EA::WebKit::kVProcessTypeDispatchFunctions, EA::WebKit::kVProcessStatusEnded, 0);
 
 	NOTIFY_PROCESS_STATUS(EA::WebKit::kVProcessTypeTickDownload, EA::WebKit::kVProcessStatusStarted, 0);
-	WebCore::ResourceHandleManager::sharedInstance()->TickDownload();
+	for(int i=0;i<100;i++)
+		WebCore::ResourceHandleManager::sharedInstance()->TickDownload();
 	NOTIFY_PROCESS_STATUS(EA::WebKit::kVProcessTypeTickDownload, EA::WebKit::kVProcessStatusEnded, 0);
 	
 	NOTIFY_PROCESS_STATUS(EA::WebKit::kVProcessTypeTransportTick, EA::WebKit::kVProcessStatusStarted, 0);

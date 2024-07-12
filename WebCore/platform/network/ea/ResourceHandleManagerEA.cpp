@@ -142,7 +142,8 @@ namespace WebCore
 /////////////////////////////////////////////////////////////////////////////
 ResourceHandleManager* ResourceHandleManager::m_pInstance = NULL;
 
-const double kPollTimeSeconds = 0.016; //60 Frames per Second
+const double kPollTimeSeconds = 0.001; //MBG - Why not download as fast as possible? it seems this timeout only gets set when stuff is loading hard and then it doesn't get used, so it won't hammer something hard enough to starve normal gameplay
+//const double kPollTimeSeconds = 0.016; //60 Frames per Second
 ResourceHandleManager::ResourceHandleManager()
     : m_downloadTimer(*this, &ResourceHandleManager::downloadTimerCallback)
     , m_pendingResourceHandleList()

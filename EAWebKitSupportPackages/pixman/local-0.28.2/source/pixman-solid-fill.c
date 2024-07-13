@@ -22,43 +22,18 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include <pixman-config.h>
 #endif
 #include "pixman-private.h"
-
-void
-_pixman_solid_fill_iter_init (pixman_image_t *image, pixman_iter_t  *iter)
-{
-    if (iter->iter_flags & ITER_NARROW)
-    {
-	uint32_t *b = (uint32_t *)iter->buffer;
-	uint32_t *e = b + iter->width;
-	uint32_t color = iter->image->solid.color_32;
-
-	while (b < e)
-	    *(b++) = color;
-    }
-    else
-    {
-	argb_t *b = (argb_t *)iter->buffer;
-	argb_t *e = b + iter->width;
-	argb_t color = image->solid.color_float;
-
-	while (b < e)
-	    *(b++) = color;
-    }
-
-    iter->get_scanline = _pixman_iter_get_scanline_noop;
-}
 
 static uint32_t
 color_to_uint32 (const pixman_color_t *color)
 {
     return
-        (color->alpha >> 8 << 24) |
-        (color->red >> 8 << 16) |
-        (color->green & 0xff00) |
-        (color->blue >> 8);
+        ((unsigned int) color->alpha >> 8 << 24) |
+        ((unsigned int) color->red >> 8 << 16) |
+        ((unsigned int) color->green & 0xff00) |
+        ((unsigned int) color->blue >> 8);
 }
 
 static argb_t

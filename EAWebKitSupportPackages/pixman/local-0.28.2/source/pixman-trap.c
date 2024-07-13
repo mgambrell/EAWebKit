@@ -1,8 +1,6 @@
 /*
  * Copyright © 2002 Keith Packard, member of The XFree86 Project, Inc.
  * Copyright © 2004 Keith Packard
- * Copyright (C) 2014 Electronic Arts, Inc.
-
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -24,7 +22,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include <pixman-config.h>
 #endif
 
 #include <stdio.h>
@@ -76,7 +74,7 @@ pixman_sample_floor_y (pixman_fixed_t y,
 
     if (f < Y_FRAC_FIRST (n))
     {
-	if (pixman_fixed_to_int (i) == 0x8000)
+	if (pixman_fixed_to_int (i) == 0xffff8000)
 	{
 	    f = 0; /* saturate */
 	}
@@ -493,6 +491,8 @@ pixman_composite_trapezoids (pixman_op_t		op,
 {
     int i;
 
+    return_if_fail (PIXMAN_FORMAT_TYPE (mask_format) == PIXMAN_TYPE_A);
+    
     if (n_traps <= 0)
 	return;
 
@@ -523,8 +523,9 @@ pixman_composite_trapezoids (pixman_op_t		op,
 	if (!get_trap_extents (op, dst, traps, n_traps, &box))
 	    return;
 	
-	tmp = pixman_image_create_bits (
-	    mask_format, box.x2 - box.x1, box.y2 - box.y1, NULL, -1);
+	if (!(tmp = pixman_image_create_bits (
+		  mask_format, box.x2 - box.x1, box.y2 - box.y1, NULL, -1)))
+	    return;
 	
 	for (i = 0; i < n_traps; ++i)
 	{
@@ -687,13 +688,7 @@ pixman_composite_triangles (pixman_op_t			op,
 				     x_src, y_src, x_dst, y_dst,
 				     n_tris * 2, traps);
 	
-	//+EAWebKitChange
-
-	//01/24/14
-
-	pixman_free (traps);
-	//-EAWebKitChange
-
+	free (traps);
     }
 }
 
@@ -711,12 +706,6 @@ pixman_add_triangles (pixman_image_t          *image,
 	pixman_add_trapezoids (image, x_off, y_off,
 			       n_tris * 2, traps);
 
-	//+EAWebKitChange
-
-	//01/24/14
-
-	pixman_free (traps);
-	//-EAWebKitChange
-
+	free (traps);
     }
 }

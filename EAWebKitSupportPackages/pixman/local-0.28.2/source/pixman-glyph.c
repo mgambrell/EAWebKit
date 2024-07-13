@@ -1,8 +1,6 @@
 /*
  * Copyright 2010, 2012, Soren Sandmann <sandmann@cs.au.dk>
  * Copyright 2010, 2011, 2012, Red Hat, Inc
- * Copyright (C) 2014 Electronic Arts, Inc.
-
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -27,7 +25,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include <pixman-config.h>
 #endif
 #include "pixman-private.h"
 
@@ -69,13 +67,7 @@ free_glyph (glyph_t *glyph)
 {
     pixman_list_unlink (&glyph->mru_link);
     pixman_image_unref (glyph->image);
-    //+EAWebKitChange
-
-    //01/24/14
-
-    pixman_free (glyph);
-    //-EAWebKitChange
-
+    free (glyph);
 }
 
 static unsigned int
@@ -195,13 +187,7 @@ pixman_glyph_cache_create (void)
 {
     pixman_glyph_cache_t *cache;
 
-    //+EAWebKitChange
-
-    //01/24/14
-
-    if (!(cache = pixman_malloc (sizeof *cache)))
-    //-EAWebKitChange
-
+    if (!(cache = malloc (sizeof *cache)))
 	return NULL;
 
     memset (cache->glyphs, 0, sizeof (cache->glyphs));
@@ -221,13 +207,7 @@ pixman_glyph_cache_destroy (pixman_glyph_cache_t *cache)
 
     clear_table (cache);
 
-    //+EAWebKitChange
-
-    //01/24/14
-
-    pixman_free (cache);
-    //-EAWebKitChange
-
+    free (cache);
 }
 
 PIXMAN_EXPORT void
@@ -288,13 +268,7 @@ pixman_glyph_cache_insert (pixman_glyph_cache_t  *cache,
     if (cache->n_glyphs >= HASH_SIZE)
 	return NULL;
 
-    //+EAWebKitChange
-
-    //01/24/14
-
-    if (!(glyph = pixman_malloc (sizeof *glyph)))
-    //-EAWebKitChange
-
+    if (!(glyph = malloc (sizeof *glyph)))
 	return NULL;
 
     glyph->font_key = font_key;
@@ -305,13 +279,7 @@ pixman_glyph_cache_insert (pixman_glyph_cache_t  *cache,
     if (!(glyph->image = pixman_image_create_bits (
 	      image->bits.format, width, height, NULL, -1)))
     {
-	//+EAWebKitChange
-
-	//01/24/14
-
-	pixman_free (glyph);
-	//-EAWebKitChange
-
+	free (glyph);
 	return NULL;
     }
 
@@ -423,6 +391,9 @@ box32_intersect (pixman_box32_t *dest,
     return dest->x2 > dest->x1 && dest->y2 > dest->y1;
 }
 
+#if defined(__GNUC__) && !defined(__x86_64__) && !defined(__amd64__)
+__attribute__((__force_align_arg_pointer__))
+#endif
 PIXMAN_EXPORT void
 pixman_composite_glyphs_no_mask (pixman_op_t            op,
 				 pixman_image_t        *src,
@@ -495,16 +466,13 @@ pixman_composite_glyphs_no_mask (pixman_op_t            op,
 		{
 		    glyph_format = glyph_img->common.extended_format_code;
 		    glyph_flags = glyph_img->common.flags;
-		    
+
 		    _pixman_implementation_lookup_composite (
 			get_implementation(), op,
 			src->common.extended_format_code, src->common.flags,
 			glyph_format, glyph_flags | extra,
 			dest_format, dest_flags,
 			&implementation, &func);
-
-		    if (!func)
-			goto out;
 		}
 
 		info.src_x = src_x + composite_box.x1 - dest_x;
@@ -540,7 +508,7 @@ add_glyphs (pixman_glyph_cache_t *cache,
     uint32_t glyph_flags = 0;
     pixman_composite_func_t func = NULL;
     pixman_implementation_t *implementation = NULL;
-    uint32_t dest_format;
+    pixman_format_code_t dest_format;
     uint32_t dest_flags;
     pixman_box32_t dest_box;
     pixman_composite_info_t info;
@@ -614,9 +582,6 @@ add_glyphs (pixman_glyph_cache_t *cache,
 		mask_format, info.mask_flags,
 		dest_format, dest_flags,
 		&implementation, &func);
-
-	    if (!func)
-		goto out;
 	}
 
 	glyph_box.x1 = glyphs[i].x - glyph->origin_x + off_x;
@@ -668,6 +633,9 @@ out:
  *   - Trim the mask to the destination clip/image?
  *   - Trim composite region based on sources, when the op ignores 0s.
  */
+#if defined(__GNUC__) && !defined(__x86_64__) && !defined(__amd64__)
+__attribute__((__force_align_arg_pointer__))
+#endif
 PIXMAN_EXPORT void
 pixman_composite_glyphs (pixman_op_t            op,
 			 pixman_image_t        *src,

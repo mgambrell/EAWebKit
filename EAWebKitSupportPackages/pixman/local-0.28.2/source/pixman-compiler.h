@@ -19,6 +19,12 @@
 #endif
 
 #if defined (__GNUC__)
+#  define unlikely(expr) __builtin_expect ((expr), 0)
+#else
+#  define unlikely(expr)  (expr)
+#endif
+
+#if defined (__GNUC__)
 #  define MAYBE_UNUSED  __attribute__((unused))
 #else
 #  define MAYBE_UNUSED
@@ -56,6 +62,10 @@
 # define INT64_MAX              (9223372036854775807)
 #endif
 
+#ifndef SIZE_MAX
+# define SIZE_MAX               ((size_t)-1)
+#endif
+
 
 #ifndef M_PI
 # define M_PI			3.14159265358979323846
@@ -85,6 +95,8 @@
 /* Sun Studio 8 visibility */
 #elif defined(__SUNPRO_C) && (__SUNPRO_C >= 0x550)
 #   define PIXMAN_EXPORT __global
+#elif defined (_MSC_VER) || defined(__MINGW32__)
+#   define PIXMAN_EXPORT PIXMAN_API
 #else
 #   define PIXMAN_EXPORT
 #endif
@@ -97,14 +109,14 @@
 #if defined(PIXMAN_NO_TLS)
 
 #   define PIXMAN_DEFINE_THREAD_LOCAL(type, name)			\
-    static type name
+    static type name;
 #   define PIXMAN_GET_THREAD_LOCAL(name)				\
     (&name)
 
 #elif defined(TLS)
 
 #   define PIXMAN_DEFINE_THREAD_LOCAL(type, name)			\
-    static TLS type name
+    static TLS type name;
 #   define PIXMAN_GET_THREAD_LOCAL(name)				\
     (&name)
 
@@ -113,8 +125,6 @@
 #   define _NO_W32_PSEUDO_MODIFIERS
 #   include <windows.h>
 
-//+EAWebKitChange
-//01/24/14
 #   define PIXMAN_DEFINE_THREAD_LOCAL(type, name)			\
     static volatile int tls_ ## name ## _initialized = 0;		\
     static void *tls_ ## name ## _mutex = NULL;				\
@@ -123,7 +133,7 @@
     static type *							\
     tls_ ## name ## _alloc (void)					\
     {									\
-        type *value = pixman_calloc (1, sizeof (type));			\
+        type *value = calloc (1, sizeof (type));			\
         if (value)							\
             TlsSetValue (tls_ ## name ## _index, value);		\
         return value;							\
@@ -160,22 +170,20 @@
 	return value;							\
     }
 
-//-EAWebKitChange
 #   define PIXMAN_GET_THREAD_LOCAL(name)				\
     tls_ ## name ## _get ()
 
 #elif defined(_MSC_VER)
 
 #   define PIXMAN_DEFINE_THREAD_LOCAL(type, name)			\
-    static __declspec(thread) type name
+    static __declspec(thread) type name;
 #   define PIXMAN_GET_THREAD_LOCAL(name)				\
     (&name)
 
-#elif defined(HAVE_PTHREAD_SETSPECIFIC)
+#elif defined(HAVE_PTHREADS)
 
 #include <pthread.h>
-//+EAWebKitChange
-//01/24/14
+
 #  define PIXMAN_DEFINE_THREAD_LOCAL(type, name)			\
     static pthread_once_t tls_ ## name ## _once_control = PTHREAD_ONCE_INIT; \
     static pthread_key_t tls_ ## name ## _key;				\
@@ -183,7 +191,7 @@
     static void								\
     tls_ ## name ## _destroy_value (void *value)			\
     {									\
-	pixman_free (value);							\
+	free (value);							\
     }									\
 									\
     static void								\
@@ -196,7 +204,7 @@
     static type *							\
     tls_ ## name ## _alloc (void)					\
     {									\
-	type *value = pixman_calloc (1, sizeof (type));			\
+	type *value = calloc (1, sizeof (type));			\
 	if (value)							\
 	    pthread_setspecific (tls_ ## name ## _key, value);		\
 	return value;							\
@@ -216,15 +224,11 @@
 	return value;							\
     }
 
-//-EAWebKitChange
 #   define PIXMAN_GET_THREAD_LOCAL(name)				\
     tls_ ## name ## _get ()
 
 #else
 
 #    error "Unknown thread local support for this system. Pixman will not work with multiple threads. Define PIXMAN_NO_TLS to acknowledge and accept this limitation and compile pixman without thread-safety support."
-#ifdef PIXMAN_NO_TLS
-#pragma message "PIXMAN_NO_TLS IS DEFINED!!!! THIS MAY CAUSE PROBLEMS DUE TO HOW COMPLEX WEBKIT IS. MUST FIX LATER. (I HAVE AN IMPLEMENTATION OF IT SOMEWHERE, RIGHT?)
-#endif
 
 #endif

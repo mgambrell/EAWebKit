@@ -1156,9 +1156,12 @@ LayoutRect RenderInline::linesVisualOverflowBoundingBoxInRegion(const RenderRegi
 
 LayoutRect RenderInline::clippedOverflowRectForRepaint(const RenderLayerModelObject* repaintContainer) const
 {
-    // Only first-letter renderers are allowed in here during layout. They mutate the tree triggering repaints.
-    ASSERT(!view().layoutStateEnabled() || style().styleType() == FIRST_LETTER);
+   //MBG: this happens sometimes...  
+   //commit aab332edce238b8de5caaef471d7f9eea23241ad is good enough to resolve this
 
+   // Only first-letter renderers are allowed in here during layout. They mutate the tree triggering repaints.
+   ASSERT(!view().layoutStateEnabled() || style().styleType() == FIRST_LETTER || hasSelfPaintingLayer());
+    
     if (!firstLineBoxIncludingCulling() && !continuation())
         return LayoutRect();
 

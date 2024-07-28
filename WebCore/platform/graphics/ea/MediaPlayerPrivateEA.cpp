@@ -32,15 +32,19 @@
 #include <internal/include/EAWebKitEASTLHelpers.h>
 #include <internal/include/EAWebKitAssert.h>
 #include "PlatformContextCairo.h"
+#include "AudioSourceProviderClient.h"
+#include "AudioBus.h"
+
 #include <cairo/cairo.h>
+
 using namespace EA::WebKit;
 
-namespace WebCore {
+namespace WebCore
+{
 
 int MediaPlayerPrivateEA::sIdGenerator = 0;    
 int MediaPlayerPrivateEA::sRefCount = 0;
 MediaUpdateInfo* MediaPlayerPrivateEA::spMediaUpdateInfo = NULL;
-
 
 
 // Helper functions for common calls to client.
@@ -124,12 +128,12 @@ MediaPlayerPrivateEA::MediaPlayerPrivateEA(MediaPlayer* player)
 MediaPlayerPrivateEA::~MediaPlayerPrivateEA()
 {
     ClientUpdate(MediaUpdateInfo::kDestroy);
-    
+
     mUpdateTimer.stop();
     
     sRefCount--;
     if (!sRefCount)
-        Finalize();         
+        Finalize();
 }
 
 MediaUpdateInfo& MediaPlayerPrivateEA::GetMediaUpdateInfo(void)
@@ -609,5 +613,44 @@ bool MediaPlayerPrivateEA::didLoadingProgress() const
     return didLoadingProgress;
 }
 
+void MediaPlayerPrivateEA::load(const String& url, MediaSourcePrivateClient* client)
+{
+	//added for MediaSource, but I didn't end up using MediaSource.. I think?
+	(void)url;
 }
+
+AudioSourceProvider* MediaPlayerPrivateEA::audioSourceProvider()
+{
+	return this;
+}
+
+// "provideInput() gets called repeatedly to render time-slices of a continuous audio stream."
+void MediaPlayerPrivateEA::provideInput(AudioBus* bus, size_t framesToProcess)
+{
+	float* buffers[6];
+
+	auto& info = GetMediaUpdateInfo();
+
+	for(unsigned i = 0; i < bus->numberOfChannels(); i++)
+		buffers[i] = bus->channel(i)->mutableData();
+
+	info.provideAudioSourceInput.framesDstBuf = buffers;
+	info.provideAudioSourceInput.frameCount = framesToProcess;
+
+	ClientUpdate(MediaUpdateInfo::kProvideAudioSourceInput);
+}
+
+// "If a client is set, we call it back when the audio format is available or changes."
+void MediaPlayerPrivateEA::setClient(AudioSourceProviderClient* client)
+{
+	//at this point I think we're supposed to yank playback from the normal output and send it out the provideInput() instead
+	auto& info = GetMediaUpdateInfo();
+	ClientUpdate(MediaUpdateInfo::kSetAudioSourceClient);
+	audioSourceProviderClient = client;
+	audioSourceProviderClient->setFormat(info.setAudioSourceClient.channelCount, info.setAudioSourceClient.sampleRate);
+}
+
+
+} //namespace WebCore
+
 

@@ -683,6 +683,10 @@ struct MediaUpdateInfo
         kWindowSize,            // The movie location or size changed.  Window is returned in mWindowRect (= clip rect) and the movie location and size in mMediaRect
         kPaint,                 // For draw of a movie inside EAWebKit.  
 
+				//MBG ADDED 
+				kSetAudioSourceClient, //this has turned into an audio source, so stop playing it on the normal output bus and pipe it through webaudio instead. Return channels and samplerate
+				kProvideAudioSourceInput, //
+
 
         kGetIfMimeSupported,    // Set mReturnBool if the passed mime type in mMime is supported.  
         kGetSupportsFullScreen, // Set mReturnBool if full screen is supported.    
@@ -731,6 +735,21 @@ struct MediaUpdateInfo
     MediaState                  mReturnMediaState;          // Return the current media state
     void*                       mReturnData;                // Optional - return the movie surface data for drawing inside EAWebKit with a kPaint call. It needs to have the passed mRect width and height.
 	bool                        mReturnBool;                // Return if request is true or false.
+
+	//MBG - Set by user for kSetAudioSourceClient
+	struct
+	{
+		int channelCount;
+		float sampleRate;
+	} setAudioSourceClient;
+
+	//MBG - set for kProvideAudioSourceInput
+	struct {
+		//separate buffers for each channel
+		float** framesDstBuf;
+		int frameCount;
+	} provideAudioSourceInput;
+
 };
 
 

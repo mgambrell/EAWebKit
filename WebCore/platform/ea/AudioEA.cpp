@@ -14,6 +14,9 @@ namespace WebCore
 {
 	PassRefPtr<AudioBus> createBusFromInMemoryAudioFile(const void* data, size_t dataSize, bool mixToMono, float sampleRate)
 	{
+		//NOTE: this did not seem to end up getting used :(
+		//but it was good for learning
+
 		auto *pClient = EA::WebKit::GetEAWebKitClient();
 
 		EA::WebKit::EAWebKitClientAudioBufferInfo *info = pClient->AudioLoadBuffer(data, dataSize, mixToMono, sampleRate);

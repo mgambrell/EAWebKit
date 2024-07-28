@@ -31,6 +31,7 @@
 
 #include "config.h"
 #include "MediaSource.h"
+#include "MediaSample.h" //MBG - had to add?
 
 #if ENABLE(MEDIA_SOURCE)
 

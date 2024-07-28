@@ -24,6 +24,7 @@
 #include "MediaPlayerPrivate.h"
 #include <EAWebKit/EAWebKitClient.h>
 #include "MediaPlayer.h"
+#include "AudioSourceProvider.h"
 
 namespace EA
 {
@@ -38,11 +39,9 @@ namespace WebCore
 
 class IntRect;
 class IntSize;
+class AudioSourceProviderClient;
 
-
-
-
-class MediaPlayerPrivateEA : public MediaPlayerPrivateInterface
+class MediaPlayerPrivateEA : public MediaPlayerPrivateInterface, public AudioSourceProvider
 {
 public:
 	explicit MediaPlayerPrivateEA(MediaPlayer* player);
@@ -51,7 +50,16 @@ public:
     // For setting up the engine
     static void registerMediaEngine(MediaEngineRegistrar);
     static void getSupportedTypes(HashSet<String> &supported);
-	static MediaPlayer::SupportsType supportsType(const MediaEngineSupportParameters& parameters);
+    static MediaPlayer::SupportsType supportsType(const MediaEngineSupportParameters& parameters);
+
+    //MBG - added (needed for MediaSource)
+    AudioSourceProvider* audioSourceProvider() override;
+    void load(const String& url, MediaSourcePrivateClient*) override;
+    AudioSourceProviderClient* audioSourceProviderClient = nullptr;
+  
+    //MBG - added (implementation of AudioSourceProvider)
+    void provideInput(AudioBus* bus, size_t framesToProcess) override;
+    void setClient(AudioSourceProviderClient* client) override;
 
     // For playing the media
     virtual void load(const String& url) override;

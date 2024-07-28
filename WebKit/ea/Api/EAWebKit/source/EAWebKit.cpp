@@ -46,6 +46,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <EAWebKit/EAWebKitView.h>
 #include <EAWebKit/EAWebKitThreadInterface.h>
 #include <EAWebKit/EAWebKitTextInterface.h>
+#include <Modules/webaudio/AudioNode.h>
 #include <EAIO/PathString.h>
 #include <EAAssert/eaassert.h>
 #include "Logging.h"
@@ -720,7 +721,9 @@ bool Init(AppCallbacks* appCallbacks, AppSystems* appSystems)
 
 		//MBG added
 		if(appSystems->mEAWebkitClient)
+		{
 			GLPipe_SetProcs((GLPipe_Procs*)appSystems->mEAWebkitClient->GetGLPipeProcs());
+		}
 
 		//MBG ADDED:
 		//set a global cairo device. since I added this for cairo-gl, it's not shuttled around to any of the needed plaes
@@ -728,6 +731,9 @@ bool Init(AppCallbacks* appCallbacks, AppSystems* appSystems)
 		//we need this set up early and there's no reason to do it differently, so it's done now here
 		auto context = WebCore::GLContext::sharingContext();
 		g_cairoDevice = context->cairoDevice();
+
+		//MBG ADDED
+		WebCore::AudioNode::ProcessingSizeInFrames = appSystems->mEAWebkitClient->AudioGetMixQuantum();
 	}
 
 	// Force the creation of allocator if one was not passed. This allows us to use the pointer directly instead of having to call GetAllocator all the time. 

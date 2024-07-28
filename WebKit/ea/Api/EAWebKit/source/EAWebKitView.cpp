@@ -453,9 +453,15 @@ bool View::InitView(const ViewParameters& vp)
 
 	//why not?
 	settings.setAcceleratedDrawingEnabled(true);
+	settings.setMediaDataLoadsAutomatically(true);
+	settings.setMediaEnabled(true);
 
 	//seems browsers usually do this and games count on it
 	settings.setImageSubsamplingEnabled(true);
+
+	//now supported
+	settings.setWebAudioEnabled(true);
+	settings.setMediaStreamEnabled(true);
 
 	d->mInitialized = true;
 	

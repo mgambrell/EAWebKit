@@ -51,7 +51,9 @@ typedef int ExceptionCode;
 
 class AudioNode : public EventTargetWithInlineData {
 public:
-    enum { ProcessingSizeInFrames = 128 };
+  //MBG - changed this to a variable so we can configure it at bootup. 
+    //enum { ProcessingSizeInFrames = 128 };
+  static int ProcessingSizeInFrames;
 
     AudioNode(AudioContext*, float sampleRate);
     virtual ~AudioNode();

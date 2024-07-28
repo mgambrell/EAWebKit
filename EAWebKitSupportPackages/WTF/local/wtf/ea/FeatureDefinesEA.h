@@ -47,6 +47,8 @@ Use this file to define ENABLE() macros only. Do not use this file to define USE
 #define ENABLE_ACCELERATED_2D_CANVAS 1
 #define ENABLE_GAMEPAD 1
 #define ENABLE_DOM4_EVENTS_CONSTRUCTOR 1
+#define ENABLE_WEB_AUDIO 1
+//#define ENABLE_MEDIA_STREAM 1
 
 /* The list below is not comprehensive (meaning it does not include all the webcore/wtf/javascriptcore defines) but we can build over time as needed. */
 

@@ -42,6 +42,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <string>
 #include <vector>
+#include <functional>
 
 //MBG - ADDED
 namespace WebCore
@@ -793,6 +794,13 @@ public:
 	double *m_pAxes = nullptr;
 };
 
+struct EAWebKitClientAudioBufferInfo
+{
+	int numChannels;
+	int numFrames;
+	float* data; //deinterleaved data. e.g. numFrames=4, numChannels=2 -> LLLLRRRR
+};
+
 // The user can provide an instance of this interface to the EAWebKit library. You can think of this instance as a delegate to which EAWebKit
 // refers when it needs to interact with the application.
 class EAWebKitClient
@@ -800,9 +808,15 @@ class EAWebKitClient
 public:
 	virtual ~EAWebKitClient() { }
 
+	//---------------------
 	//MBG - added
 	virtual void* GetGLPipeProcs() { return 0; }
 	virtual void GetGamepads(EAWebKitClientGamepad** ppGamepads, int *nGamepads) { }
+	virtual EAWebKitClientAudioBufferInfo* AudioLoadBuffer(const void* data, size_t dataSize, bool mixToMono, float sampleRate) { return nullptr; }
+	virtual void AudioStart(std::function<void(float*,int)> cb, unsigned numberOfInputChannels, unsigned numberOfOutputChannels, float sampleRate) {}
+	virtual void AudioStop() {}
+	virtual int AudioGetMixQuantum() { return 128; }
+	//---------------------
 
 	virtual void GetLocalizedString     (LocalizedStringInfo&)          {   }
 	virtual void LoadUpdate				(LoadInfo&)						{	}

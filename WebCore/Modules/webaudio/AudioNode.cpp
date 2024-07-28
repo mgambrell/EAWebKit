@@ -42,6 +42,10 @@
 
 namespace WebCore {
 
+  //MBG - added.
+  //default it to something utterly wild.
+  int AudioNode::ProcessingSizeInFrames = -1;
+
 AudioNode::AudioNode(AudioContext* context, float sampleRate)
     : m_isInitialized(false)
     , m_nodeType(NodeTypeUnknown)

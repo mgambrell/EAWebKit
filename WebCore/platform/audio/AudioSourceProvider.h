@@ -29,6 +29,8 @@
 #ifndef AudioSourceProvider_h
 #define AudioSourceProvider_h
 
+#include <stddef.h>
+
 namespace WebCore {
 
 class AudioBus;

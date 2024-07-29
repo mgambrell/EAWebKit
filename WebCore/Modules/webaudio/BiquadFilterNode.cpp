@@ -38,6 +38,9 @@ BiquadFilterNode::BiquadFilterNode(AudioContext* context, float sampleRate)
     // Initially setup as lowpass filter.
     m_processor = std::make_unique<BiquadProcessor>(context, sampleRate, 1, false);
     setNodeType(NodeTypeBiquadFilter);
+
+    //MBG - this was missing? not sure, but it doesn't seem to hurt (I saw it in later versions)
+    initialize();
 }
 
 String BiquadFilterNode::type() const

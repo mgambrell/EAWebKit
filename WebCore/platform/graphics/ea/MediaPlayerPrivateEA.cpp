@@ -230,6 +230,11 @@ void MediaPlayerPrivateEA::load(const String& url)
 
     GetFixedString(info.mURI)->assign(StringView(escapedUrl).upconvertedCharacters(), escapedUrl.length());
     ClientUpdate(MediaUpdateInfo::kLoad);
+
+    //MBG:
+    //if this has been previously configured as an AudioSourceProvider, reset the client now that metadata is available
+    if(audioSourceProviderClient)
+      setClient(audioSourceProviderClient);
     
 	if (!info.mReturnBool && info.mReturnMediaState == MediaUpdateInfo::kError) {
 		cancelLoad();
@@ -645,9 +650,12 @@ void MediaPlayerPrivateEA::setClient(AudioSourceProviderClient* client)
 {
 	//at this point I think we're supposed to yank playback from the normal output and send it out the provideInput() instead
 	auto& info = GetMediaUpdateInfo();
+	info.setAudioSourceClient.channelCount = 0;
 	ClientUpdate(MediaUpdateInfo::kSetAudioSourceClient);
 	audioSourceProviderClient = client;
-	audioSourceProviderClient->setFormat(info.setAudioSourceClient.channelCount, info.setAudioSourceClient.sampleRate);
+	//sometimes the format isn't known yet because the url's never been sent......
+	if(info.setAudioSourceClient.channelCount)
+		audioSourceProviderClient->setFormat(info.setAudioSourceClient.channelCount, info.setAudioSourceClient.sampleRate);
 }
 
 

@@ -450,6 +450,8 @@ void MediaPlayer::loadWithNextMediaEngine(const MediaPlayerFactory* current)
         else
 #endif
         m_private->load(m_url.string());
+        //MBG - had to add this?? not sure, but it took a lot of work to find so I'll save it
+        //m_client.mediaPlayerEngineUpdated(this);
     } else {
         m_private = std::make_unique<NullMediaPlayerPrivate>(this);
         m_client.mediaPlayerEngineUpdated(this);

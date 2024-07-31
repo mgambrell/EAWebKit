@@ -155,10 +155,8 @@ void MediaPlayerPrivateEA::Finalize(void)
     }
 }
 
-void MediaPlayerPrivateEA::ClientUpdate(MediaUpdateInfo::UpdateType type) const
+void MediaPlayerPrivateEA::ClientUpdate(EA::WebKit::MediaUpdateInfo& info, MediaUpdateInfo::UpdateType type) const
 {
-    MediaUpdateInfo& info = GetMediaUpdateInfo();
-    
     EA::WebKit::View* pView = mpEAWebKitView;
     // If we don't yet have a view, try to get one now.
     if(!pView)
@@ -166,6 +164,11 @@ void MediaPlayerPrivateEA::ClientUpdate(MediaUpdateInfo::UpdateType type) const
     
     SetUpClientUpdate(info, type, mHandleID, pView, mIsVideo);    
     CallClientUpdate(info); 
+}
+
+void MediaPlayerPrivateEA::ClientUpdate(MediaUpdateInfo::UpdateType type) const
+{
+  ClientUpdate(GetMediaUpdateInfo(), type);
 }
 
 float MediaPlayerPrivateEA::ClientUpdateAndReturnTime(MediaUpdateInfo::UpdateType type) const
@@ -634,7 +637,8 @@ void MediaPlayerPrivateEA::provideInput(AudioBus* bus, size_t framesToProcess)
 {
 	float* buffers[6];
 
-	auto& info = GetMediaUpdateInfo();
+	//use our own info struct because we can get called into from the webaudio thread
+	MediaUpdateInfo info;
 
 	for(unsigned i = 0; i < bus->numberOfChannels(); i++)
 		buffers[i] = bus->channel(i)->mutableData();
@@ -642,18 +646,23 @@ void MediaPlayerPrivateEA::provideInput(AudioBus* bus, size_t framesToProcess)
 	info.provideAudioSourceInput.framesDstBuf = buffers;
 	info.provideAudioSourceInput.frameCount = framesToProcess;
 
-	ClientUpdate(MediaUpdateInfo::kProvideAudioSourceInput);
+	ClientUpdate(info, MediaUpdateInfo::kProvideAudioSourceInput);
 }
 
 // "If a client is set, we call it back when the audio format is available or changes."
 void MediaPlayerPrivateEA::setClient(AudioSourceProviderClient* client)
 {
 	//at this point I think we're supposed to yank playback from the normal output and send it out the provideInput() instead
-	auto& info = GetMediaUpdateInfo();
+
+	//use our own info struct because we can get called into from the webaudio thread
+	MediaUpdateInfo info;
 	info.setAudioSourceClient.channelCount = 0;
+
 	ClientUpdate(MediaUpdateInfo::kSetAudioSourceClient);
+
 	audioSourceProviderClient = client;
-	//sometimes the format isn't known yet because the url's never been sent......
+	
+  //sometimes the format isn't known yet because the url's never been sent......
 	if(info.setAudioSourceClient.channelCount)
 		audioSourceProviderClient->setFormat(info.setAudioSourceClient.channelCount, info.setAudioSourceClient.sampleRate);
 }

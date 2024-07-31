@@ -99,6 +99,7 @@ public:
 private: 
     static EA::WebKit::MediaUpdateInfo& GetMediaUpdateInfo(void);
     static void Finalize(void);
+    void ClientUpdate(EA::WebKit::MediaUpdateInfo& info, EA::WebKit::MediaUpdateInfo::UpdateType type) const;
     void ClientUpdate(EA::WebKit::MediaUpdateInfo::UpdateType type) const;
     bool ClientUpdateAndReturnBool(EA::WebKit::MediaUpdateInfo::UpdateType type) const;
     float ClientUpdateAndReturnTime(EA::WebKit::MediaUpdateInfo::UpdateType type) const;

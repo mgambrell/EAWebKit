@@ -43,7 +43,7 @@
 #endif
 
 // FIXME: Find a better way to avoid the name confliction for NO_ERROR.
-#if defined(SYS_RATA)
+#if defined(BUILDING_EA__)
 #undef NO_ERROR
 #elif PLATFORM(GTK)
 // This define is from the X11 headers, but it's used below, so we must undefine it.
@@ -676,7 +676,7 @@ public:
         ALREADY_SIGNALED = 0x911A,
         TIMEOUT_EXPIRED = 0x911B,
         CONDITION_SATISFIED = 0x911C,
-#if defined(SYS_RATA)
+#if defined(BUILDING_EA__)
         WAIT_FAILED_WIN = 0x911D,
 #else
         WAIT_FAILED = 0x911D,

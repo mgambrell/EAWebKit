@@ -29,7 +29,7 @@
 #include <cairo.h>
 
 //MBG MODIFIED
-#include <EAWebKit/EAWebKit>
+#include <EAWebKit/EAWebKitAll.h>
 #include "cairo-gl.h"
 #include "GLContext.h"
 

@@ -658,7 +658,7 @@ void MediaPlayerPrivateEA::setClient(AudioSourceProviderClient* client)
 	MediaUpdateInfo info;
 	info.setAudioSourceClient.channelCount = 0;
 
-	ClientUpdate(MediaUpdateInfo::kSetAudioSourceClient);
+	ClientUpdate(info, MediaUpdateInfo::kSetAudioSourceClient);
 
 	audioSourceProviderClient = client;
 	

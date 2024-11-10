@@ -716,13 +716,22 @@ void pixman_free(void *p)
 
 }
 
+namespace cairo
+{
+	size_t allocationSize = 0;
+	size_t allocationCount = 0;
+}
+
 // cairo package  //////////////////////////////////////////////////////
 // cairo has been set up to require you to provide the functions below.
 extern "C" 
 {
 void *cairo_malloc(size_t size)
 {
-    return EA::WebKit::spEAWebKitAllocator->Malloc(size, 0, "EAWebKit/Cairo");
+	cairo::allocationCount++;
+	void* pRet = EA::WebKit::spEAWebKitAllocator->Malloc(size, 0, "EAWebKit/Cairo");
+	cairo::allocationSize += EA::WebKit::spEAWebKitAllocator->Size(pRet);
+	return pRet;
 }
 
 void *cairo_calloc(size_t num, size_t size)
@@ -741,7 +750,11 @@ void *cairo_realloc(void *p, size_t size)
 
 void cairo_free(void *p)
 {
-    EA::WebKit::spEAWebKitAllocator->Free(p, 0);
+	if(!p)
+		return;
+	cairo::allocationCount--;
+	cairo::allocationSize -= EA::WebKit::spEAWebKitAllocator->Size(p);
+	EA::WebKit::spEAWebKitAllocator->Free(p, 0);
 }
 }
 

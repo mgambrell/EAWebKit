@@ -59,6 +59,7 @@ public:
 	virtual void* MallocAligned(size_t size, size_t alignment, size_t offset, int flags, const char* pName) = 0;
 	virtual void  Free(void* p, size_t size) = 0;
 	virtual void* Realloc(void* p, size_t size, int flags) = 0;
+	virtual size_t Size(void* p) = 0;
 	virtual void  ValidateHeap() //Useful for tracking memory corruption
 	{
 

@@ -552,6 +552,9 @@ _cairo_gl_composite_setup_painted_clipping (cairo_gl_composite_t *setup,
 					    cairo_gl_context_t *ctx,
 					    int vertex_size)
 {
+  cairo_clip_t *clip_to_destroy = NULL;
+  cairo_clip_t* old_clip = setup->dst->clip_on_stencil_buffer;
+
     cairo_int_status_t status = CAIRO_INT_STATUS_SUCCESS;
 
     cairo_gl_surface_t *dst = setup->dst;
@@ -572,19 +575,19 @@ _cairo_gl_composite_setup_painted_clipping (cairo_gl_composite_t *setup,
     glEnable (GL_STENCIL_TEST);
     glDisable (GL_SCISSOR_TEST);
 
-    /* Texture surfaces have private depth/stencil buffers, so we can
-     * rely on any previous clip being cached there. */
-    if (_cairo_gl_surface_is_texture (setup->dst)) {
-	cairo_clip_t *old_clip = setup->dst->clip_on_stencil_buffer;
-	if (_cairo_clip_equal (old_clip, setup->clip))
-	    goto activate_stencil_buffer_and_return;
+		/* Texture surfaces have private depth/stencil buffers, so we can
+		 * rely on any previous clip being cached there. */
+		if(_cairo_gl_surface_is_texture(setup->dst)) {
+			if(_cairo_clip_equal(old_clip, setup->clip))
+				goto activate_stencil_buffer_and_return;
 
-      /* Clear the stencil buffer, but only the areas that we are
-       * going to be drawing to. */
-	if (old_clip)
-	    _cairo_gl_scissor_to_rectangle (dst, _cairo_clip_get_extents (old_clip));
-	setup->dst->clip_on_stencil_buffer = _cairo_clip_copy (setup->clip);
-    }
+				/* Clear the stencil buffer, but only the areas that we are
+				 * going to be drawing to. */
+			if(old_clip)
+				_cairo_gl_scissor_to_rectangle(dst, _cairo_clip_get_extents(old_clip));
+
+			setup->dst->clip_on_stencil_buffer = clip_to_destroy = _cairo_clip_copy(setup->clip);
+		}
 
     glClearStencil (0);
     glClear (GL_STENCIL_BUFFER_BIT);
@@ -606,6 +609,11 @@ _cairo_gl_composite_setup_painted_clipping (cairo_gl_composite_t *setup,
        drawing. */
     _cairo_gl_composite_flush (ctx);
     _cairo_gl_composite_setup_vbo (ctx, vertex_size);
+
+    //MBG - fix leak
+    setup->dst->clip_on_stencil_buffer = old_clip;
+    if(clip_to_destroy)
+      _cairo_clip_destroy(clip_to_destroy);
 
 activate_stencil_buffer_and_return:
     glColorMask (1, 1, 1, 1);

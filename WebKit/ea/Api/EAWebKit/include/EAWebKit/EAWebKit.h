@@ -118,6 +118,17 @@ struct RAMCacheUsageInfo
 
 };
 
+struct MemoryReport
+{
+	struct {
+		size_t BytesAllocatedThisCycle;
+		size_t MaxEdenSize;
+		size_t MaxHeapSize;
+	} heap;
+
+	size_t ConfiguredGcMaxHeapSize;
+};
+
 enum MemoryCacheClearFlags
 {
     MemoryCacheClearScriptBit       = 1 << 0, // Clear compiled Script code that holds references to many other elements (meaning lot of memory can't be freed until this is cleared).
@@ -441,6 +452,9 @@ public:
 	virtual void NetworkStateChanged(bool isOnline); //Call this to indicate any change in network status. 
 	virtual void RegisterURLSchemeAsCORSEnabled(const char16_t* pScheme);
     virtual bool IsURLSchemeCORSEnabled(const char16_t* pScheme);
+
+		//MBG ADDITION
+		virtual void GetMemoryReport(MemoryReport* report);
 
 	// Add a user style sheet that affects all rendered pages.
 	// Example 1 - Adding ":link, :visited { text-decoration: line-through ! important; }" will line-through all the links on all pages even if styled by the page.

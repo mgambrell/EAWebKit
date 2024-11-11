@@ -1119,6 +1119,7 @@ bool TextSystem::GetCachedGlyph(EA::Text::Font* pFontEA, EA::WebKit::GlyphId g, 
             }
             else
             {
+                //MBG: sometimes this hits when I fool around with ClearMemoryCache... hmm
                 EA_ASSERT_MSG(false, "FontEA: Out of glyph cache space.  Please consider increasing size");
             }
             pFontEA->DoneGlyphBitmap(pGlyphBitmap);

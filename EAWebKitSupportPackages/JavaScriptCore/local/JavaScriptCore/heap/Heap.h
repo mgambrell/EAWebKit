@@ -237,6 +237,11 @@ public:
 
     void addLogicallyEmptyWeakBlock(WeakBlock*);
 
+    //MBG - added for investigation
+    size_t GetBytesAllocatedThisCycle() const { return m_bytesAllocatedThisCycle; }
+    size_t GetMaxEdenSize() const { return m_maxEdenSize; }
+    size_t GetMaxHeapSize() const { return m_maxHeapSize; }
+
 private:
     friend class CodeBlock;
     friend class CopiedBlock;

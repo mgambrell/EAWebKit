@@ -460,6 +460,15 @@ void EAWebKitLib::DestroyJavascriptValueArray(JavascriptValue *array)
 	EA::WebKit::DestroyJavascriptValueArray(array);
 }
 
+void EAWebKitLib::GetMemoryReport(MemoryReport* report)
+{
+	report->heap.BytesAllocatedThisCycle = WebCore::JSDOMWindow::commonVM().heap.GetBytesAllocatedThisCycle();
+	report->heap.MaxEdenSize = WebCore::JSDOMWindow::commonVM().heap.GetMaxEdenSize();
+	report->heap.MaxHeapSize = WebCore::JSDOMWindow::commonVM().heap.GetMaxHeapSize();
+	report->ConfiguredGcMaxHeapSize = JSC::Options::gcMaxHeapSize();
+
+}
+
 void EAWebKitLib::ClearMemoryCache(MemoryCacheClearFlags flags)
 {
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);
@@ -1167,7 +1176,9 @@ void ClearMemoryCache(MemoryCacheClearFlags flags)
 			WebCore::GCController::singleton().deleteAllCode();
         
 		//Invalidate font cache
-		WebCore::FontCache::singleton().invalidate();
+		//MBG: this doesn't work. Some other font resource (font cascades?) is supposed to be purged when this is done, but it isn't happening
+		//we then get an assert on this: ASSERT(FontCache::singleton().generation() == m_generation);
+		//WebCore::FontCache::singleton().invalidate();
 
 		//Dropping buffered data from paused media elements
 		if (flags & EA::WebKit::MemoryCacheClearResourcesBit)
@@ -1179,8 +1190,8 @@ void ClearMemoryCache(MemoryCacheClearFlags flags)
 		}
 		
 		if (flags & EA::WebKit::MemoryCacheClearScriptBit)
-			WebCore::GCController::singleton().garbageCollectNowIfNotDoneRecently();
-			//WebCore::GCController::singleton().garbageCollectNow();//for testing purposes we could make it sync 
+			//WebCore::GCController::singleton().garbageCollectNowIfNotDoneRecently();
+			WebCore::GCController::singleton().garbageCollectNow();//for testing purposes we could make it sync 
 	}
 
 	// from MemoryPressureHandler::releaseNoncriticalMemory()

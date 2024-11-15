@@ -126,11 +126,45 @@ _freed_pool_reset (freed_pool_t *pool);
  * enabled usually indicates a missing _freed_pool_reset() in the
  * static reset function */
 
-typedef int freed_pool_t;
+#define MAX_FREED_POOL_SIZE 64
+typedef struct {
+void *pool[MAX_FREED_POOL_SIZE];
+int top;
+} freed_pool_t;
 
+//MBG - added a less awkward implementation, since we know we're not running in threads here
+//Somewhat redundant with a good SSS implementation (which should be used for most purposes like this...)
+//But it will be a little faster and simplify analysis of memory leaks if cairo's allocs can be totally internally pooled
+static inline void *_freed_pool_get (freed_pool_t *pool)
+{
+  if(pool->top == 0)
+    return NULL;
+
+  return pool->pool[--pool->top];
+}
+static inline void _freed_pool_put (freed_pool_t *pool, void *ptr)
+{
+  if(pool->top == MAX_FREED_POOL_SIZE)
+  {
+    cairo_free(ptr);
+    return;
+  }
+  
+  pool->pool[pool->top++] = ptr;
+}
+
+static inline void _freed_pool_reset(freed_pool_t *pool)
+{
+  for(int i=0;i<pool->top;i++)
+    cairo_free(pool->pool[i]);
+  pool->top = 0;
+}
+
+#if 0
 #define _freed_pool_get(pool) NULL
 #define _freed_pool_put(pool, ptr) cairo_free(ptr)
 #define _freed_pool_reset(ptr)
+#endif
 
 #endif
 

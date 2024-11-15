@@ -530,8 +530,27 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 		NOTIFY_PROCESS_STATUS(kVProcessTypeClearSurface, EA::WebKit::kVProcessStatusEnded, d->page->view());
 	}
 
+	//MBG: experiment in not allocating so much litter
+	static RefPtr<cairo_t> my_cairoMainLayerContext;
+	static WebCore::GraphicsContext* my_mainLayerGC;
+	static cairo_surface_t* cairoMainLayerSurface_last;
+	if(cairoMainLayerSurface_last != cairoMainLayerSurface)
+	{
+		cairoMainLayerSurface_last = cairoMainLayerSurface;
+		
+		//make sure these destruct in reverse order (I dunno what's safe)
+		delete my_mainLayerGC;
+		my_cairoMainLayerContext = nullptr;
+		my_cairoMainLayerContext = adoptRef(cairo_create(cairoMainLayerSurface));
+		my_mainLayerGC = new WebCore::GraphicsContext(my_cairoMainLayerContext.get());
+	}
+	RefPtr<cairo_t> &cairoMainLayerContext = my_cairoMainLayerContext;
+	WebCore::GraphicsContext &mainLayerGC = *my_mainLayerGC;
+
+	#if 0
 	RefPtr<cairo_t> cairoMainLayerContext = adoptRef(cairo_create(cairoMainLayerSurface));
 	WebCore::GraphicsContext mainLayerGC(cairoMainLayerContext.get());
+	#endif
 
 	WebCore::FrameView *view = d->frame->view();
 	NOTIFY_PROCESS_STATUS(kVProcessTypeDirtyRectsRender, EA::WebKit::kVProcessStatusStarted, d->page->view());
@@ -572,17 +591,47 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 
 	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusStarted, d->page->view());
 
-	//...............
-	//make a temporary cairo surface to wrap the target ISurface so we can use cairo to draw the main layer surface onto it
 	int fullViewWidth = d->page->view()->GetSize().mWidth;
 	int fullViewHeight = d->page->view()->GetSize().mHeight;
-	cairo_surface_t *targetCairoSurface = cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA,surface->GetGlTexId(),fullViewWidth,fullViewHeight);
-	cairo_t *targetSurfaceCairoContext = cairo_create(targetCairoSurface);
+
+	//...............
+	//make a temporary cairo surface to wrap the target ISurface so we can use cairo to draw the main layer surface onto it
+	//static shenanigans are here to cut down on some allocations (input is expected to be double buffered, so we manage two)
+	//YEAH, IT'S SLOPPY AND BAD. I'm just experimenting for now
+	static std::array<ISurface*,2> surfaces_last;
+	static std::array<cairo_surface_t*,2> my_cairoSurfaces;
+	static std::array<cairo_t*,2> my_cairos;
+	cairo_surface_t *targetCairoSurface = nullptr;
+	cairo_t *targetSurfaceCairoContext = nullptr;
+	for(int i=0;i<2;i++)
+	{
+		if(surfaces_last[i] == surface)
+		{
+			targetCairoSurface = my_cairoSurfaces[i];
+			targetSurfaceCairoContext = my_cairos[i];
+			break;
+		}
+	}
+	if(!targetCairoSurface)
+	{
+		int doobie = my_cairoSurfaces[0] ? 1 : 0;
+
+		if(my_cairoSurfaces[doobie])
+		{
+			cairo_destroy(my_cairos[doobie]);
+			cairo_surface_destroy(my_cairoSurfaces[doobie]);
+		}
+
+		surfaces_last[doobie] = surface;
+		targetCairoSurface = my_cairoSurfaces[doobie] = cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA,surface->GetGlTexId(),fullViewWidth,fullViewHeight);
+		targetSurfaceCairoContext = my_cairos[doobie] = cairo_create(targetCairoSurface);
+	}
+		
+
+
 	cairo_set_source_surface(targetSurfaceCairoContext,cairoMainLayerSurface,0,0);
 	cairo_set_operator (targetSurfaceCairoContext, CAIRO_OPERATOR_SOURCE);
 	cairo_paint(targetSurfaceCairoContext);
-	cairo_destroy(targetSurfaceCairoContext);
-	cairo_surface_destroy(targetCairoSurface);
 	//...............
 
 	//after this we're going to hand things off to the TextureMapper
@@ -608,7 +657,11 @@ void WebFrame::renderCompositedLayers(EA::WebKit::IHardwareRenderer* renderer, I
 		return;
 
 	//I think there's some kinds of drawing configuration that can only be stored on the GraphicsContext, so we need to make one of those
-	WebCore::GraphicsContext graphicsContext((cairo_t*)nullptr);
+	//Sloppy static stuff is here to avoid needless allocations
+	static WebCore::GraphicsContext *my_graphicsContext;
+	if(!my_graphicsContext)
+		my_graphicsContext = new WebCore::GraphicsContext((cairo_t*)nullptr);
+	WebCore::GraphicsContext &graphicsContext = *my_graphicsContext;
 
 	// Composite the auxiliary layers if we have them
 	if (WebCore::TextureMapperLayerClientEA* client = static_cast<WebCore::ChromeClientEA&>(page->chrome().client()).m_textureMapperLayerClient.get())

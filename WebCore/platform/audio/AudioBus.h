@@ -146,10 +146,11 @@ public:
 
     static PassRefPtr<AudioBus> loadPlatformResource(const char* name, float sampleRate);
 
+    AudioBus(unsigned numberOfChannels, size_t length, bool allocate);
+
 protected:
     AudioBus() { };
 
-    AudioBus(unsigned numberOfChannels, size_t length, bool allocate);
 
     void speakersCopyFrom(const AudioBus&);
     void discreteCopyFrom(const AudioBus&);

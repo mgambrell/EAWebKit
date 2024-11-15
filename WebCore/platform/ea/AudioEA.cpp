@@ -47,10 +47,12 @@ namespace WebCore
 	class AudioDestinationEA : public AudioDestination
 	{
 	private:
+		RefPtr<AudioBus> audioBus;
 		AudioIOCallback& cb;
 		unsigned numberOfInputChannels;
 		unsigned numberOfOutputChannels;
 		float m_sampleRate;
+		int lastFrameCount = -1;
 		
 		bool running = false;
 
@@ -65,7 +67,11 @@ namespace WebCore
 
 		void userCallback(float* buffer, int frameCount)
 		{
-			auto audioBus = AudioBus::create(numberOfOutputChannels, frameCount, false);
+			if(lastFrameCount != frameCount)
+			{
+				lastFrameCount = frameCount;
+				audioBus = AudioBus::create(numberOfOutputChannels, frameCount, false);
+			}
 			for(int i=0;i<numberOfOutputChannels;i++)
 				audioBus->setChannelMemory(i, buffer+frameCount*i, frameCount); //bytes or frames?
 			cb.render(nullptr, audioBus.get(), frameCount);

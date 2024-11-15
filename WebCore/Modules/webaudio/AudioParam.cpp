@@ -134,19 +134,23 @@ void AudioParam::calculateFinalValues(float* values, unsigned numberOfValues, bo
         values[0] = narrowPrecisionToFloat(m_value);
     }
 
-    // Now sum all of the audio-rate connections together (unity-gain summing junction).
-    // Note that connections would normally be mono, but we mix down to mono if necessary.
-    RefPtr<AudioBus> summingBus = AudioBus::create(1, numberOfValues, false);
-    summingBus->setChannelMemory(0, values, numberOfValues);
+    //MBG OPTIMIZATION: there's no need to do any of this if there's no outputs...
+    if(m_renderingOutputs.size())
+    {
+      // Now sum all of the audio-rate connections together (unity-gain summing junction).
+      // Note that connections would normally be mono, but we mix down to mono if necessary.
+      RefPtr<AudioBus> summingBus = AudioBus::create(1, numberOfValues, false);
+      summingBus->setChannelMemory(0, values, numberOfValues);
 
-    for (auto& output : m_renderingOutputs) {
-        ASSERT(output);
+      for (auto& output : m_renderingOutputs) {
+          ASSERT(output);
 
-        // Render audio from this output.
-        AudioBus* connectionBus = output->pull(0, AudioNode::ProcessingSizeInFrames);
+          // Render audio from this output.
+          AudioBus* connectionBus = output->pull(0, AudioNode::ProcessingSizeInFrames);
 
-        // Sum, with unity-gain.
-        summingBus->sumFrom(*connectionBus);
+          // Sum, with unity-gain.
+          summingBus->sumFrom(*connectionBus);
+      }
     }
 }
 

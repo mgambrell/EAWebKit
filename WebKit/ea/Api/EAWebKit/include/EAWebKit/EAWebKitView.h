@@ -130,6 +130,8 @@ public:
     virtual void GoBack(void);
     virtual void GoForward(void);
     virtual void Refresh(void);
+		virtual void Stop();
+		virtual void CloseUrl();
 
     //
     // Setting the web page/element content from application 

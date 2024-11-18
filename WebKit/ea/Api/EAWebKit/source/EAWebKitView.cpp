@@ -687,6 +687,36 @@ void View::GoForward(void)
     }
 }
 
+void View::Stop(void)
+{
+	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);   
+	SET_AUTO_COLLECTOR_STACK_BASE();   
+	EAWEBKIT_THREAD_CHECK();
+	EAWWBKIT_INIT_CHECK(); 
+
+	d->OverlayChangeNotify();
+
+	if (d->page)
+	{
+		d->page->triggerAction(EA::WebKit::Stop);
+	}
+}
+
+void View::CloseUrl(void)
+{
+	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);   
+	SET_AUTO_COLLECTOR_STACK_BASE();   
+	EAWEBKIT_THREAD_CHECK();
+	EAWWBKIT_INIT_CHECK(); 
+
+	d->OverlayChangeNotify();
+
+	if (d->page)
+	{
+		d->page->triggerAction(EA::WebKit::CloseUrl);
+	}
+}
+
 void View::Refresh(void)
 {
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);   

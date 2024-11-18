@@ -1051,6 +1051,9 @@ void WebPage::triggerAction(WebAction action, bool)
 		case ReloadAndBypassCache:
 			mainFrame()->d->frame->loader().reload(/*endtoendreload*/true);
 			break;
+		case CloseUrl:
+			mainFrame()->d->frame->loader().closeURL();
+			break;
 		default:
 			command = WebPagePrivate::editorCommandForWebActions(action);
 			break;

@@ -193,6 +193,16 @@ static bool drawGlyphsShadow(GraphicsContext* graphicsContext, float x, float y,
 
 static void drawGlyphsToContext(GraphicsContext* pGraphicsContext, const EA::WebKit::GlyphDrawInfo *glyphs, const int glyphCount, int srcW, int srcH, float x, float y, float xMin, float yMin)
 {
+    //MBG MODIFIED
+    //align dimensions to nice blocky numbers to increase chance of resource reuse.
+    //typically, for me, a single line of text will be under 32px tall. 
+    //(this could be configured with a global define if needed)
+    int real_srcH = srcH;
+    int srcW_toUse = (srcW%32==0)?srcW:(srcW + 32-srcW%32);
+    int srcH_toUse = (srcH%32==0)?srcH:(srcH + 32-srcH%32);
+    srcW = srcW_toUse;
+    srcH = srcH_toUse;
+
     // Set up the intermediate 32bit draw surface.
     eastl::fixed_vector<uint32_t, 500, true, EA::WebKit::EASTLAllocator> glyphRGBABuffer;
     const uint32_t dataBufferSize = srcW * srcH;
@@ -215,14 +225,14 @@ static void drawGlyphsToContext(GraphicsContext* pGraphicsContext, const EA::Web
         EAW_ASSERT(gdi.mpData);    // These should have been filtered already
         
         const int textureSize = (int)gdi.mSize;   
-        const int yOffset = (srcH + (int) yMin) - (int)gdi.y1;
+        const int yOffset = (real_srcH + (int) yMin) - (int)gdi.y1;
 
         const int bufferIndex = (yOffset * srcW) + (int)(gdi.x1 - xMin);
         EAW_ASSERT_FORMATTED(bufferIndex >= 0, "Buffer Index is negative. This would corrupt memory. yOffset:%d,destWidth:%u,gdi.x1:%d",yOffset,srcW,(int)gdi.x1);
         uint32_t*            pDestColor  = glyphRGBABuffer.data() + bufferIndex;
 
         const int            glyphWidth  = (int) (gdi.x2 - gdi.x1);
-        const int            glyphHeight = (int) (gdi.y1 - gdi.y2);			
+        const int            glyphHeight = (int) (gdi.y1 - gdi.y2);
 
         const int tx = (int)(gdi.mU0 * textureSize);
         const int ty = (int)(gdi.mV0 * textureSize);
@@ -313,7 +323,7 @@ static void drawGlyphsToContext(GraphicsContext* pGraphicsContext, const EA::Web
      GLContext* previousActiveContext = GLContext::getCurrent();
 
      //cairo_surface_t *surface = cairo_image_surface_create_for_data((unsigned char*)glyphRGBABuffer.data(), CAIRO_FORMAT_ARGB32, srcW, srcH, srcW * sizeof(uint32_t));
-     cairo_surface_t *surface = cairo_gl_surface_create_for_data((cairo_device_t*)EA::WebKit::g_cairoDevice, (unsigned char*)glyphRGBABuffer.data(), CAIRO_CONTENT_COLOR_ALPHA, srcW, srcH, srcW * sizeof(uint32_t));
+     cairo_surface_t *surface = cairo_gl_surface_create_for_data((cairo_device_t*)EA::WebKit::g_cairoDevice, (unsigned char*)glyphRGBABuffer.data(), CAIRO_CONTENT_COLOR_ALPHA, srcW_toUse, srcH_toUse, srcW_toUse * sizeof(uint32_t));
      EAW_ASSERT(cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS);
 
 

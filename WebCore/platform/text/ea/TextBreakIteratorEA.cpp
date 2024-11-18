@@ -144,7 +144,19 @@ TextBreakIterator* acquireLineBreakIterator(StringView string, const AtomicStrin
     if (priorContextLength > 0)
     {
         const UChar* stringUChar = string.upconvertedCharacters().get();
-        int stringLength = std::char_traits<UChar>::length(stringUChar);
+
+				//MBG BUGFIX: strings aren't null terminated in this framework necessarily.................
+        //int stringLength = std::char_traits<UChar>::length(stringUChar);
+				int stringLength = 0;
+				for(;;)
+				{
+					if(stringLength == string.length())
+						break;
+					if(!stringUChar[stringLength])
+						break;
+					stringLength++;
+				}
+
         int totalLength = stringLength + priorContextLength;
         UChar* totalString = new UChar[totalLength];
 

@@ -841,6 +841,7 @@ void GraphicsContext::endPlatformTransparencyLayer()
 
     cairo_pop_group_to_source(cr);
     cairo_paint_with_alpha(cr, m_data->layers.last());
+    cairo_set_source_rgb(cr,0,0,0); //MBG NOTE: this helps keep old stuff from lingering around
     m_data->layers.removeLast();
 }
 

@@ -271,7 +271,20 @@ GlyphData FontCascadeFonts::glyphDataForSystemFallback(UChar32 c, const FontDesc
     if (variant == NormalVariant)
         fallbackGlyphData = systemFallbackFont->glyphDataForCharacter(c);
     else
-        fallbackGlyphData = systemFallbackFont->variantFont(description, variant)->glyphDataForCharacter(c);
+    {
+        auto pVariant = systemFallbackFont->variantFont(description, variant);
+        if(pVariant)
+          fallbackGlyphData = pVariant->glyphDataForCharacter(c);
+        else
+        {
+          //I probably didn't print this diagnostics properly... but it works for me
+          LOG_ERROR("Could not find (synthesize) fallback font variant %d. Falling back further to NormalVariant", variant);
+          for(unsigned i=0;i<description.familyCount();i++)
+            LOG_ERROR("-> %s", description.familyAt(i).string().characters8());
+          //rather than tailcall with tweaked variant to fully repeat the logic, we copy the code here since it seems like this function is an awful lot of overhead, perhaps for every character....?
+          fallbackGlyphData = systemFallbackFont->glyphDataForCharacter(c);
+        }
+    }
 
     if (fallbackGlyphData.font && fallbackGlyphData.font->platformData().orientation() == Vertical && !fallbackGlyphData.font->isTextOrientationFallback()) {
         if (variant == NormalVariant && !FontCascade::isCJKIdeographOrSymbol(c))

@@ -311,27 +311,35 @@ void BitmapTextureGL::updateContents(Image* image, const IntRect& targetRect, co
     if (!frameImage)
         return;
 
-    int bytesPerLine;
-    const char* imageData;
+    #if USE(CAIRO)
 
-#if USE(CAIRO)
-    cairo_surface_t* surface = frameImage.get();
-    imageData = reinterpret_cast<const char*>(cairo_image_surface_get_data(surface));
-    bytesPerLine = cairo_image_surface_get_stride(surface);
+    //So what I want to know is why we can't just use cairo to blit
+    //(the other updateContents does this, essentially, but I can't figure out how to merge the two)
+    
+    //sadly, I don't have a cairo wrapper right now which can take this
+    //so cairo is gonna create another FB internally. 
+    //createFboIfNeeded();
+    
+    cairo_surface_t* srcSurface = frameImage.get();
+    Platform3DObject glTexIdToWrap = m_id;
+    cairo_public cairo_surface_t *dstSurface = cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA, glTexIdToWrap, m_textureSize.width(), m_textureSize.height());
 
-    //MBG - added this, so we can support copying GL surfaces
-    //it's not ideal, but it helps me change one piece at a time
-    RefPtr<cairo_surface_t> tempSurface;
-    if(!imageData)
-    {
-      tempSurface = copyCairoImageSurface(surface);
-      imageData = reinterpret_cast<const char*>(cairo_image_surface_get_data(tempSurface.get()));
-      bytesPerLine = cairo_image_surface_get_stride(tempSurface.get());
-    }
+    cairo_t* cr = cairo_create(dstSurface);
+    cairo_set_source_surface(cr, srcSurface, offset.x(), offset.y()); //is this sense backwards?
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+    cairo_rectangle(cr, targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height());
+    cairo_clip(cr);
+    cairo_paint(cr);
+    cairo_destroy(cr);
 
-#endif
+    //this does leave behind glTexIdToWrap (ill-named cairo_gl_surface_create_for_texture is just wrapping/referencing, not adopting)
+    cairo_surface_destroy(dstSurface);
 
+    #else
+ 
     updateContents(imageData, targetRect, offset, bytesPerLine, updateContentsFlag);
+
+    #endif
 }
 
 static unsigned getPassesRequiredForFilter(FilterOperation::OperationType type)

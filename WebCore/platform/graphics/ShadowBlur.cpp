@@ -466,9 +466,11 @@ void ShadowBlur::drawShadowBuffer(GraphicsContext* graphicsContext)
 
     IntSize bufferSize = m_layerImage->internalSize();
     if (bufferSize != m_layerSize) {
-        // The rect passed to clipToImageBuffer() has to be the size of the entire buffer,
-        // but we may not have cleared it all, so clip to the filled part first.
-        graphicsContext->clip(FloatRect(m_layerOrigin, m_layerSize));
+      //MBG MODIFICATION: I don't see why this is true. Both the blitting to save the mask, and the application of the mask use a tiny rectangle.
+      //We don't need to clip the whole context here. This causes cairo to make a temp RT of the exact tiny wild size.
+        //// The rect passed to clipToImageBuffer() has to be the size of the entire buffer,
+        //// but we may not have cleared it all, so clip to the filled part first.
+        //graphicsContext->clip(FloatRect(m_layerOrigin, m_layerSize));
     }
     graphicsContext->clipToImageBuffer(m_layerImage, FloatRect(m_layerOrigin, bufferSize));
     graphicsContext->setFillColor(m_color, m_colorSpace);

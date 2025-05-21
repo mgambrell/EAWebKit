@@ -47,7 +47,9 @@ enum {
 
 static inline int roundUpToMultipleOf32(int d)
 {
-    return (1 + (d >> 5)) << 5;
+  //MBG - THIS WAS WRONG...
+  //return (1 + (d >> 5)) << 5;
+  return (d + 31) & ~31;
 }
 
 // ShadowBlur needs a scratch image as the buffer for the blur filter.

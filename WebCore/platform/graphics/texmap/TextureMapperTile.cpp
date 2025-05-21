@@ -35,10 +35,19 @@
 
 namespace WebCore {
 
+inline int roundUpToMultipleOf32(int d)
+{
+  return (d + 31) & ~31;
+}
+
 class GraphicsLayer;
 
 void TextureMapperTile::updateContents(TextureMapper* textureMapper, Image* image, const IntRect& dirtyRect, BitmapTexture::UpdateContentsFlag updateContentsFlag)
 {
+  for(;;)
+  {
+    volatile int x=0;
+  }
     IntRect targetRect = enclosingIntRect(m_rect);
     targetRect.intersect(dirtyRect);
     if (targetRect.isEmpty())
@@ -56,8 +65,21 @@ void TextureMapperTile::updateContents(TextureMapper* textureMapper, Image* imag
         //m_texture = textureMapper->createTexture(EA::WebKit::SurfaceTypeTexture, 0, 0);
       //MBG - reverted
       m_texture = textureMapper->createTexture();
+
+      //MBG: round up the size for better pooling
+      int w = roundUpToMultipleOf32(targetRect.width());
+      int h = roundUpToMultipleOf32(targetRect.height());
+      auto roundedSize = targetRect;
+      roundedSize.setWidth(w);
+      roundedSize.setHeight(h);
+
+      if(roundedSize != targetRect)
+      {
+        int zzz=9;
+      }
+
         //-EAWebKitChange
-        m_texture->reset(targetRect.size(), image->currentFrameKnownToBeOpaque() ? 0 : BitmapTexture::SupportsAlpha);
+        m_texture->reset(roundedSize.size(), image->currentFrameKnownToBeOpaque() ? 0 : BitmapTexture::SupportsAlpha);
     }
 
     m_texture->updateContents(image, targetRect, sourceOffset, updateContentsFlag);
@@ -123,10 +145,17 @@ void TextureMapperTile::updateContents(TextureMapper* textureMapper, GraphicsLay
     //}
     ////-EAWebKitChange
 
+    //MBG: round up the size for better pooling
+    int w = roundUpToMultipleOf32(targetRect.width());
+    int h = roundUpToMultipleOf32(targetRect.height());
+    auto roundedRect = targetRect;
+    roundedRect.setWidth(w);
+    roundedRect.setHeight(h);
+
     if (!m_texture) 
     {
         m_texture = textureMapper->createTexture();
-        m_texture->reset(targetRect.size(), BitmapTexture::SupportsAlpha);
+        m_texture->reset(roundedRect.size(), BitmapTexture::SupportsAlpha);
     }
 
     m_texture->updateContents(textureMapper, sourceLayer, targetRect, sourceOffset, updateContentsFlag);
@@ -134,8 +163,20 @@ void TextureMapperTile::updateContents(TextureMapper* textureMapper, GraphicsLay
 
 void TextureMapperTile::paint(TextureMapper* textureMapper, const TransformationMatrix& transform, float opacity, const unsigned exposedEdges)
 {
-    if (texture().get())
-        textureMapper->drawTexture(*texture().get(), rect(), transform, opacity, exposedEdges);
+  //MBG: round up the size for better pooling
+  int w = roundUpToMultipleOf32(rect().width());
+  int h = roundUpToMultipleOf32(rect().height());
+  auto roundedRect = rect();
+  roundedRect.setWidth(w);
+  roundedRect.setHeight(h);
+
+  auto xf = transform;
+  float xs = roundedRect.width()/rect().width();
+  float ys = roundedRect.height()/rect().height();
+  xf.scale3d(xs,ys,1.0f);
+
+     if (texture().get())
+        textureMapper->drawTexture(*texture().get(), rect(), xf, opacity, exposedEdges);
 }
 
 } // namespace WebCore

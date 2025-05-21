@@ -90,7 +90,7 @@ void BitmapTextureGL::updateContents(TextureMapper* textureMapper, GraphicsLayer
   if(updateContentsFlag == UpdateCannotModifyOriginalImageData)
     abort();
 
-  //this should only happen if we're using tiles and since they default to 8k in size, it wont happen
+  //this should only happen if we're using tiles and since they default to (large) in size, it wont happen (unless the game has a very large element......)
   if(targetRect.x() != offset.x()
     || targetRect.y() != offset.y())
   {

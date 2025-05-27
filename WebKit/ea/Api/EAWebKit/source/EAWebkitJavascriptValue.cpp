@@ -269,6 +269,13 @@ const char16_t *JavascriptValue::GetStringValue(size_t *pLengthOut) const
 	return mString16Wrapper->GetCharacters();
 }
 
+std::u16string JavascriptValue::GetStringValue() const
+{
+  size_t len;
+  auto val = GetStringValue(&len);
+  return std::u16string(val,len);
+}
+
 void JavascriptValue::SetArrayType(size_t arraySize) 
 {
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);

@@ -37,6 +37,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <EAWebkit/EAWebkitSTLWrapper.h>
 
+#include <string>
+
 namespace JSC
 {
 class ExecState;
@@ -250,9 +252,10 @@ public:
     virtual void SetStringValue(const char16_t *v);
     virtual const char16_t *GetStringValue(size_t *pLengthOut) const;
 
-    //MBG ADDITIONS: 
+    //MBG ADDITIONS:
     virtual void SetStringValueUTF8(const char *v);
     virtual void SetStringValueUTF8(const char *v, size_t len);
+    virtual std::u16string GetStringValue() const;
 
     // Arrays
     virtual void SetArrayType(size_t arraySize = 0);

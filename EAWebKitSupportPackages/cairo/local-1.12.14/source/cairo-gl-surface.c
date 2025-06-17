@@ -1527,3 +1527,15 @@ static const cairo_surface_backend_t _cairo_gl_surface_backend = {
 		_cairo_gl_surface_rataResolve,
 		_cairo_gl_surface_rataClear,
 };
+
+//MBG: dirty hack functions
+uint32_t cairo_gl_surface_rataGetFBO(void *abstract_surface)
+{
+	cairo_gl_surface_t *surface = abstract_surface;
+	return surface->fb;
+}
+uint32_t cairo_gl_surface_rataGetTexName(void *abstract_surface)
+{
+	cairo_gl_surface_t *surface = abstract_surface;
+	return surface->tex;
+}

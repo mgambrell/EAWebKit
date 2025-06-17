@@ -269,6 +269,23 @@ const char16_t *JavascriptValue::GetStringValue(size_t *pLengthOut) const
 	return mString16Wrapper->GetCharacters();
 }
 
+std::string latinize(const std::u16string& ustr)
+{
+  //we know these will always be all latin, so it's fine
+  std::string ret;
+  for(auto ch : ustr)
+    ret.push_back((char)ch);
+  return ret;
+}
+
+void* JavascriptValue::GetPtrFromHexString() const
+{
+  auto str = latinize(GetStringValue(nullptr));
+  void* ret;
+  sscanf(str.c_str(), "%p", &ret);
+  return ret;
+}
+
 std::u16string JavascriptValue::GetStringValue() const
 {
   size_t len;

@@ -256,6 +256,7 @@ public:
     virtual void SetStringValueUTF8(const char *v);
     virtual void SetStringValueUTF8(const char *v, size_t len);
     virtual std::u16string GetStringValue() const;
+    virtual void* GetPtrFromHexString() const;
 
     // Arrays
     virtual void SetArrayType(size_t arraySize = 0);

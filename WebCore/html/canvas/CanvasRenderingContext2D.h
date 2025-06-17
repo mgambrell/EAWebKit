@@ -64,7 +64,9 @@ public:
 
     //MBG HACKS
     void rataResolve();
+    void rataFlush();
     void rataClear();
+    void* rataGetCairoHandle();
 
     const CanvasStyle& strokeStyle() const { return state().m_strokeStyle; }
     void setStrokeStyle(CanvasStyle);

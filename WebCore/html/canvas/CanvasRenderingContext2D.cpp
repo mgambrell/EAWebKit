@@ -71,6 +71,10 @@
 #include "Settings.h"
 #endif
 
+//MBG: inelegant hacks: we need to peek straight to cairo with no fuss
+#include "../../../WebCore/platform/graphics/ImageBuffer.h"
+extern "C" uint32_t cairo_gl_surface_rataGetFBO(void *abstract_surface);
+
 namespace WebCore {
 
 using namespace HTMLNames;
@@ -2551,6 +2555,12 @@ void CanvasRenderingContext2D::setImageSmoothingEnabled(bool enabled)
         c->setImageInterpolationQuality(enabled ? DefaultInterpolationQuality : InterpolationNone);
 }
 
+void CanvasRenderingContext2D::rataFlush()
+{
+  GraphicsContext* c = drawingContext();
+  c->rataFlush();
+}
+
 void CanvasRenderingContext2D::rataResolve()
 {
   GraphicsContext* c = drawingContext();
@@ -2561,6 +2571,13 @@ void CanvasRenderingContext2D::rataClear()
 {
   GraphicsContext* c = drawingContext();
   c->rataClear();
+}
+
+void* CanvasRenderingContext2D::rataGetCairoHandle()
+{
+  auto ib = static_cast<ImageBuffer*>(canvas()->buffer());
+  cairo_surface_t* surf = ib->GetData().m_surface.get();
+  return (void*)cairo_gl_surface_rataGetFBO(surf);
 }
 
 } // namespace WebCore

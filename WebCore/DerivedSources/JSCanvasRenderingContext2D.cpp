@@ -101,8 +101,10 @@ JSC::EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionGet
 JSC::EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionWebkitGetImageDataHD(JSC::ExecState*);
 JSC::EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionDrawFocusIfNeeded(JSC::ExecState*);
 //MBG ADDITION
+JSC::EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataFlush(JSC::ExecState*);
 JSC::EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataResolve(JSC::ExecState*);
 JSC::EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataClear(JSC::ExecState*);
+JSC::EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataGetCairoHandle(JSC::ExecState*);
 
 // Attributes
 
@@ -311,8 +313,10 @@ static const HashTableValue JSCanvasRenderingContext2DPrototypeTableValues[] =
     { "getImageData", JSC::Function, NoIntrinsic, (intptr_t)static_cast<NativeFunction>(jsCanvasRenderingContext2DPrototypeFunctionGetImageData), (intptr_t) (4) },
     { "webkitGetImageDataHD", JSC::Function, NoIntrinsic, (intptr_t)static_cast<NativeFunction>(jsCanvasRenderingContext2DPrototypeFunctionWebkitGetImageDataHD), (intptr_t) (4) },
     { "drawFocusIfNeeded", JSC::Function, NoIntrinsic, (intptr_t)static_cast<NativeFunction>(jsCanvasRenderingContext2DPrototypeFunctionDrawFocusIfNeeded), (intptr_t) (1) },
+    { "rataFlush", JSC::Function, NoIntrinsic, (intptr_t)static_cast<NativeFunction>(jsCanvasRenderingContext2DPrototypeFunctionRataFlush), (intptr_t) (0) },
     { "rataResolve", JSC::Function, NoIntrinsic, (intptr_t)static_cast<NativeFunction>(jsCanvasRenderingContext2DPrototypeFunctionRataResolve), (intptr_t) (0) },
     { "rataClear", JSC::Function, NoIntrinsic, (intptr_t)static_cast<NativeFunction>(jsCanvasRenderingContext2DPrototypeFunctionRataClear), (intptr_t) (0) },
+    { "rataGetCairoHandle", JSC::Function, NoIntrinsic, (intptr_t)static_cast<NativeFunction>(jsCanvasRenderingContext2DPrototypeFunctionRataGetCairoHandle), (intptr_t) (0) },
 };
 
 const ClassInfo JSCanvasRenderingContext2DPrototype::s_info = { "CanvasRenderingContext2DPrototype", &Base::s_info, 0, CREATE_METHOD_TABLE(JSCanvasRenderingContext2DPrototype) };
@@ -2172,6 +2176,18 @@ EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataReso
   return JSValue::encode(jsUndefined());
 }
 
+EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataFlush(ExecState* exec)
+{
+  JSValue thisValue = exec->thisValue();
+  JSCanvasRenderingContext2D* castedThis = jsDynamicCast<JSCanvasRenderingContext2D*>(thisValue);
+  if (UNLIKELY(!castedThis))
+    return throwThisTypeError(*exec, "CanvasRenderingContext2D", "rataFlush");
+  ASSERT_GC_OBJECT_INHERITS(castedThis, JSCanvasRenderingContext2D::info());
+  auto& impl = castedThis->impl();
+  impl.rataFlush();
+  return JSValue::encode(jsUndefined());
+}
+
 EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataClear(ExecState* exec)
 {
   JSValue thisValue = exec->thisValue();
@@ -2182,6 +2198,22 @@ EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataClea
   auto& impl = castedThis->impl();
   impl.rataClear();
   return JSValue::encode(jsUndefined());
+}
+
+JSC::EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionRataGetCairoHandle(JSC::ExecState* exec)
+{
+  JSValue thisValue = exec->thisValue();
+  JSCanvasRenderingContext2D* castedThis = jsDynamicCast<JSCanvasRenderingContext2D*>(thisValue);
+  if (UNLIKELY(!castedThis))
+    return throwThisTypeError(*exec, "CanvasRenderingContext2D", "rataGetCairoHandle");
+
+  auto& impl = castedThis->impl();
+  auto ptr = impl.rataGetCairoHandle();
+
+  char buf[32];
+  snprintf(buf, sizeof(buf), "%p", reinterpret_cast<void*>(ptr));
+
+  return JSValue::encode(jsString(exec, buf));
 }
 
 EncodedJSValue JSC_HOST_CALL jsCanvasRenderingContext2DPrototypeFunctionStrokeText(ExecState* exec)

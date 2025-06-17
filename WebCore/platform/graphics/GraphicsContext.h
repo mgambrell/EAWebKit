@@ -510,8 +510,10 @@ namespace WebCore {
 
 #if USE(CAIRO)
         GraphicsContext(cairo_t*);
+        void rataFlush();
         void rataResolve();
         void rataClear();
+        void* rataGetCairoHandle();
 #endif
 
         static void adjustLineToPixelBoundaries(FloatPoint& p1, FloatPoint& p2, float strokeWidth, StrokeStyle);

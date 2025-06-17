@@ -28,9 +28,19 @@
 #include <runtime/JSString.h>
 #include <wtf/GetPtr.h>
 
+//MBG: inelegant hacks: we need to peek straight to cairo with no fuss
+#include "../../../WebCore/loader/cache/CachedImage.h"
+#include "../../../WebCore/platform/graphics/NativeImagePtr.h"
+extern "C" uint32_t cairo_gl_surface_rataGetTexName(void *abstract_surface);
+
 using namespace JSC;
 
 namespace WebCore {
+
+  // Functions
+
+  //MBG ADDITION
+  JSC::EncodedJSValue JSC_HOST_CALL jsHTMLImageElementRataGetCairoHandle(JSC::ExecState*);
 
 // Attributes
 
@@ -158,6 +168,7 @@ static const HashTableValue JSHTMLImageElementPrototypeTableValues[] =
     { "naturalWidth", DontDelete | ReadOnly | CustomAccessor, NoIntrinsic, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsHTMLImageElementNaturalWidth), (intptr_t) static_cast<PutPropertySlot::PutValueFunc>(0) },
     { "x", DontDelete | ReadOnly | CustomAccessor, NoIntrinsic, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsHTMLImageElementX), (intptr_t) static_cast<PutPropertySlot::PutValueFunc>(0) },
     { "y", DontDelete | ReadOnly | CustomAccessor, NoIntrinsic, (intptr_t)static_cast<PropertySlot::GetValueFunc>(jsHTMLImageElementY), (intptr_t) static_cast<PutPropertySlot::PutValueFunc>(0) },
+    { "rataGetCairoHandle", JSC::Function, NoIntrinsic, (intptr_t)static_cast<NativeFunction>(jsHTMLImageElementRataGetCairoHandle), (intptr_t) (0) },
 };
 
 const ClassInfo JSHTMLImageElementPrototype::s_info = { "HTMLImageElementPrototype", &Base::s_info, 0, CREATE_METHOD_TABLE(JSHTMLImageElementPrototype) };
@@ -524,6 +535,26 @@ EncodedJSValue jsHTMLImageElementY(ExecState* exec, JSObject* slotBase, EncodedJ
     return JSValue::encode(result);
 }
 
+JSC::EncodedJSValue JSC_HOST_CALL jsHTMLImageElementRataGetCairoHandle(JSC::ExecState* exec)
+{
+  JSValue thisValue = exec->thisValue();
+  JSHTMLImageElement* castedThis = jsDynamicCast<JSHTMLImageElement*>(thisValue);
+  if (UNLIKELY(!castedThis))
+    return throwThisTypeError(*exec, "HTMLImageElement", "rataGetCairoHandle");
+
+  const auto& image = JSHTMLImageElement::toWrapped(thisValue);
+  auto cached = image->cachedImage();
+  auto img = cached->image();
+  auto native = img->nativeImageForCurrentFrame();
+  cairo_surface_t* surf = native.get();
+
+  auto ptr = cairo_gl_surface_rataGetTexName(surf);
+
+  char buf[32];
+  snprintf(buf, sizeof(buf), "%p", reinterpret_cast<void*>(ptr));
+
+  return JSValue::encode(jsString(exec, buf));
+}
 
 EncodedJSValue jsHTMLImageElementConstructor(ExecState* exec, JSObject* baseValue, EncodedJSValue, PropertyName)
 {

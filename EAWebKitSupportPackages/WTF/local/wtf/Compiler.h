@@ -138,14 +138,20 @@
 #define WTF_COMPILER_SUPPORTS_EABI 1
 #endif
 
+#ifndef ASAN_ENABLED
 #if defined(__has_feature)
 #define ASAN_ENABLED __has_feature(address_sanitizer)
 #else
 #define ASAN_ENABLED 0
 #endif
+#endif
 
 #if ASAN_ENABLED
-#define SUPPRESS_ASAN __attribute__((no_sanitize_address))
+	#ifdef _MSC_VER
+	#define SUPPRESS_ASAN __declspec(no_sanitize_address)
+	#else
+	#define SUPPRESS_ASAN __attribute__((no_sanitize_address))
+	#endif
 #else
 #define SUPPRESS_ASAN
 #endif

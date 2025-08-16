@@ -280,7 +280,7 @@ GlyphData FontCascadeFonts::glyphDataForSystemFallback(UChar32 c, const FontDesc
           //I probably didn't print this diagnostics properly... but it works for me
           LOG_ERROR("Could not find (synthesize) fallback font variant %d. Falling back further to NormalVariant", variant);
           for(unsigned i=0;i<description.familyCount();i++)
-            LOG_ERROR("-> %s", description.familyAt(i).string().characters8());
+            LOG_ERROR("-> %s", description.familyAt(i).string().utf8().data());
           //rather than tailcall with tweaked variant to fully repeat the logic, we copy the code here since it seems like this function is an awful lot of overhead, perhaps for every character....?
           fallbackGlyphData = systemFallbackFont->glyphDataForCharacter(c);
         }

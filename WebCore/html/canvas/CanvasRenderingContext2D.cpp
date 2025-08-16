@@ -144,8 +144,17 @@ CanvasRenderingContext2D::~CanvasRenderingContext2D()
 bool CanvasRenderingContext2D::isAccelerated() const
 {
 #if USE(IOSURFACE_CANVAS_BACKING_STORE) || ENABLE(ACCELERATED_2D_CANVAS)
+  //MBG - this is important because calling drawingContext() will creatge the imagebuffer.. not something we want this little analyzer method to do
+  //Now, whether or not this should be considered "accelerated" in that case is another question, but it seems the premise is that only the context knows that.
+  //That we don't have a context without an image is just unfortunate.
+  //ALSO: there are OTHER BUGS that happen if we don't just always return true from here
+  //(the composition tree doesn't get updated by the CanvasChanged notification unless it thinks it's accelerated)
+  //So we just have to return true (why would any canvas not be accelerated? check it: it always will be. For me, anyway)
+  return true;
+
     if (!canvas()->hasCreatedImageBuffer())
         return false;
+
     GraphicsContext* context = drawingContext();
     return context && context->isAcceleratedContext();
 #else

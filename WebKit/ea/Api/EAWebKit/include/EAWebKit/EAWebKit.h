@@ -44,6 +44,7 @@ namespace EA
 namespace WebKit
 {
 struct PlatformSocketAPI;
+class ISurface;
 
 //MBG ADDED
 extern void* g_cairoDevice;
@@ -453,8 +454,9 @@ public:
 	virtual void RegisterURLSchemeAsCORSEnabled(const char16_t* pScheme);
     virtual bool IsURLSchemeCORSEnabled(const char16_t* pScheme);
 
-		//MBG ADDITION
+		//MBG ADDITIONS
 		virtual void GetMemoryReport(MemoryReport* report);
+		virtual void CleanupISurface(ISurface* surface);
 
 	// Add a user style sheet that affects all rendered pages.
 	// Example 1 - Adding ":link, :visited { text-decoration: line-through ! important; }" will line-through all the links on all pages even if styled by the page.

@@ -591,47 +591,19 @@ void WebFrame::renderNonTiled(EA::WebKit::IHardwareRenderer* renderer, ISurface 
 
 	NOTIFY_PROCESS_STATUS(kVProcessTypeRenderCompLayers, EA::WebKit::kVProcessStatusStarted, d->page->view());
 
-	int fullViewWidth = d->page->view()->GetSize().mWidth;
-	int fullViewHeight = d->page->view()->GetSize().mHeight;
-
 	//...............
 	//make a temporary cairo surface to wrap the target ISurface so we can use cairo to draw the main layer surface onto it
-	//static shenanigans are here to cut down on some allocations (input is expected to be double buffered, so we manage two)
-	//YEAH, IT'S SLOPPY AND BAD. I'm just experimenting for now
-	static std::array<ISurface*,2> surfaces_last;
-	static std::array<cairo_surface_t*,2> my_cairoSurfaces;
-	static std::array<cairo_t*,2> my_cairos;
-	cairo_surface_t *targetCairoSurface = nullptr;
-	cairo_t *targetSurfaceCairoContext = nullptr;
-	for(int i=0;i<2;i++)
+	if(!surface->cairoSurface)
 	{
-		if(surfaces_last[i] == surface)
-		{
-			targetCairoSurface = my_cairoSurfaces[i];
-			targetSurfaceCairoContext = my_cairos[i];
-			break;
-		}
+		int fullViewWidth = d->page->view()->GetSize().mWidth;
+		int fullViewHeight = d->page->view()->GetSize().mHeight;
+		surface->cairoSurface = cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA, surface->GetGlTexId(), fullViewWidth, fullViewHeight);
+		surface->cairoContext = cairo_create((cairo_surface_t*)surface->cairoSurface);
 	}
-	if(!targetCairoSurface)
-	{
-		int doobie = my_cairoSurfaces[0] ? 1 : 0;
-
-		if(my_cairoSurfaces[doobie])
-		{
-			cairo_destroy(my_cairos[doobie]);
-			cairo_surface_destroy(my_cairoSurfaces[doobie]);
-		}
-
-		surfaces_last[doobie] = surface;
-		targetCairoSurface = my_cairoSurfaces[doobie] = cairo_gl_surface_create_for_texture((cairo_device_t*)EA::WebKit::g_cairoDevice, CAIRO_CONTENT_COLOR_ALPHA,surface->GetGlTexId(),fullViewWidth,fullViewHeight);
-		targetSurfaceCairoContext = my_cairos[doobie] = cairo_create(targetCairoSurface);
-	}
-		
-
-
-	cairo_set_source_surface(targetSurfaceCairoContext,cairoMainLayerSurface,0,0);
-	cairo_set_operator (targetSurfaceCairoContext, CAIRO_OPERATOR_SOURCE);
-	cairo_paint(targetSurfaceCairoContext);
+	cairo_t* cairoContext = (cairo_t*)surface->cairoContext;
+	cairo_set_source_surface(cairoContext, cairoMainLayerSurface, 0, 0);
+	cairo_set_operator(cairoContext, CAIRO_OPERATOR_SOURCE);
+	cairo_paint(cairoContext);
 	//...............
 
 	//after this we're going to hand things off to the TextureMapper

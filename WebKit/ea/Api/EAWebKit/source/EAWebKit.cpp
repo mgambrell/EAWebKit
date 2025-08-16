@@ -469,6 +469,16 @@ void EAWebKitLib::GetMemoryReport(MemoryReport* report)
 
 }
 
+void EAWebKitLib::CleanupISurface(ISurface* surface)
+{
+	if(!surface->cairoContext)
+		return;
+	cairo_destroy((cairo_t*)surface->cairoContext);
+	cairo_surface_destroy((cairo_surface_t*)surface->cairoSurface);
+	surface->cairoContext = nullptr;
+	surface->cairoSurface = nullptr;
+}
+
 void EAWebKitLib::ClearMemoryCache(MemoryCacheClearFlags flags)
 {
 	SET_AUTOFPUPRECISION(EA::WebKit::kFPUPrecisionExtended);

@@ -65,6 +65,8 @@ public:
     void Clear(int red, int green, int blue, int alpha) {}
     virtual unsigned int GetGlTexId() { return 0; }
     virtual void Bind() {}
+    void* cairoSurface = nullptr; //cairo_surface_t
+    void* cairoContext = nullptr; //cairo_t
 
     virtual ~ISurface(void) {}
     // If rect is NULL, Lock the entire surface. Otherwise, lock the given rectangle and fill the SurfaceDescriptor struct.

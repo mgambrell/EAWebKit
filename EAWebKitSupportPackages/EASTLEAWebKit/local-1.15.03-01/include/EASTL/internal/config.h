@@ -961,7 +961,9 @@ namespace eastl
     #endif
 #endif
 
-
+//MBG - I disagree. it's always needed (if I find a case failing to compile, I'll fix it myself)
+//It's certainly needed on MSVC V143 toolchain
+#define EASTL_VA_COPY_ENABLED 1
 
 ///////////////////////////////////////////////////////////////////////////////
 // EASTL_LIST_PROXY_ENABLED

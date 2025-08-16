@@ -68,8 +68,11 @@ void GraphicsLayerTextureMapper::notifyChange(ChangeMask changeMask)
 
 GraphicsLayerTextureMapper::~GraphicsLayerTextureMapper()
 {
+    //MBG: no guarantee this is valid and no need to set it (see setContentsToPlatformLayer)
+    #if 0
     if (m_contentsLayer)
         m_contentsLayer->setClient(0);
+    #endif
 
     willBeDestroyed();
 }
@@ -324,8 +327,16 @@ void GraphicsLayerTextureMapper::setContentsToPlatformLayer(TextureMapperPlatfor
     GraphicsLayer::setContentsToPlatformLayer(platformLayer, purpose);
     notifyChange(ContentChange);
 
+    //MBG: we just got told to use a new platformLayer
+    //we have NO BUSINESS touching the old one
+    //In fact, it's been DESTROYED sometimes (when a canvas changes size)
+    //I can't believe this actually matters: nobody should be asking whether there's a client and adopting a homeless object.
+    //Anybody who's being told to adopt one of these will just set the client on it to mark it adopted.
+    //So this simply shouldn't be needed at all
+    #if 0
     if (m_contentsLayer)
         m_contentsLayer->setClient(0);
+    #endif
 
     m_contentsLayer = platformLayer;
 

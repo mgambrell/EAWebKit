@@ -433,6 +433,12 @@ void HTMLCanvasElement::setSurfaceSize(const IntSize& size)
     m_contextStateSaver = nullptr;
     m_imageBuffer.reset();
     clearCopiedImage();
+    
+    //MBG: render boxes will hold onto stale ImageBuffers or whatever stashed by raw pointers
+    //This is needed to get them to refresh
+    RenderBox* myRenderBox = renderBox();
+    if(myRenderBox && myRenderBox->hasAcceleratedCompositing())
+      myRenderBox->contentChanged(CanvasChanged);
 }
 
 String HTMLCanvasElement::toEncodingMimeType(const String& mimeType)
@@ -586,6 +592,11 @@ void HTMLCanvasElement::createImageBuffer() const
         m_imageBuffer->context()->setShouldAntialias(false);
     m_imageBuffer->context()->setStrokeThickness(1);
     m_contextStateSaver = std::make_unique<GraphicsContextStateSaver>(*m_imageBuffer->context());
+
+    //MBG: added for symmetry with setSurfaceSize
+    RenderBox* myRenderBox = renderBox();
+    if(myRenderBox && myRenderBox->hasAcceleratedCompositing())
+      myRenderBox->contentChanged(CanvasChanged);
 
     JSC::JSLockHolder lock(scriptExecutionContext()->vm());
     scriptExecutionContext()->vm().heap.reportExtraMemoryAllocated(memoryCost());

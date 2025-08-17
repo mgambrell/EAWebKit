@@ -312,6 +312,14 @@ inline void decomposeDouble(double number, bool& sign, int32_t& exponent, uint64
         mantissa |= 0x10000000000000ull;
 }
 
+//tired of hearing this....
+#if defined(__clang__)
+#  pragma clang diagnostic push
+#  if __has_warning("-Wimplicit-const-int-float-conversion")
+#    pragma clang diagnostic ignored "-Wimplicit-const-int-float-conversion"
+#  endif
+#endif
+
 // Calculate d % 2^{64}.
 inline void doubleToInteger(double d, unsigned long long& value)
 {
@@ -334,6 +342,10 @@ inline void doubleToInteger(double d, unsigned long long& value)
         }
     }
 }
+
+#if defined(__clang__)
+#  pragma clang diagnostic pop
+#endif
 
 namespace WTF {
 

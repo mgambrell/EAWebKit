@@ -39,6 +39,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <limits.h>
 #include <EASTL/internal/type_fundamental.h>
 
+//tired of hearing this....
+#if defined(__clang__)
+#  pragma clang diagnostic push
+#  if __has_warning("-Wdeprecated-builtins")
+#    pragma clang diagnostic ignored "-Wdeprecated-builtins"
+#  endif
+#endif
 
 namespace eastl
 {
@@ -444,6 +451,9 @@ namespace eastl
 
 } // namespace eastl
 
+#if defined(__clang__)
+#  pragma clang diagnostic pop
+#endif
 
 #endif // Header include guard
 

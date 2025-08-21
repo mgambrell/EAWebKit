@@ -149,7 +149,7 @@ const uint32_t kTouchMove	 = 2;
 const uint32_t kTouchEnd	 = 3;
 const uint32_t kTouchCancel	 = 4;
 
-const uint32_t kMaxTouchPointsAllowed = 4; 
+const uint32_t kMaxTouchPointsAllowed = 16; 
 enum TouchPointState
 {
 	TouchPointPressed = 0,

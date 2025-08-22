@@ -127,25 +127,57 @@ RGBA32 makeRGBAFromCMYKA(float c, float m, float y, float k, float a)
 template <typename CharacterType>
 static inline bool parseHexColorInternal(const CharacterType* name, unsigned length, RGBA32& rgb)
 {
-    if (length != 3 && length != 6)
-        return false;
-    unsigned value = 0;
-    for (unsigned i = 0; i < length; ++i) {
-        if (!isASCIIHexDigit(name[i]))
-            return false;
-        value <<= 4;
-        value |= toASCIIHexValue(name[i]);
-    }
-    if (length == 6) {
-        rgb = 0xFF000000 | value;
-        return true;
-    }
-    // #abc converts to #aabbcc
-    rgb = 0xFF000000
-        | (value & 0xF00) << 12 | (value & 0xF00) << 8
-        | (value & 0xF0) << 8 | (value & 0xF0) << 4
-        | (value & 0xF) << 4 | (value & 0xF);
+  // Accept #RGB, #RGBA, #RRGGBB, #RRGGBBAA
+  if(length != 3 && length != 4 && length != 6 && length != 8)
+    return false;
+
+  unsigned value = 0;
+  for(unsigned i = 0; i < length; ++i) {
+    if(!isASCIIHexDigit(name[i]))
+      return false;
+    value <<= 4;
+    value |= toASCIIHexValue(name[i]);
+  }
+
+  if(length == 8) {
+    // #RRGGBBAA  ->  0xAARRGGBB
+    unsigned rr = (value >> 24) & 0xFF;
+    unsigned gg = (value >> 16) & 0xFF;
+    unsigned bb = (value >> 8) & 0xFF;
+    unsigned aa = value & 0xFF;
+    rgb = (aa << 24) | (rr << 16) | (gg << 8) | bb;
     return true;
+  }
+
+  if(length == 6) {
+    // #RRGGBB -> 0xFFRRGGBB
+    rgb = 0xFF000000 | value;
+    return true;
+  }
+
+  if(length == 4) {
+    // #RGBA -> expand each nibble (#RGBA -> #RRGGBBAA) then map to 0xAARRGGBB
+    unsigned r = (value >> 12) & 0xF;
+    unsigned g = (value >> 8) & 0xF;
+    unsigned b = (value >> 4) & 0xF;
+    unsigned a = value & 0xF;
+
+    unsigned rr = (r << 4) | r;
+    unsigned gg = (g << 4) | g;
+    unsigned bb = (b << 4) | b;
+    unsigned aa = (a << 4) | a;
+
+    rgb = (aa << 24) | (rr << 16) | (gg << 8) | bb;
+    return true;
+  }
+
+  // length == 3
+  // #RGB converts to #RRGGBB (alpha = 0xFF)
+  rgb = 0xFF000000
+    | (value & 0xF00) << 12 | (value & 0xF00) << 8
+    | (value & 0x0F0) << 8 | (value & 0x0F0) << 4
+    | (value & 0x00F) << 4 | (value & 0x00F);
+  return true;
 }
 
 bool Color::parseHexColor(const LChar* name, unsigned length, RGBA32& rgb)

@@ -163,7 +163,10 @@ void GamepadManager::registerNavigator(NavigatorGamepad* navigator)
     m_navigators.add(navigator);
     m_gamepadBlindNavigators.add(navigator);
 
-    maybeStartMonitoringGamepads();
+    //MBG: if do this here then we re-enter the gamepad init process and things go crazy
+    //this must be called after the initialization is more complete
+    //Not sure where that is.. but.. maybe it will work itself out.
+    //maybeStartMonitoringGamepads();
 }
 
 void GamepadManager::unregisterNavigator(NavigatorGamepad* navigator)

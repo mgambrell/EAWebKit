@@ -60,9 +60,13 @@ NavigatorGamepad* NavigatorGamepad::from(Navigator* navigator)
 {
     NavigatorGamepad* supplement = static_cast<NavigatorGamepad*>(Supplement<Navigator>::from(navigator, supplementName()));
     if (!supplement) {
-        auto newSupplement = std::make_unique<NavigatorGamepad>();
+        auto newSupplement = std::make_unique<NavigatorGamepad>(); //<-- MBG: USED TO BE DONE HERE
         supplement = newSupplement.get();
         provideTo(navigator, supplementName(), WTF::move(newSupplement));
+
+        //MBG: do this here if needed...? wild guess
+        //(see GamepadManager::registerNavigator)
+        //GamepadManager::singleton().maybeStartMonitoringGamepads();
 
         if (Frame* frame = navigator->frame()) {
             if (DocumentLoader* documentLoader = frame->loader().documentLoader())
